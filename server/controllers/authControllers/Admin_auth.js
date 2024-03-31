@@ -19,7 +19,7 @@ exports.register = async (req, res) => {
         .then(() =>
           res
             .status(200)
-            .json({ Succefull_msg: `${admin.username}added Succefully` })
+            .json({ Succefull_msg: `${admin.username} added Succefully` })
         );
     }
   } catch (err) {
