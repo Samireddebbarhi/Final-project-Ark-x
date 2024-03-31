@@ -3,10 +3,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const PORT = 3001;
 const admin_route = require("./routes/auth_routes/admin_route");
+const customer_route = require("./routes/auth_routes/customer_route");
 const app = express();
 app.use(express.json());
 
 app.use("/api/admin", admin_route);
+app.use("/api/customer", customer_route);
 
 mongoose
   .connect(`${process.env.URI}`)
