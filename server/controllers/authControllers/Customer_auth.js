@@ -14,7 +14,7 @@ const customerRegister = async (req, res) => {
             const newCustomer = new CustomerModel({
                 username: customer.username,
                 email: customer.email,
-                dateofbirth: customer.dateofbirth,
+                date_of_birth: customer.date_of_birth,
                 password: hashedPassword,
             });
             newCustomer.save()
@@ -39,12 +39,12 @@ const customerLogin = async (req, res) => {
 
         await bcrypt.compare(password, customer.password).then((isMatch) => {
             if(!isMatch){
-                return res.status(400).json({ msg: "password invalid, try again"});
+                return res.status(400).json({ msg: "Password invalid, Try again"});
             }
             const token = jwt.sign({CustomerId: customer._id}, process.env.TOKEN_SECRET, {
                 expiresIn: "20m",
             })
-            // to sese
+           
             res.status(200).send(`${customer.username} logged in with a token: ${token}`); 
         });
         

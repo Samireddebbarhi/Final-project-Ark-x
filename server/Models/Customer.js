@@ -5,7 +5,7 @@ const SchemaCustomer = new mongoose.Schema({
       required: true,
       unique: true,
     },
-    dateofbirth: {
+    date_of_birth: {
         type: String,
         required: true,
     },
@@ -17,7 +17,7 @@ const SchemaCustomer = new mongoose.Schema({
       type: String,
       required: true,
     },
-    permiumstatus: {
+    permium_status: {
       type : Boolean,
       default: false,
     },
