@@ -10,9 +10,11 @@ const SchemaOrder = new mongoose.Schema({
     required: true,
   },
   totalamount: {
-    type: String,
+    type: Number, // Changed to Number if this should represent a numeric value
     required: true,
   },
 });
 
-export default OrderModel = mongoose.model("Order", SchemaOrder);
+const OrderModel = mongoose.model("Order", SchemaOrder); // Removed export default
+
+module.exports = OrderModel; // Export OrderModel instead

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const SchemaOrder = new mongoose.Schema({
+const SchemaPayment = new mongoose.Schema({
   orderid: {
     type: String,
     required: true,
@@ -9,10 +9,12 @@ const SchemaOrder = new mongoose.Schema({
     type: String,
     required: true,
   },
-  amountpaid: {
-    type: integer,
+  amountPaid: {
+    type: Number, // Changed Integer to Number
     required: true,
   },
 });
 
-export default PaymentModel = mongoose.model("Payment", SchemaPayment);
+const PaymentModel = mongoose.model("Payment", SchemaPayment); // Removed export default
+
+module.exports = PaymentModel; // Export PaymentModel instead

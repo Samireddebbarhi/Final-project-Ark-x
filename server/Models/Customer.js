@@ -14,7 +14,7 @@ const SchemaCustomer = new mongoose.Schema({
     required: true,
   },
   dateofbirth: {
-    type: String,
+    type: Date, // Changed to Date if it should represent a date
     required: true,
   },
   premiumstatus: {
@@ -24,7 +24,10 @@ const SchemaCustomer = new mongoose.Schema({
   createdat: {
     type: Date,
     required: true,
+    default: Date.now // Added default value to set current date/time
   },
 });
 
-export default CustomerModel = mongoose.model("Customer", SchemaCustomer);
+const CustomerModel = mongoose.model("Customer", SchemaCustomer); // Removed export default
+
+module.exports = CustomerModel; // Export CustomerModel instead

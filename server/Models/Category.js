@@ -10,13 +10,15 @@ const SchemaCategory = new mongoose.Schema({
     required: true,
   },
   description: {
-    type: string,
+    type: String, // Changed string to String
     required: true,
   },
   products: {
-    type: list,
+    type: String,
     required: true,
   },
 });
 
-export default ProductModel = mongoose.model("Product", SchemaProduct);
+const CategoryModel = mongoose.model("Category", SchemaCategory); // Changed ProductModel to CategoryModel
+
+module.exports = CategoryModel; // Export CategoryModel instead of ProductModel
