@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const PORT = 3001;
+const PORT = process.env.PORT || 3001; // Use the PORT environment variable if set, otherwise use 3001
 const admin_route = require("./routes/auth_routes/admin_route");
 const customer_route = require("./routes/auth_routes/customer_route");
 const app = express();
@@ -19,3 +19,4 @@ mongoose
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
