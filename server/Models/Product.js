@@ -26,7 +26,7 @@ const SchemaProduct = new mongoose.Schema({
     required: true,
   },
   rating: {
-    type: String,
+    type: String, 
     required: true,
   },
 });
