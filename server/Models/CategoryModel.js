@@ -1,22 +1,9 @@
 const mongoose = require("mongoose");
 
 const SchemaCategory = new mongoose.Schema({
-  productId: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-    required: true,
-  },
-  description: {
-    type: String, // Changed string to String
-    required: true,
-  },
-  products: {
-    type: String,
-    required: true,
-  },
+  name: { type: String, required: true },
+
+  products: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
 });
 
 const CategoryModel = mongoose.model("Category", SchemaCategory); // Changed ProductModel to CategoryModel
