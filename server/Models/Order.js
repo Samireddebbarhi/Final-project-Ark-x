@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const SchemaOrder = new mongoose.Schema({
   customerId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId, // Reference to Customer model i added
     required: true,
   },
   orderDate: {

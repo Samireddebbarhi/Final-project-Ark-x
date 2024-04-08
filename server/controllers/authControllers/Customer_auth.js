@@ -10,11 +10,11 @@ const customerRegister = async (req, res) => {
         if (!customer) {
             res.status(400).send("No data provided");
         } else {
-            let hashedPassword = await bcrypt.hash(customer.password, 10); //Encryption of password using Bcrypt
+            let hashedPassword = await bcrypt.hash(customer.password, 10); 
             const newCustomer = new CustomerModel({
                 username: customer.username,
                 email: customer.email,
-                date_of_birth: customer.date_of_birth,
+                date_of_birth: customer.dateOfBirth,
                 password: hashedPassword,
             });
             newCustomer.save()

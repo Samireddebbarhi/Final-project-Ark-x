@@ -10,3 +10,5 @@ const verifyJwtCustomer = (req, res, next) => {
     next();
   });
 };
+
+module.exports ={ verifyJwtCustomer }

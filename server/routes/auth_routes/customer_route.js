@@ -6,4 +6,5 @@ const customerRoute = express.Router();
 customerRoute.post("/register", authenticate.customerRegister);
 customerRoute.get("/login", authenticate.customerLogin);
 
+
 module.exports = customerRoute;
