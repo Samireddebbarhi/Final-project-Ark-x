@@ -5,18 +5,17 @@ const SchemaProduct = new mongoose.Schema({
     type: String,
     required: true,
   },
-  description: {
-    type: String,
-    required: true,
-  },
+
   price: {
-    type: Number, // Changed integer to Number
+    type: Number,
     required: true,
   },
   category: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
     required: true,
   },
+
   location: {
     type: String,
     required: true,

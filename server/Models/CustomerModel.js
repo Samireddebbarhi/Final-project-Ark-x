@@ -11,6 +11,7 @@ const SchemaCustomer = new mongoose.Schema({
   },
   password: {
     type: String,
+
     required: true,
   },
   dateOfBirth: {
@@ -23,7 +24,7 @@ const SchemaCustomer = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    required: true,
+    default: Date.now(),
   },
 });
 

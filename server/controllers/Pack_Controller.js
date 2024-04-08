@@ -1,4 +1,4 @@
-const packModel = require('../../Models/Pack');
+const packModel = require('../Models/PackModel');
 const express = require("express");
 const app = express();
 app.use(express.json());
@@ -10,6 +10,7 @@ const addPack = async (req, res) => {
       description: req.body.description,
       price: req.body.price,
       features: req.body.features,
+      validityDays: req.body.validityDays,
     });
 
     await pack.save();

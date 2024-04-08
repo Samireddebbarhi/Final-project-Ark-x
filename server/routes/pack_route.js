@@ -1,6 +1,6 @@
 const express = require('express');
 const packRouter = express.Router();
-const { addPack, getPack, updatePack, deletePack } = require('../../controllers/authControllers/Pack_Controller');
+const { addPack, getPack, updatePack, deletePack } = require('../controllers/Pack_Controller');
 
 
 packRouter.post('/', addPack);
@@ -9,4 +9,3 @@ packRouter.put('/:id', updatePack);
 packRouter.delete('/:id', deletePack);
 
 module.exports = packRouter;
-
