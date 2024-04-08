@@ -1,18 +1,20 @@
 const mongoose = require("mongoose");
 
-const SchemaOrder = new mongoose.Schema({
-  orderid: {
+const SchemaPayment = new mongoose.Schema({
+  orderId: {
     type: String,
     required: true,
   },
-  paymentmethod: {
+  paymentMethod: {
     type: String,
     required: true,
   },
-  amountpaid: {
-    type: integer,
+  amountPaid: {
+    type: Number, // Changed Integer to Number
     required: true,
   },
 });
 
-export default PaymentModel = mongoose.model("Payment", SchemaPayment);
+const PaymentModel = mongoose.model("Payment", SchemaPayment); // Removed export default
+
+module.exports = PaymentModel; // Export PaymentModel instead

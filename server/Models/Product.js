@@ -10,7 +10,7 @@ const SchemaProduct = new mongoose.Schema({
     required: true,
   },
   price: {
-    type: integer,
+    type: Number, // Changed integer to Number
     required: true,
   },
   category: {
@@ -31,4 +31,6 @@ const SchemaProduct = new mongoose.Schema({
   },
 });
 
-export default ProductModel = mongoose.model("Product", SchemaProduct);
+const ProductModel = mongoose.model("Product", SchemaProduct); // Removed export default
+
+module.exports = ProductModel; // Export ProductModel instead

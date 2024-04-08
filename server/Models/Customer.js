@@ -13,15 +13,15 @@ const SchemaCustomer = new mongoose.Schema({
     type: String,
     required: true,
   },
-  dateofbirth: {
+  dateOfBirth: {
     type: String,
     required: true,
   },
-  premiumstatus: {
+  premiumStatus: {
     type: Boolean,
     required: true,
   },
-  createdat: {
+  createdAt: {
     type: Date,
     required: true,
   },

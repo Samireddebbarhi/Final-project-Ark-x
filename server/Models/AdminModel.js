@@ -4,6 +4,7 @@ const SchemaAdmin = new mongoose.Schema({
   username: {
     type: String,
     required: true,
+    unique: true,
   },
   email: {
     type: String,
@@ -13,10 +14,14 @@ const SchemaAdmin = new mongoose.Schema({
     type: String,
     required: true,
   },
+
+  createdAt: { type: Date, default: Date.now() },
+
   permission: {
     type: String,
     default: "admin",
   },
 });
 
-export default AdminModel = mongoose.model("Admin", SchemaAdmin);
+const AdminModel = mongoose.model("Admins", SchemaAdmin);
+module.exports = AdminModel;

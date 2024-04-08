@@ -10,13 +10,15 @@ const SchemaPack = new mongoose.Schema({
     required: true,
   },
   price: {
-    type: integer,
+    type: Number, // Changed integer to Number
     required: true,
   },
   features: {
-    type: list,
+    type: String,
     required: true,
   },
 });
 
-export default PackModel = mongoose.model("Pack", SchemaPack);
+const PackModel = mongoose.model("Pack", SchemaPack); // Removed export default
+
+module.exports = PackModel; // Export PackModel instead

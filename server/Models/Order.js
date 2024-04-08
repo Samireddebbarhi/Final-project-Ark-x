@@ -1,18 +1,20 @@
 const mongoose = require("mongoose");
 
 const SchemaOrder = new mongoose.Schema({
-  customerid: {
+  customerId: {
     type: String,
     required: true,
   },
-  orderdate: {
+  orderDate: {
     type: String,
     required: true,
   },
-  totalamount: {
-    type: String,
+  totalAmount: {
+    type: Number, // Changed to Number if this should represent a numeric value
     required: true,
   },
 });
 
-export default OrderModel = mongoose.model("Order", SchemaOrder);
+const OrderModel = mongoose.model("Order", SchemaOrder); // Removed export default
+
+module.exports = OrderModel; // Export OrderModel instead
