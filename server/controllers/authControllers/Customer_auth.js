@@ -83,3 +83,5 @@ const customer_update = async (req, res) => {
 module.exports = {
     customerRegister,
     customerLogin,
+    customer_update,
+}
