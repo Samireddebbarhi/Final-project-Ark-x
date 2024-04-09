@@ -17,8 +17,12 @@ const SchemaPack = new mongoose.Schema({
     type: String,
     required: true,
   },
+  validityDays: {
+    type: Number,
+    required: true,
+  },
 });
 
-const PackModel = mongoose.model("Pack", SchemaPack); // Removed export default
+const PackModel = mongoose.model("Pack", SchemaPack);
 
 module.exports = PackModel; // Export PackModel instead
