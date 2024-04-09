@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const packRouter = require("./routes/pack_route");
+const categoryRouter = require("./routes/category_route");
 const PORT = process.env.PORT || 3001; // Use the PORT environment variable if set, otherwise use 3001
 const admin_route = require("./routes/auth_routes/admin_route");
 const customer_route = require("./routes/auth_routes/customer_route");
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use("/api/admin", admin_route);
 app.use("/api/customer", customer_route);
 app.use("/api/pack", packRouter);
+app.use("/api/category", categoryRouter);
 
 mongoose
   .connect(`${process.env.URI}`)
