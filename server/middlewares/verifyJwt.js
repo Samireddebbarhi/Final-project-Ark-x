@@ -8,3 +8,4 @@ const verifyJwtAdmin = (req, res, next) => {
     next();
   });
 };
+module.exports = verifyJwtAdmin;

@@ -20,7 +20,7 @@ const SchemaCustomer = new mongoose.Schema({
   },
   premiumStatus: {
     type: Boolean,
-    required: true,
+    default: false, //false means customer is not a premium member
   },
   createdAt: {
     type: Date,
@@ -28,4 +28,5 @@ const SchemaCustomer = new mongoose.Schema({
   },
 });
 
-export default CustomerModel = mongoose.model("Customer", SchemaCustomer);
+const CustomerModel = mongoose.model("Customer", SchemaCustomer);
+module.exports = CustomerModel;
