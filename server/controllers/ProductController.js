@@ -44,7 +44,7 @@ const updateProduct = async (req, res) => {
           name: req.body.name,
           price: req.body.price,
           location: req.body.location,
-          category: categoryUpdated?._id || null,
+          category: categoryUpdated ? categoryName : null,
           adsplatform: req.body.adsplatform,
           rating: req.body.rating,
         },
