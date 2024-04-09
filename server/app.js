@@ -21,7 +21,7 @@ app.use(logs);
 app.use("/api/admin", admin_route);
 app.use("/api/customer", customer_route);
 app.use("/api/customer/product", verifyJwtCustomer, RouterProduct);
-
+app.use("/api/admin/product", verifyJwtAdmin, RouterProduct);
 app.use(errorHandler);
 
 // Connect to MongoDB database using Mongoose
