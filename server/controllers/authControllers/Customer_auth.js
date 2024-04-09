@@ -11,9 +11,10 @@ const customerRegister = async (req, res) => {
     } else {
       let hashedPassword = await bcrypt.hash(customer.password, 10); //Encryption of password using Bcrypt
       const newCustomer = new CustomerModel({
-        username: customer.username,
+        name: customer.name,
         email: customer.email,
-        date_of_birth: customer.date_of_birth,
+        dateOfBirth: customer.dateOfBirth,
+        username: customer.username,
         password: hashedPassword,
       });
       newCustomer.save().then(() => {
