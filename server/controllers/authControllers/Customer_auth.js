@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken')
 const CustomerModel = require('../../Models/Customer.js');
 
-
+// customer registration
 const customerRegister = async (req, res) => {
     try {
         const customer = req.body;
@@ -26,7 +26,7 @@ const customerRegister = async (req, res) => {
         console.log(err);
     }
 };
-// 
+// customer login
 const customerLogin = async (req, res) => {
  try {
     const {email, password} = req.body;
@@ -53,8 +53,31 @@ const customerLogin = async (req, res) => {
     console.log(err);
  }
 };
+// update customer Profile by Customer
+const customer_update = async (req, res) => {
+    try{
+        
+        const updated = await CustomerModel.updateOne({
+
+        username: req.body.username,
+        email: req.body.email,
+        password: req.body.password
+        },{
+        new: true,
+        })
+        
+        if (!updated) {
+        return res.status(404).json({ message: 'Customer not found' });
+        }
+        res.status(200).json({ message: 'Customer Updated successfully'});
+        } catch(err) {
+        console.log(err);
+        res.status(500).json({error:'Failed to update customer, please try again' , err});
+        };
+        }
 module.exports = {
     customerRegister,
     customerLogin,
+    customer_update,
 
 }

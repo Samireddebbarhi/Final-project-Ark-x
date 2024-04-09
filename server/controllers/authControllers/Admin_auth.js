@@ -39,8 +39,8 @@ exports.login = (req, res) => {
       if (!isMatch)
         return res.status(400).json({ msg: "error password, Try again !!" });
 
-      const token = jwt.sign({ AdminId: admin._id }, process.env.token_Access, {
-        expiresIn: "20m",
+      const token = jwt.sign({ AdminId: admin._id }, process.env.SECRET, {
+        expiresIn: "30m",
       });
 
       res
