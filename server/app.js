@@ -1,28 +1,37 @@
-require("dotenv").config();
+// app.js
+
 const express = require("express");
-const mongoose = require("mongoose");
-const cookie = require("cookie-parser");
-const cors = require("cors");
-const PORT = process.env.PORT || 3001; // Use the PORT environment variable if set, otherwise use 3001
-const admin_route = require("./routes/auth_routes/admin_route");
-const customer_route = require("./routes/auth_routes/customer_route");
 const app = express();
+const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const logs = require("./middlewares/logs.js");
+
+// Middleware
 app.use(express.json());
 app.use(cors());
-app.use(cookie());
+app.use(cookieParser());
+ // Place logs middleware here before any routes
 
-app.use(logs);
 // Routes
-app.use("/api/admin", admin_route);
-app.use("/api/customer", customer_route);
+const adminRoute = require("./routes/auth_routes/admin_route");
+const customerRoute = require("./routes/auth_routes/customer_route");
+const routerProduct = require("./routes/product_routes.js");
+const orderRoutes = require("./routes/order_routes.js");
 
-// Connect to MongoDB database using Mongoose
-mongoose
-  .connect(`${process.env.URI}`)
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => console.error(err));
+app.use("/api/admin", adminRoute);
+app.use("/api/customer", customerRoute);
+app.use("/api/admin/product", routerProduct);
+app.use("/api/customer/order", orderRoutes);
+
+// Connect to MongoDB
+mongoose.connect(process.env.URI)
+    .then(() => {
+        console.log("Connected to MongoDB");
+    })
+    .catch((err) => console.error(err));
+
+const PORT = process.env.PORT ;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });

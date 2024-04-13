@@ -1,10 +1,11 @@
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken')
-const CustomerModel = require('../../Models/Customer.js');
+const CustomerModel = require('../../Models/CustomerModel');
 
 
 const customerRegister = async (req, res) => {
+
     try {
         const customer = req.body;
         if (!customer) {
@@ -12,9 +13,9 @@ const customerRegister = async (req, res) => {
         } else {
             let hashedPassword = await bcrypt.hash(customer.password, 10); //Encryption of password using Bcrypt
             const newCustomer = new CustomerModel({
-                username: customer.username,
+                name: customer.name,
                 email: customer.email,
-                date_of_birth: customer.date_of_birth,
+                dateOfBirth: customer.dateOfBirth,
                 password: hashedPassword,
             });
             newCustomer.save()
@@ -25,7 +26,7 @@ const customerRegister = async (req, res) => {
     } catch (err) {
         console.log(err);
     }
-};
+}
 // 
 const customerLogin = async (req, res) => {
   try {

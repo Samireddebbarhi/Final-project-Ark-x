@@ -2,12 +2,15 @@ const mongoose = require("mongoose");
 
 const SchemaOrder = new mongoose.Schema({
   customerId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
+  products: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
+  ],
   orderDate: {
-    type: String,
-    required: true,
+    type: Date,
+    default: Date.now,
   },
   totalAmount: {
     type: Number, // Changed to Number if this should represent a numeric value
