@@ -1,18 +1,22 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
+const cookie = require("cookie-parser");
+const cors = require("cors");
 const PORT = process.env.PORT || 3001; // Use the PORT environment variable if set, otherwise use 3001
 const admin_route = require("./routes/auth_routes/admin_route");
 const customer_route = require("./routes/auth_routes/customer_route");
-const crud_routes = require("./routes/Customer_routes/crud_routes")
 const app = express();
 app.use(express.json());
+app.use(cors());
+app.use(cookie());
 
+app.use(logs);
+// Routes
 app.use("/api/admin", admin_route);
 app.use("/api/customer", customer_route);
-app.use("/api/admin/crud", crud_routes)
-// app.use("/api/customer" , customerRouteData)
 
+// Connect to MongoDB database using Mongoose
 mongoose
   .connect(`${process.env.URI}`)
   .then(() => {
@@ -22,4 +26,3 @@ mongoose
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-
