@@ -1,5 +1,5 @@
 const Product = require("../models/ProductModel");
-const Category = require("../models/CategoryModel");
+const Category = require("../Models/CategoryModel");
 const getAllProducts = async (req, res, next) => {
   const product = await Product.find();
   if (!product)
