@@ -20,14 +20,14 @@ const customerRegister = async (req, res) => {
             });
             newCustomer.save()
                 .then(() => {
-                    res.status(200).json({ Success_msg: `${customer.username} added successfully` });
+                    res.status(200).json({ Success_msg: `${customer.name} added successfully` });
                 });
         }
     } catch (err) {
         console.log(err);
     }
 }
-// 
+//  
 const customerLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -52,7 +52,7 @@ const customerLogin = async (req, res) => {
 
         res
           .status(200)
-          .send(`${customer.username} logged in with a token: ${token}`);
+          .send(`${customer.name} logged in with a token: ${token}`);
       });
     });
   } catch {
@@ -65,7 +65,7 @@ const customer_update = async (req, res) => {
         
         const updated = await CustomerModel.updateOne({
 
-        username: req.body.username,
+        username: req.body.name,
         email: req.body.email,
         password: req.body.password
         },{
@@ -80,9 +80,34 @@ const customer_update = async (req, res) => {
         console.log(err);
         res.status(500).json({error:'Failed to update customer, please try again' , err});
         };
-        }
-module.exports = {
-    customerRegister,
-    customerLogin,
-    customer_update,
+}
+// logout 
+const tokenBlacklist = new Set();
+
+const customerLogout = async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({ msg: "Token is required" });
+    }
+
+    // Add the token to the blacklist
+    tokenBlacklist.add(token);
+
+    res.status(200).json({ msg: "Logged out successfully" });
+  } catch (error) {
+    console.error('Error logging out:', error);
+    res.status(500).json({ msg: "Failed to logout" });
+  }
+};
+
+
+
+  
+module.exports ={
+  customerRegister,
+  customerLogin,
+  customer_update,
+  customerLogout,
 }

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const SchemaOrder = new mongoose.Schema({
   customerId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId, ref : "Customer", required: true,
     required: true,
   },
   products: [
@@ -20,4 +20,4 @@ const SchemaOrder = new mongoose.Schema({
 
 const OrderModel = mongoose.model("Order", SchemaOrder); // Removed export default
 
-module.exports = OrderModel; // Export OrderModel instead
+module.exports = OrderModel;

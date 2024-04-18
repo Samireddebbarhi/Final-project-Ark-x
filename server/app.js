@@ -1,37 +1,41 @@
-// app.js
-
+require("dotenv").config();
 const express = require("express");
-const app = express();
 const mongoose = require("mongoose");
-const cookieParser = require("cookie-parser");
+const cookie = require("cookie-parser");
 const cors = require("cors");
-const logs = require("./middlewares/logs.js");
+const PORT = process.env.PORT ; // Use the PORT environment variable if set, otherwise use 3001
+const admin_route = require("./routes/auth_routes/admin_route");
+const customer_route = require("./routes/auth_routes/customer_route");
+const RouterProduct = require("./routes/product_routes");
+const verifyJwtCustomer = require("./middlewares/verifyJwtCus");
+const verifyJwtAdmin = require("./middlewares/verifyJwt");
+// const logs = require("./middlewares/logs");
+const errorHandler = require("./middlewares/errorHandling");
+const route_order = require("./routes/Customer_routes/crud_order");
 
-// Middleware
+
+const app = express();
 app.use(express.json());
 app.use(cors());
-app.use(cookieParser());
- // Place logs middleware here before any routes
+app.use(cookie());
 
+// app.use(logs());
 // Routes
-const adminRoute = require("./routes/auth_routes/admin_route");
-const customerRoute = require("./routes/auth_routes/customer_route");
-const routerProduct = require("./routes/product_routes.js");
-const orderRoutes = require("./routes/order_routes.js");
+app.use("/api/admin", admin_route);
+app.use("/api/customer", customer_route);
+app.use("/api/customer/order", verifyJwtCustomer, route_order)
+// app.use("/api/customer/product", verifyJwtCustomer, RouterProduct);
+// app.use("/api/admin/product", verifyJwtAdmin, RouterProduct);
 
-app.use("/api/admin", adminRoute);
-app.use("/api/customer", customerRoute);
-app.use("/api/admin/product", routerProduct);
-app.use("/api/customer/order", orderRoutes);
+// app.use(errorHandler());
 
-// Connect to MongoDB
-mongoose.connect(process.env.URI)
-    .then(() => {
-        console.log("Connected to MongoDB");
-    })
-    .catch((err) => console.error(err));
-
-const PORT = process.env.PORT ;
+// Connect to MongoDB database using Mongoose
+mongoose
+  .connect(`${process.env.URI}`)
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err) => console.error(err));
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

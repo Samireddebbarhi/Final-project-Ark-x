@@ -17,5 +17,5 @@ const verifyJwtAdmin = (req, res, next) => {
 };
 
 
-module.exports ={ verifyJwtAdmin};
+module.exports = verifyJwtAdmin;
 

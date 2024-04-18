@@ -1,4 +1,4 @@
-const express = require('express');
+
 const Customer = require('../../Models/Customer')
 
 
@@ -57,11 +57,9 @@ const deleteById = async (req, res) => {
 
 }
 
-
-module.exports = {
+module.exports ={
     getAllCustomers,
-    getById ,
+    getById,
     deleteById,
-   
 }
 
