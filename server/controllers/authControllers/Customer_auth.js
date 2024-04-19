@@ -5,7 +5,6 @@ const CustomerModel = require('../../Models/CustomerModel');
 
 
 const customerRegister = async (req, res) => {
-
     try {
         const customer = req.body;
         if (!customer) {
@@ -16,16 +15,15 @@ const customerRegister = async (req, res) => {
                 name: customer.name,
                 email: customer.email,
                 dateOfBirth: customer.dateOfBirth,
+        username: customer.username,
                 password: hashedPassword,
             });
-            newCustomer.save()
-                .then(() => {
-                    res.status(200).json({ Success_msg: `${customer.name} added successfully` });
+      newCustomer.save().then(() => {
+        res
+          .status(200)
+          .json({ Success_msg: `${customer.username} added successfully` });
                 });
         }
-    } catch (err) {
-        console.log(err);
-    }
 }
 //  
 const customerLogin = async (req, res) => {
