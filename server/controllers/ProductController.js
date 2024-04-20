@@ -1,5 +1,7 @@
 const Product = require("../Models/ProductModel");
 const Category = require("../models/CategoryModel");
+const Image = require("../Models/ImageModel")
+// it work
 const getAllProducts = async (req, res, next) => {
   const product = await Product.find();
   if (!product)
@@ -8,6 +10,7 @@ const getAllProducts = async (req, res, next) => {
       .json({ success: false, msg: "No products exists in the database" });
   return res.status(200).json({ succeess: true, product });
 };
+// it work
 const createProduct = (req, res) => {
   const product = req.body;
   const categoryName = product.category;
@@ -32,7 +35,7 @@ const createProduct = (req, res) => {
     });
   });
 };
-
+// i
 const updateProduct = async (req, res) => {
   try {
     const categoryName = req.body.category;
@@ -105,6 +108,26 @@ const deleteAllProducts = async (req, res, next) => {
     res.status(500).send(`Internal server error`);
   }
 };
+// Function to upload an image for a product
+const uploadProductImage = async (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No image file uploaded');
+  }
+
+  const image = new Image({
+    filename: req.file.filename,
+    path: req.file.path
+  });
+
+  try {
+    await image.save();
+    res.status(200).send('Image uploaded and saved successfully');
+  } catch (error) {
+    res.status(500).send('Error saving image to the database');
+  }
+};
+
+
 
 module.exports = {
   getAllProducts,
@@ -113,4 +136,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   deleteAllProducts,
+  uploadProductImage,
 };

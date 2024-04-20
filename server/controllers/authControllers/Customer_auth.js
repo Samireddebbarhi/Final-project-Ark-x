@@ -5,27 +5,31 @@ const CustomerModel = require('../../Models/CustomerModel');
 
 
 const customerRegister = async (req, res) => {
-    try {
-        const customer = req.body;
-        if (!customer) {
-            res.status(400).send("No data provided");
-        } else {
-            let hashedPassword = await bcrypt.hash(customer.password, 10); //Encryption of password using Bcrypt
-            const newCustomer = new CustomerModel({
-                name: customer.name,
-                email: customer.email,
-                dateOfBirth: customer.dateOfBirth,
+  try {
+    const customer = req.body;
+    if (!customer) {
+      res.status(400).send("No data provided");
+    } else {
+      let hashedPassword = await bcrypt.hash(customer.password, 10); // Encryption of password using Bcrypt
+      const newCustomer = new CustomerModel({
+        name: customer.name,
+        email: customer.email,
+        dateOfBirth: customer.dateOfBirth,
         username: customer.username,
-                password: hashedPassword,
-            });
+        password: hashedPassword,
+      });
       newCustomer.save().then(() => {
-        res
-          .status(200)
-          .json({ Success_msg: `${customer.username} added successfully` });
-                });
-        }
-}
-//  
+        res.status(200).json({ Success_msg: `${customer.username} added successfully` });
+      });
+    }
+  } catch (error) {
+    // Handle any errors that occur during registration
+    console.error("Error in customer registration:", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+
 const customerLogin = async (req, res) => {
   try {
     const { email, password } = req.body;

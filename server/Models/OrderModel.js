@@ -8,6 +8,17 @@ const SchemaOrder = new mongoose.Schema({
   products: [
     { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
   ],
+  paymentInfo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Payment",
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ["Pending", "Processing"],
+    default: "Pending",
+  },
+
   orderDate: {
     type: Date,
     default: Date.now,

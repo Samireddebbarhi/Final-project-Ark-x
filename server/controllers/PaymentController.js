@@ -133,11 +133,18 @@ const captureOrder = async (req, res) => {
     const { jsonResponse, httpStatusCode } = await capture_Order(orderID);
     res.status(httpStatusCode).json(jsonResponse);
   } catch (error) {
-    console.error("Error processing payment:", error.message);
-    res.status(500).json({ error: "Payment failed" });
+    console.error("Failed to create order:", error);
+    res.status(500).json({ error: "Failed to capture order." });
   }
 };
 
+// serve index.html
+//const render = (req, res) => {
+//res.sendFile(path.resolve("./client/checkout.html"));
+//};
+
 module.exports = {
-  processPayment,
+  createOrder,
+  captureOrder,
+
 };
