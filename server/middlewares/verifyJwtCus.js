@@ -5,7 +5,8 @@ const verifyJwtCustomer = (req, res, next) => {
   const token = authHeader.split(" ")[1];
   jwt.verify(token, process.env.TOKEN_CUSTOMER, (err, user) => {
     if (err) {
-      res.sendStatus(403); //inavlid token
+      res.sendStatus(403); //inavlid token*
+      console.log(res)
     }
     req.id = user.CustomerId;
     next();

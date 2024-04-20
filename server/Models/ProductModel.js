@@ -2,35 +2,45 @@ const mongoose = require("mongoose");
 
 const SchemaProduct = new mongoose.Schema(
   {
-    name: {
+    title: {
       type: String,
       required: true,
     },
+    slug: {
+      type: String,
+      required : true,
+      unique: true,
+      lowercase: true,
 
+    },
+    description: {
+      type: String,
+      required: true,
+    },
     price: {
       type: Number,
       required: true,
-    },
-    currency: {
-      type: String,
-      default: "USD",
     },
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
     },
-
-    location: {
+    brand:{
       type: String,
+      enum: ["Apple","Samsung"]
     },
-    adsplatform: {
-      type: String,
-      required: true,
-    },
-    rating: {
+    quantity: {
       type: Number,
-      required: true,
     },
+    image:{
+      type: String,
+    },
+    rating: [
+      {
+        star: Number,
+        postedby:  {type: mongoose.Schema.Types.ObjectId, ref: "User"},
+      }
+    ]
   },
   {
     timestamps: true,

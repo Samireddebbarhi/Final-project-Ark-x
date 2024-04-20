@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
 
 const SchemaOrder = new mongoose.Schema({
-  customer: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Customer",
+  customerId: {
+    type: mongoose.Schema.Types.ObjectId, ref : "Customer", required: true,
     required: true,
   },
   products: [
@@ -22,7 +21,7 @@ const SchemaOrder = new mongoose.Schema({
 
   orderDate: {
     type: Date,
-    required: Date.now(),
+    default: Date.now,
   },
   totalAmount: {
     type: Number, // Changed to Number if this should represent a numeric value
@@ -32,4 +31,4 @@ const SchemaOrder = new mongoose.Schema({
 
 const OrderModel = mongoose.model("Order", SchemaOrder); // Removed export default
 
-module.exports = OrderModel; // Export OrderModel instead
+module.exports = OrderModel;

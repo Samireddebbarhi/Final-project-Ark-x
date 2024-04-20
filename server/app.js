@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3001; // Use the PORT environment variable if s
 const admin_route = require("./routes/auth_routes/admin_route");
 const customer_route = require("./routes/auth_routes/customer_route");
 const RouterProduct = require("./routes/product_routes");
+const Cardt = require("./routes/cart_routes")
 const PayRoute = require("./routes/payment_routes");
 const verifyJwtCustomer = require("./middlewares/verifyJwtCus");
 const verifyJwtAdmin = require("./middlewares/verifyJwt");
@@ -22,8 +23,9 @@ app.use(logs);
 // Routes
 app.use("/api/admin", admin_route);
 app.use("/api/customer", customer_route);
+app.use("/api/customer/card", Cardt)
 app.use("/api/customer/product", verifyJwtCustomer, RouterProduct);
-app.use("/api/admin/product", verifyJwtAdmin, RouterProduct);
+app.use("/api/admin/product",  RouterProduct);
 app.use("/api/orders/", PayRoute);
 app.get("/", (req, res) => {
   res.sendFile(path.resolve("./client/checkout.html"));
