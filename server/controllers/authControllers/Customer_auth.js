@@ -44,7 +44,7 @@ const customerLogin = async (req, res) => {
         }
         const token = jwt.sign(
           { CustomerId: customer._id },
-          process.env.TOKEN_SECRET,
+          process.env.TOKEN_CUSTOMER,
           {
             expiresIn: "20m",
           }
