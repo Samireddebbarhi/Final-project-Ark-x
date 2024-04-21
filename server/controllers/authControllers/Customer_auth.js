@@ -1,8 +1,7 @@
 require("dotenv").config();
 const bcrypt = require("bcrypt");
-const jwt = require('jsonwebtoken')
-const CustomerModel = require('../../Models/CustomerModel');
-
+const jwt = require("jsonwebtoken");
+const CustomerModel = require("../../models/CustomerModel");
 
 const customerRegister = async (req, res) => {
   try {
@@ -19,7 +18,9 @@ const customerRegister = async (req, res) => {
         password: hashedPassword,
       });
       newCustomer.save().then(() => {
-        res.status(200).json({ Success_msg: `${customer.username} added successfully` });
+        res
+          .status(200)
+          .json({ Success_msg: `${customer.username} added successfully` });
       });
     }
   } catch (error) {
@@ -28,7 +29,6 @@ const customerRegister = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
 
 const customerLogin = async (req, res) => {
   try {
@@ -45,7 +45,11 @@ const customerLogin = async (req, res) => {
           return res.status(400).json({ msg: "Password invalid, Try again" });
         }
         const token = jwt.sign(
-          { CustomerId: customer._id },
+          {
+            CustomerId: customer._id,
+            Name: customer.name,
+            userRole: customer.role,
+          },
           process.env.TOKEN_CUSTOMER,
           {
             expiresIn: "20m",
@@ -63,27 +67,30 @@ const customerLogin = async (req, res) => {
 };
 // update customer Profile by Customer
 const customer_update = async (req, res) => {
-    try{
-        
-        const updated = await CustomerModel.updateOne({
-
+  try {
+    const updated = await CustomerModel.updateOne(
+      {
         username: req.body.name,
         email: req.body.email,
-        password: req.body.password
-        },{
+        password: req.body.password,
+      },
+      {
         new: true,
-        })
-        
-        if (!updated) {
-        return res.status(404).json({ message: 'Customer not found' });
-        }
-        res.status(200).json({ message: 'Customer Updated successfully'});
-        } catch(err) {
-        console.log(err);
-        res.status(500).json({error:'Failed to update customer, please try again' , err});
-        };
-}
-// logout 
+      }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: "Customer not found" });
+    }
+    res.status(200).json({ message: "Customer Updated successfully" });
+  } catch (err) {
+    console.log(err);
+    res
+      .status(500)
+      .json({ error: "Failed to update customer, please try again", err });
+  }
+};
+// logout
 const tokenBlacklist = new Set();
 
 const customerLogout = async (req, res) => {
@@ -99,17 +106,14 @@ const customerLogout = async (req, res) => {
 
     res.status(200).json({ msg: "Logged out successfully" });
   } catch (error) {
-    console.error('Error logging out:', error);
+    console.error("Error logging out:", error);
     res.status(500).json({ msg: "Failed to logout" });
   }
 };
 
-
-
-  
-module.exports ={
+module.exports = {
   customerRegister,
   customerLogin,
   customer_update,
   customerLogout,
-}
+};

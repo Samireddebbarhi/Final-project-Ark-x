@@ -6,9 +6,10 @@ const verifyJwtCustomer = (req, res, next) => {
   jwt.verify(token, process.env.TOKEN_CUSTOMER, (err, user) => {
     if (err) {
       res.sendStatus(403); //inavlid token*
-      console.log(res)
+      console.log(res);
     }
     req.id = user.CustomerId;
+    req.role = user.userRole;
     next();
   });
 };
