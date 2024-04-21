@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const validator = require("validator");
 const SchemaCustomer = new mongoose.Schema(
   {
     username: {
@@ -25,7 +25,6 @@ const SchemaCustomer = new mongoose.Schema(
       type: String,
       required: [true, "please enter your password"],
       minlength: [8, "password should be atleast 8 char"],
-      select: false,
     },
     avatar: {
       image: {

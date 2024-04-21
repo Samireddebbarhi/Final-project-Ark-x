@@ -11,10 +11,7 @@ const customerRegister = async (req, res) => {
     } else {
       let hashedPassword = await bcrypt.hash(customer.password, 10); // Encryption of password using Bcrypt
       const newCustomer = new CustomerModel({
-        name: customer.name,
-        email: customer.email,
-        dateOfBirth: customer.dateOfBirth,
-        username: customer.username,
+        ...customer,
         password: hashedPassword,
       });
       newCustomer.save().then(() => {
@@ -46,9 +43,7 @@ const customerLogin = async (req, res) => {
         }
         const token = jwt.sign(
           {
-            CustomerId: customer._id,
-            Name: customer.name,
-            userRole: customer.role,
+            InfoUser: customer,
           },
           process.env.TOKEN_CUSTOMER,
           {

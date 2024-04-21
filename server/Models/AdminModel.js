@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 const SchemaAdmin = new mongoose.Schema({
   username: {
@@ -6,25 +7,23 @@ const SchemaAdmin = new mongoose.Schema({
     required: [true, "Username is required"],
     unique: true,
   },
-
   name: {
     type: String,
-    required: [true, "please enter your name"],
-    maxlength: [40, "Name should not exceed more than 30 char"],
-    minlength: [4, "Name should be atleast 4 char"],
+    required: [true, "Please enter your name"],
+    maxlength: [40, "Name should not exceed more than 30 characters"],
+    minlength: [4, "Name should be at least 4 characters"],
   },
   email: {
     type: String,
-    required: [true, "please enter your email"],
+    required: [true, "Please enter your email"],
     unique: true,
     validate: [validator.isEmail, "Please enter a valid email"],
     lowercase: true,
   },
   password: {
     type: String,
-    required: [true, "please enter your password"],
-    minlength: [8, "password should be atleast 8 char"],
-    select: false,
+    required: [true, "Please enter your password"],
+    minlength: [8, "Password should be at least 8 characters"],
   },
   avatar: {
     image: {
@@ -34,8 +33,15 @@ const SchemaAdmin = new mongoose.Schema({
   },
   role: {
     type: String,
+    enum: ["admin", "super_admin"],
     default: "admin",
   },
+  permissions: [
+    {
+      type: String,
+      enum: ["create", "read", "update", "delete"],
+    },
+  ],
 });
 
 const AdminModel = mongoose.model("Admins", SchemaAdmin);

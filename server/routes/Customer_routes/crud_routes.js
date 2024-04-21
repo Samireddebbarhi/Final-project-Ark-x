@@ -1,15 +1,25 @@
-const express = require('express');
+const express = require("express");
 const crudRouter = express.Router();
-const Crud = require('../../controllers/CustomerData/Customer_CRUD');
-// const { verifyJwtAdmin } = require('../../middlewares/verifyJwt');
-// const { verifyJwtCustomer } = require('../../middlewares/verifyJwtCus');
+const Crud = require("../../controllers/data_controllers/Customer_CRUD");
 
-// crudRouter.use(verifyJwtAdmin)
+const {
+  checkRoleAndPermission,
+} = require("../../middlewares/verifyRole_permission");
 
-// crudRouter.use(express.json());
-
-crudRouter.get('/customers',  Crud.getAllCustomers);
-crudRouter.get('/customers/:id',  Crud.getById);
-crudRouter.delete('/customers/:id',  Crud.deleteById);
+crudRouter.get(
+  "/customers/All",
+  checkRoleAndPermission(["super_admin", "admin"], "read"),
+  Crud.getAllCustomers
+);
+crudRouter.get(
+  "/customers/:id",
+  checkRoleAndPermission(["admin", "super_admin"], "read"),
+  Crud.getById
+);
+crudRouter.delete(
+  "/customers/:id",
+  checkRoleAndPermission(["admin", "super_admin"], "delete"),
+  Crud.deleteById
+);
 
 module.exports = crudRouter;
