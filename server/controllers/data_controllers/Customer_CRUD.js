@@ -52,9 +52,41 @@ const deleteById = async (req, res) => {
       .json({ error: "Failed to delete customer, please try again" });
   }
 };
+// update customer 
+const updateById = async (req, res) => {
+  try {
+    const customerId = req.params.id;
+    const updates = req.body; // Assuming request body contains updated fields
+
+    // Check if the customer exists
+    const existingCustomer = await CustomerModel.findById(customerId);
+    if (!existingCustomer) {
+      return res.status(404).json({ message: "Customer not found" });
+    }
+
+    // Update the customer with the new information
+    // Using { new: true } to return the updated document
+    const updatedCustomer = await CustomerModel.findByIdAndUpdate(
+      customerId,
+      updates,
+      { new: true }
+    );
+
+    // Check if the update was successful
+    if (!updatedCustomer) {
+      return res.status(500).json({ error: "Failed to update customer" });
+    }
+
+    res.status(200).json({ message: "Customer updated successfully", updatedCustomer });
+  } catch (error) {
+    console.error("Error updating customer by ID:", error);
+    res.status(500).json({ error: "Failed to update customer, please try again" });
+  }
+};
 
 module.exports = {
   getAllCustomers,
   getById,
   deleteById,
+  updateById,
 };

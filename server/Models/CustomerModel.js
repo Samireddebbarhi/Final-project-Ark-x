@@ -42,6 +42,13 @@ const SchemaCustomer = new mongoose.Schema(
     resetPasswordExpire: {
       type: Date,
     },
+    permissions: [
+      {
+        type: String,
+        default :{
+          enum: ["create", "read", "update", "delete"]},
+      },
+    ],
   },
   {
     timestamps: true,
