@@ -1,35 +1,37 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null); // State for handling login errors
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email);
-    console.log(password);
 
     try {
-      // Send POST request to login endpoint
-      const response = await axios.post('http://localhost:3001/api/admin/login', {
+      const formData = {
+        email,
+        password
+      };
+
+      const response = await fetch('http://localhost:3001/api/v1/admin/super/login', {
+        method:"POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
       });
-      console.log(response)
-      if(response.status === 200) {
-        alert('You are Logged Successfully')
-      }else {
-        throw new Error("Invalid Username and Password")
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
       }
+
+      const data = await response.json();
+      console.log('Login successful:', data);
     } catch (error) {
-      // Handle login error
-      setError('Invalid email or password. Please try again.');
-      console.log(error) // Set error message
+      console.error('Login failed:', error);
     }
   };
-// i stop here
+
   return (
     <div className="flex justify-center items-center h-screen">
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-1/3" onSubmit={handleSubmit}>
@@ -60,7 +62,6 @@ const LoginForm = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-      
         <div className="flex items-center justify-between">
           <button
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

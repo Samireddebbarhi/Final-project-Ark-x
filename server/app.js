@@ -10,6 +10,7 @@ const customer_route = require("./routes/auth_routes/customer_route");
 const RouterProduct = require("./routes/product_routes");
 const customer_crud = require("./routes/Customer_routes/crud_routes");
 const Cardt = require("./routes/cart_routes");
+const catg_route = require("./routes/category_route");
 const PayRoute = require("./routes/payment_routes");
 const verifyJwtCustomer = require("./middlewares/verifyJwtCus");
 const verifyJwtAdmin = require("./middlewares/verifyJwt");
@@ -22,13 +23,17 @@ app.use(cookie());
 app.use(express.static("client"));
 app.use(logs);
 // Routes
-app.use("/api/admin", admin_route.authRoute);
-app.use("/api/admin/super", verifyJwtAdmin, admin_route.adminRouter);
-app.use("/api/admin", verifyJwtAdmin, customer_crud);
-app.use("/api/customer", customer_route);
-app.use("/api/customer", verifyJwtCustomer,customer_crud);
+app.use("/api/v2/admin", admin_route.authRoute);
+app.use("/api/v1/admin/super", verifyJwtAdmin, admin_route.adminRouter);
+app.use("/api/v2/admin", verifyJwtAdmin, customer_crud);
+app.use("/api/v2/customer", verifyJwtCustomer, customer_crud);
 
+app.use("/api/v2/admin", verifyJwtAdmin, catg_route);
+app.use("/api/v2/customer", verifyJwtCustomer, catg_route);
+app.use("/api/v1/customer", customer_route);
 app.use("/api/customer/card", Cardt);
+app.use("/api/customer/card", Cardt);
+
 app.use("/api/admin/product", verifyJwtAdmin, RouterProduct);
 app.use("/api/orders/", PayRoute);
 app.get("/", (req, res) => {

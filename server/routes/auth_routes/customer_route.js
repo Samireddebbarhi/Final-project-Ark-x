@@ -1,8 +1,6 @@
 const authenticate = require("../../controllers/authControllers/Customer_auth");
 const express = require("express");
-const {
-  checkRoleAndPermission,
-} = require("../../middlewares/verifyRole_permission");
+
 const customerRoute = express.Router();
 
 customerRoute.post("/logout", authenticate.customerLogout);

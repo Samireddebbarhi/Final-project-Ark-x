@@ -36,6 +36,10 @@ const SchemaCustomer = new mongoose.Schema(
       type: String,
       default: "user",
     },
+    permissions: {
+      type: [String],
+      default: ["create", "read", "update", "delete"],
+    },
     resetPasswordToken: {
       type: String,
     },
