@@ -23,9 +23,9 @@ app.use(cookie());
 app.use(express.static("client"));
 app.use(logs);
 // Routes
-app.use("/api/v2/admin", admin_route.authRoute);
-app.use("/api/v1/admin/super", verifyJwtAdmin, admin_route.adminRouter);
-app.use("/api/v2/admin", verifyJwtAdmin, customer_crud);
+app.use("/api/v1/admin/super", admin_route.authRoute);
+app.use("/api/v2/admin/super", verifyJwtAdmin, admin_route.adminRouter);
+app.use("/api/v2/admin/super", verifyJwtAdmin, customer_crud);
 app.use("/api/v2/customer", verifyJwtCustomer, customer_crud);
 
 app.use("/api/v2/admin", verifyJwtAdmin, catg_route);
