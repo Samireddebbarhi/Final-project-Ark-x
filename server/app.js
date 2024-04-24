@@ -26,7 +26,7 @@ app.use("/api/admin", admin_route.authRoute);
 app.use("/api/admin/super", verifyJwtAdmin, admin_route.adminRouter);
 app.use("/api/admin", verifyJwtAdmin, customer_crud);
 app.use("/api/customer", customer_route);
-app.use("/api/customer", verifyJwtCustomer ,customer_crud);
+app.use("/api/customer", verifyJwtCustomer,customer_crud);
 
 app.use("/api/customer/card", Cardt);
 app.use("/api/admin/product", verifyJwtAdmin, RouterProduct);
