@@ -13,12 +13,12 @@ crudRouter.get(
 );
 crudRouter.get(
   "/customers/:id",
-  checkRoleAndPermission(["admin", "super_admin"], "read"),
+  checkRoleAndPermission(["admin", "super_admin", "user"], "read"),
   Crud.getById
 );
 crudRouter.delete(
   "/customers/:id",
-  checkRoleAndPermission(["admin", "super_admin"], "delete"),
+  checkRoleAndPermission(["admin", "super_admin", "user"], "delete"),
   Crud.deleteById
 );
 

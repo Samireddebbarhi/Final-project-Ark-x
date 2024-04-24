@@ -52,6 +52,34 @@ const deleteById = async (req, res) => {
       .json({ error: "Failed to delete customer, please try again" });
   }
 };
+/*const updateById= async (req, res) => {
+  try{
+    const res =await  CustomerModel.findById({_id : req.params.id},{$set:{
+      name : req.body.name ,
+      email : req.body.email,
+      password : req.body.password,
+      address : req.body.address
+    }});
+   
+
+    }
+
+    }
+    // If no changes were made, send back original data
+    if(!res) {
+        return res.status(400).json({success:"False",err_msg:"no customer with this id found "});
+
+    }
+    const updated=
+    
+
+
+
+  }catch(err){
+    console.log('update err', err)
+  }
+  }
+*/
 
 module.exports = {
   getAllCustomers,
