@@ -1,11 +1,10 @@
-import React from 'react';
+import React from 'react'
 
-function Home() {
+
+export default function Home() {
   return (
-    <div className='home'>
-      <h1>Home</h1>
-    </div>
-  );
-}
+  
+      <h1> Home page </h1>
 
-export default Home;
+  )
+}

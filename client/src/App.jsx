@@ -1,25 +1,19 @@
-
-import React from 'react';
-import './App.css';
-import Navbar from './admin/components/sidebar/Navbar';
-import { BrowserRouter as Router, Navigate, Route } from 'react-router-dom';
+import React from 'react'
+import "./App.css"
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Home from './pages/Home';
-import Reports from './pages/Report';
+import MainLyaout from './admin/components/MainLyaout';
 import Products from './pages/Products';
 
-function App() {
+function App () {
   return (
-    <>
-      <Router>
-        <Navbar />
-        <Navigate>
-          <Route path='/' exact component={Home} />
-          <Route path='/reports' component={Reports} />
-          <Route path='/products' component={Products} />
-        </Navigate>
-      </Router>
-    </>
-  );
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainLyaout />} />
+        
+      </Routes>
+    </Router>
+  )
 }
 
-export default App;
+export default App
