@@ -1,14 +1,14 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-<<<<<<< HEAD
+
 // HEAD
 const packRouter = require("./routes/pack_route");
 const categoryRouter = require("./routes/category_route");
 
-=======
+
 const path = require("path");
->>>>>>> 52f2c6e9f3e9ec304d09b9e68b967bb5427ed5cf
+
 const cookie = require("cookie-parser");
 const cors = require("cors");
 // e4ebd8e905e4957ceeec146e9e4f44a8b0375ba7
@@ -36,7 +36,7 @@ app.use(cookie());
 app.use(express.static("client"));
 app.use(logs);
 // Routes
-<<<<<<< HEAD
+
 app.use("/api/admin", admin_route);
 app.use("/api/customer", customer_route);
 // HEAD
@@ -44,7 +44,7 @@ app.use("/api/pack", packRouter);
 app.use("/api/category", categoryRouter);
 
 app.use("/api/customer/product", /*verifyJwtCustomer,*/ RouterProduct);
-=======
+
 app.use("/api/v2/admin", admin_route.authRoute);
 app.use("/api/v1/admin/super", verifyJwtAdmin, admin_route.adminRouter);
 app.use("/api/v2/admin", verifyJwtAdmin, customer_crud);
@@ -56,7 +56,7 @@ app.use("/api/v1/customer", customer_route);
 app.use("/api/customer/card", Cardt);
 app.use("/api/customer/card", Cardt);
 
->>>>>>> 52f2c6e9f3e9ec304d09b9e68b967bb5427ed5cf
+
 app.use("/api/admin/product", verifyJwtAdmin, RouterProduct);
 app.use("/api/orders/", PayRoute);
 app.get("/", (req, res) => {
