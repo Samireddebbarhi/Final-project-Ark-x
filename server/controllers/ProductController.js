@@ -1,6 +1,6 @@
-const Product = require("../Models/ProductModel");
+const Product = require("../models/ProductModel");
 const Category = require("../models/CategoryModel");
-const Image = require("../Models/ImageModel")
+const Image = require("../Models/ImageModel");
 // it work
 const getAllProducts = async (req, res, next) => {
   const product = await Product.find();
@@ -111,23 +111,21 @@ const deleteAllProducts = async (req, res, next) => {
 // Function to upload an image for a product
 const uploadProductImage = async (req, res) => {
   if (!req.file) {
-    return res.status(400).send('No image file uploaded');
+    return res.status(400).send("No image file uploaded");
   }
 
   const image = new Image({
     filename: req.file.filename,
-    path: req.file.path
+    path: req.file.path,
   });
 
   try {
     await image.save();
-    res.status(200).send('Image uploaded and saved successfully');
+    res.status(200).send("Image uploaded and saved successfully");
   } catch (error) {
-    res.status(500).send('Error saving image to the database');
+    res.status(500).send("Error saving image to the database");
   }
 };
-
-
 
 module.exports = {
   getAllProducts,

@@ -5,7 +5,7 @@ const {
 } = require("../middlewares/verifyRole_permission");
 
 catg_route.get(
-  "/getCategory",
+  "/getCategory/:id",
   checkRoleAndPermission(["super_admin", "admin", "user"], "read"),
   catg_controller.getCategory
 );

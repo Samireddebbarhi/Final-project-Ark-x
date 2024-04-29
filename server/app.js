@@ -29,12 +29,13 @@ app.use("/api/v2/admin/super", verifyJwtAdmin, customer_crud);
 app.use("/api/v2/customer", verifyJwtCustomer, customer_crud);
 
 app.use("/api/v2/admin", verifyJwtAdmin, catg_route);
+app.use("/api/v2/admin", verifyJwtAdmin, RouterProduct);
+
 app.use("/api/v2/customer", verifyJwtCustomer, catg_route);
 app.use("/api/v1/customer", customer_route);
 app.use("/api/customer/card", Cardt);
 app.use("/api/customer/card", Cardt);
 
-app.use("/api/admin/product", verifyJwtAdmin, RouterProduct);
 app.use("/api/orders/", PayRoute);
 app.get("/", (req, res) => {
   res.sendFile(path.resolve("./client/checkout.html"));
