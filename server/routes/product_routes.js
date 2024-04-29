@@ -6,7 +6,7 @@ const upload = require("../middlewares/uploadImage");
 
 RouterProduct.get("/", controller.getAllProducts);
 RouterProduct.post("/upload", upload.single("image"), controller.uploadProductImage)
-RouterProduct.get("/:id", controller.getProductDetails);
+// RouterProduct.get("/:id", controller.getProductDetails);
 RouterProduct.post("/", controller.createProduct);
 RouterProduct.put("/:id", controller.updateProduct);
 RouterProduct.delete("/", controller.deleteAllProducts);
