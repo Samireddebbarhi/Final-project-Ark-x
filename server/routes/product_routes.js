@@ -33,12 +33,12 @@ RouterProduct.put(
   controller.updateProduct
 );
 RouterProduct.delete(
-  "/",
+  "/deleteAllProduct",
   checkRoleAndPermission(["super_admin", "admin"]),
   controller.deleteAllProducts
 );
 RouterProduct.delete(
-  "/:id",
+  "/deleteProduct/:id",
   checkRoleAndPermission(["super_admin", "admin"]),
   controller.deleteProduct
 );

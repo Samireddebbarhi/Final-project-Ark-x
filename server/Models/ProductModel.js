@@ -24,13 +24,12 @@ const productSchema = new mongoose.Schema(
         {
           type: mongoose.Types.ObjectId,
           ref: "Image",
-          required: [true, "please Enter the images"],
+          //  required: [true, "please Enter the images"],
         },
       ],
     },
     category: {
-      type: mongoose.Types.ObjectId,
-      ref: "Category",
+      type: String,
       required: [true, "please Enter the product category"],
     },
     stock: {
@@ -48,7 +47,7 @@ const productSchema = new mongoose.Schema(
         customers: {
           type: mongoose.Schema.ObjectId,
           ref: "Review",
-          required: true,
+          // required: true,
         },
       },
     ],
