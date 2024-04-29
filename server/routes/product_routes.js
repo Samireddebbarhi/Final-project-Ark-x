@@ -3,13 +3,44 @@ var RouterProduct = express.Router();
 const controller = require("../controllers/ProductController");
 const upload = require("../middlewares/uploadImage");
 //localhost:3001/api/customer/product
+const {
+  checkRoleAndPermission,
+} = require("../middlewares/verifyRole_permission");
 
-RouterProduct.get("/", controller.getAllProducts);
-RouterProduct.post("/upload", upload.single("image"), controller.uploadProductImage)
-RouterProduct.get("/:id", controller.getProductDetails);
-RouterProduct.post("/", controller.createProduct);
-RouterProduct.put("/:id", controller.updateProduct);
-RouterProduct.delete("/", controller.deleteAllProducts);
-RouterProduct.delete("/:id", controller.deleteProduct);
+RouterProduct.get(
+  "/",
+  checkRoleAndPermission(["super_admin", "admin"]),
+  controller.getAllProducts
+);
+RouterProduct.post(
+  "/upload",
+  upload.single("image"),
+  controller.uploadProductImage
+);
+RouterProduct.get(
+  "/:id",
+  checkRoleAndPermission(["super_admin", "admin"]),
+  controller.getProductDetails
+);
+RouterProduct.post(
+  "/createProduct",
+  checkRoleAndPermission(["super_admin", "admin"], "create"),
+  controller.createProduct
+);
+RouterProduct.put(
+  "/:id",
+  checkRoleAndPermission(["super_admin", "admin"]),
+  controller.updateProduct
+);
+RouterProduct.delete(
+  "/deleteAllProduct",
+  checkRoleAndPermission(["super_admin", "admin"]),
+  controller.deleteAllProducts
+);
+RouterProduct.delete(
+  "/deleteProduct/:id",
+  checkRoleAndPermission(["super_admin", "admin"]),
+  controller.deleteProduct
+);
 
 module.exports = RouterProduct;
