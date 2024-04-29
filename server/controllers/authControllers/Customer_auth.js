@@ -1,7 +1,7 @@
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const CustomerModel = require("../../models/CustomerModel.js");
+const CustomerModel = require("../../models/CustomerModel");
 
 const customerRegister = async (req, res) => {
   try {
@@ -9,12 +9,9 @@ const customerRegister = async (req, res) => {
     if (!customer) {
       res.status(400).send("No data provided");
     } else {
-      let hashedPassword = await bcrypt.hash(customer.password, 10); //Encryption of password using Bcrypt
+      let hashedPassword = await bcrypt.hash(customer.password, 10); // Encryption of password using Bcrypt
       const newCustomer = new CustomerModel({
-        name: customer.name,
-        email: customer.email,
-        dateOfBirth: customer.dateOfBirth,
-        username: customer.username,
+        ...customer,
         password: hashedPassword,
       });
       newCustomer.save().then(() => {
@@ -23,11 +20,13 @@ const customerRegister = async (req, res) => {
           .json({ Success_msg: `${customer.username} added successfully` });
       });
     }
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    // Handle any errors that occur during registration
+    console.error("Error in customer registration:", error);
+    res.status(500).send("Internal Server Error");
   }
 };
-//
+
 const customerLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -43,8 +42,10 @@ const customerLogin = async (req, res) => {
           return res.status(400).json({ msg: "Password invalid, Try again" });
         }
         const token = jwt.sign(
-          { CustomerId: customer._id },
-          process.env.TOKEN_SECRET,
+          {
+            InfoUser: customer,
+          },
+          process.env.TOKEN_CUSTOMER,
           {
             expiresIn: "20m",
           }
@@ -52,14 +53,62 @@ const customerLogin = async (req, res) => {
 
         res
           .status(200)
-          .send(`${customer.username} logged in with a token: ${token}`);
+          .send(`${customer.name} logged in with a token: ${token}`);
       });
     });
   } catch {
     console.log(err);
   }
 };
+// update customer Profile by Customer
+const customer_update = async (req, res) => {
+  try {
+    const updated = await CustomerModel.updateOne(
+      {
+        username: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: "Customer not found" });
+    }
+    res.status(200).json({ message: "Customer Updated successfully" });
+  } catch (err) {
+    console.log(err);
+    res
+      .status(500)
+      .json({ error: "Failed to update customer, please try again", err });
+  }
+};
+// logout
+const tokenBlacklist = new Set();
+
+const customerLogout = async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({ msg: "Token is required" });
+    }
+
+    // Add the token to the blacklist
+    tokenBlacklist.add(token);
+
+    res.status(200).json({ msg: "Logged out successfully" });
+  } catch (error) {
+    console.error("Error logging out:", error);
+    res.status(500).json({ msg: "Failed to logout" });
+  }
+};
+
 module.exports = {
   customerRegister,
   customerLogin,
+  customer_update,
+  customerLogout,
 };
