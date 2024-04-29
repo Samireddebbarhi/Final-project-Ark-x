@@ -18,7 +18,12 @@ const logs = require("./middlewares/logs");
 const errorHandler = require("./middlewares/errorHandling");
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
+
 app.use(cookie());
 
 app.use(logs);
@@ -29,7 +34,7 @@ app.use("/api/customer", customer_route);
 app.use("/api/pack", packRouter);
 app.use("/api/category", categoryRouter);
 
-app.use("/api/customer/product", verifyJwtCustomer, RouterProduct);
+app.use("/api/customer/product", /*verifyJwtCustomer,*/ RouterProduct);
 app.use("/api/admin/product", verifyJwtAdmin, RouterProduct);
 app.use(errorHandler);
 // e4ebd8e905e4957ceeec146e9e4f44a8b0375ba7

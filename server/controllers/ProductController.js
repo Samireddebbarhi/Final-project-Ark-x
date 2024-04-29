@@ -1,5 +1,6 @@
-const Product = require("../models/ProductModel");
+const Product = require("../Models/ProductModel");
 const Category = require("../Models/CategoryModel");
+
 const getAllProducts = async (req, res, next) => {
   const product = await Product.find();
   if (!product)
@@ -8,6 +9,8 @@ const getAllProducts = async (req, res, next) => {
       .json({ success: false, msg: "No products exists in the database" });
   return res.status(200).json({ succeess: true, product });
 };
+
+
 const createProduct = (req, res) => {
   const product = req.body;
   const categoryName = product.category;
