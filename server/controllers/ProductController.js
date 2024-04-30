@@ -1,7 +1,11 @@
 const Product = require("../models/ProductModel");
+<<<<<<< HEAD
 const Category = require("../models/CategoryModel");
 const Image = require("../Models/ImageModel");
 // it work
+=======
+const Category = require("../Models/CategoryModel");
+>>>>>>> 918275d63eace52fee2029bd92b40557419f189f
 const getAllProducts = async (req, res, next) => {
   const product = await Product.find();
   if (!product)

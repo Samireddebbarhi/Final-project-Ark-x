@@ -29,36 +29,26 @@ const productSchema = new mongoose.Schema(
       ],
     },
     category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+    },
+
+    location: {
       type: String,
-      required: [true, "please Enter the product category"],
     },
-    stock: {
+    adsplatform: {
+      type: String,
+      required: true,
+    },
+    rating: {
       type: Number,
-      required: [true, "please Enter the product stock"],
-      maxLength: [4, "max stock is of 4 figure"],
-      default: 1,
-    },
-    numofReviews: {
-      type: Number,
-      default: 0,
-    },
-    reviews: [
-      {
-        customers: {
-          type: mongoose.Schema.ObjectId,
-          ref: "Review",
-          // required: true,
-        },
-      },
-    ],
-    createdAt: {
-      type: Date,
-      default: Date.now(),
+      required: true,
     },
   },
   {
     timestamps: true,
   }
+
 );
 
 const ProductModel = mongoose.model("Product", productSchema);
