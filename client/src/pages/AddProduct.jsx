@@ -34,7 +34,8 @@ const AddProduct = () => {
     },
     validationSchema: schema,
     onSubmit: (values) => {
-      alert(JSON.stringify(values))
+      dispatch(createProducts(values));
+      formik.resetForm
     },
   });
 

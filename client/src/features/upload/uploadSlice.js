@@ -11,16 +11,16 @@ export const uploadImg = createAsyncThunk("images/uploadImage", async (_, {rejec
     .catch((err) => rejectWithValue(err.response.data.message));
 });
 
-export const delImg = createAsyncThunk(
-  "delete/images",
-  async (id, thunkAPI) => {
-    try {
-      return await uploadService.deleteImg(id);
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
+// export const delImg = createAsyncThunk(
+//   "delete/images",
+//   async (id, thunkAPI) => {
+//     try {
+//       return await uploadService.deleteImg(id);
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error);
+//     }
+//   }
+// );
 const initialState = {
   images: [],
   isError: false,
@@ -49,21 +49,21 @@ export const uploadSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
       })
-      .addCase(delImg.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(delImg.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.isSuccess = true;
-        state.images = [];
-      })
-      .addCase(delImg.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.payload;
-      });
+    //   .addCase(delImg.pending, (state) => {
+    //     state.isLoading = true;
+    //   })
+    //   .addCase(delImg.fulfilled, (state, action) => {
+    //     state.isLoading = false;
+    //     state.isError = false;
+    //     state.isSuccess = true;
+    //     state.images = [];
+    //   })
+    //   .addCase(delImg.rejected, (state, action) => {
+    //     state.isLoading = false;
+    //     state.isError = true;
+    //     state.isSuccess = false;
+    //     state.message = action.payload;
+    //   });
   },
 });
 export default uploadSlice.reducer;
