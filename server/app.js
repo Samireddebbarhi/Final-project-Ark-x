@@ -3,7 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 // HEAD
-const packRouter = require("./routes/pack_route");
+
 const categoryRouter = require("./routes/category_route");
 
 
@@ -41,7 +41,7 @@ app.use(logs);
 app.use("/api/admin", admin_route);
 app.use("/api/customer", customer_route);
 // HEAD
-app.use("/api/pack", packRouter);
+
 app.use("/api/category", categoryRouter);
 
 app.use("/api/customer/product", /*verifyJwtCustomer,*/ RouterProduct);
