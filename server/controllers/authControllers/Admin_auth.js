@@ -29,9 +29,12 @@ const AdminModel = require("../../models/AdminModel.js");
 exports.login = (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password)
+  if (!email || !password){
     return res.status(400).json({ msg: "Missing fields" });
-
+  }else {
+    console.log("email and password data", email , password)
+  }
+    
   AdminModel.findOne({ email }).then(async (admin) => {
     if (!admin) return res.status(400).json({ msg: "Invalid credentials" });
 
