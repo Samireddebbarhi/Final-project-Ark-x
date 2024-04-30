@@ -1,7 +1,6 @@
 const Product = require("../models/ProductModel");
 const Category = require("../models/CategoryModel");
-const Image = require("../Models/ImageModel");
-// it work
+const Image = require("../models/ImageModel");
 const getAllProducts = async (req, res, next) => {
   const product = await Product.find();
   if (!product)
@@ -10,7 +9,6 @@ const getAllProducts = async (req, res, next) => {
       .json({ success: false, msg: "No products exists in the database" });
   return res.status(200).json({ succeess: true, product });
 };
-// it work
 
 const createProduct = async (req, res) => {
   try {
@@ -24,20 +22,18 @@ const createProduct = async (req, res) => {
       throw new Error(`Category '${categoryName}' not found.`);
     }
 
-    // Create a new product
     const newProduct = new Product({
       ...product,
-      category: categoryName, // Assign category ID to the product
+      category: categoryName,
     });
 
-    // Save the product
+    //Save the product
     await newProduct.save();
 
     // Push the product ID to the category's products array
     category.products.push(newProduct._id);
     await category.save();
 
-    // Populate the products array in the category with product details
     await category.populate("products");
 
     return res.status(201).json({

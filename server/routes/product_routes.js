@@ -18,7 +18,7 @@ RouterProduct.post(
   controller.uploadProductImage
 );
 RouterProduct.get(
-  "/:id",
+  "getProduct/:id",
   checkRoleAndPermission(["super_admin", "admin"], "read"),
   controller.getProductDetails
 );
