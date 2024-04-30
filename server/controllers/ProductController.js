@@ -18,7 +18,7 @@ const createProduct = (req, res) => {
     if (!category) {
       throw new Error(`Category '${categoryName}' not found.`);
     }
-    const newProduct = new Product({ ...product, category: category._id });
+    const newProduct = new Product({ ...product, category: categoryName });
     newProduct.save().then((newproduct, err) => {
       if (err) {
         console.log(err);
@@ -130,7 +130,7 @@ const uploadProductImage = async (req, res) => {
 module.exports = {
   getAllProducts,
   createProduct,
-  // getProductDetails,
+  
   updateProduct,
   deleteProduct,
   deleteAllProducts,

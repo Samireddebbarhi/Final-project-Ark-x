@@ -9,7 +9,7 @@ const {
 
 RouterProduct.get(
   "/",
-  checkRoleAndPermission(["super_admin", "admin"]),
+//   checkRoleAndPermission(["super_admin", "admin"])
   controller.getAllProducts
 );
 RouterProduct.post(
@@ -17,11 +17,10 @@ RouterProduct.post(
   upload.single("image"),
   controller.uploadProductImage
 );
-RouterProduct.get(
-  "/:id",
-  checkRoleAndPermission(["super_admin", "admin"]),
-  controller.getProductDetails
-);
+// RouterProduct.get(
+//   "/:id",
+//   controller.getProductDetails
+// );
 RouterProduct.post(
   "/createProduct",
   checkRoleAndPermission(["super_admin", "admin"], "create"),

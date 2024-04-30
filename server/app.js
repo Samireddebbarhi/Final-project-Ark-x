@@ -28,9 +28,9 @@ app.use("/api/v1/admin/super", admin_route.authRoute);
 app.use("/api/v2/admin/super", verifyJwtAdmin, admin_route.adminRouter);
 app.use("/api/v2/admin/super", verifyJwtAdmin, customer_crud);
 app.use("/api/v2/customer", verifyJwtCustomer, customer_crud);
-
-app.use("/api/v2/admin", verifyJwtAdmin, catg_route);
-app.use("/api/v2/admin", verifyJwtAdmin, RouterProduct);
+// i will 
+app.use("/api/v2/admin",catg_route);
+app.use("/api/v2/admin", RouterProduct);
 
 app.use("/api/v2/customer", verifyJwtCustomer, catg_route);
 app.use("/api/v1/customer", customer_route);

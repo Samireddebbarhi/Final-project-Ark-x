@@ -29,8 +29,7 @@ const productSchema = new mongoose.Schema(
       ],
     },
     category: {
-      type: mongoose.Types.ObjectId,
-      ref: "Category",
+      type: String,
       required: [true, "please Enter the product category"],
     },
     stock: {
