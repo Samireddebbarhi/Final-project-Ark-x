@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 const express = require('express');
 const categoryRouter = express.Router();
 const { addCategory, getCategory, updateCategory, deleteCategory, getAllCategories } = require('../controllers/CategoryController');
@@ -14,7 +14,6 @@ categoryRouter.delete('/:id', deleteCategory);
 categoryRouter.get('/all', getAllCategories)
 
 module.exports = categoryRouter;
-=======
 const catg_route = require("express").Router();
 const catg_controller = require("../controllers/CategoryController");
 const {
@@ -43,4 +42,3 @@ catg_route.delete(
 );
 
 module.exports = catg_route;
->>>>>>> 52f2c6e9f3e9ec304d09b9e68b967bb5427ed5cf
