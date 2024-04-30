@@ -11,34 +11,48 @@ const getAllProducts = async (req, res, next) => {
   return res.status(200).json({ succeess: true, product });
 };
 // it work
-const createProduct = (req, res) => {
-  const product = req.body;
-  const categoryName = product.category;
-  Category.findOne({ name: categoryName }).then((category) => {
+
+const createProduct = async (req, res) => {
+  try {
+    const product = req.body;
+    const categoryName = product.category;
+
+    // Find the category by name
+    const category = await Category.findOne({ name: categoryName });
+
     if (!category) {
       throw new Error(`Category '${categoryName}' not found.`);
     }
+
+    // Create a new product
     const newProduct = new Product({
       ...product,
-      category: categoryName,
+      category: categoryName, // Assign category ID to the product
     });
-    newProduct.save().then((newproduct, err) => {
-      if (err) {
-        console.log(err);
-        return res
-          .status(500)
-          .json({ success: false, msg_erreur: `Error creating product` });
-      } else {
-        return res.status(201).json({
-          success: true,
-          msg_success: "The product has been created successfully:",
-          data: newproduct,
-        });
-      }
+
+    // Save the product
+    await newProduct.save();
+
+    // Push the product ID to the category's products array
+    category.products.push(newProduct._id);
+    await category.save();
+
+    // Populate the products array in the category with product details
+    await category.populate("products");
+
+    return res.status(201).json({
+      success: true,
+      msg_success: "The product has been created successfully:",
+      data: newProduct,
     });
-  });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ success: false, msg_error: "Error creating product" });
+  }
 };
-// i
+
 const updateProduct = async (req, res) => {
   try {
     const categoryName = req.body.category;
@@ -48,11 +62,10 @@ const updateProduct = async (req, res) => {
       {
         $set: {
           name: req.body.name,
+          description: req.body.description,
           price: req.body.price,
-          location: req.body.location,
-          category: categoryUpdated?._id || null,
-          adsplatform: req.body.adsplatform,
-          rating: req.body.rating,
+          category: categoryUpdated?.name || null,
+          stock: req.body.stock,
         },
       }
     );

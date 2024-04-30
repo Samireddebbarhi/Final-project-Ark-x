@@ -8,7 +8,8 @@ const verifyJwtCustomer = (req, res, next) => {
       res.sendStatus(403); //inavlid token*
       console.log(res);
     }
-    req.user = user.InfoUser;
+    req.userId = user.InfoUser.id;
+    req.username = user.InfoUser.username;
     next();
   });
 };

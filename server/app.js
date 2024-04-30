@@ -11,6 +11,7 @@ const RouterProduct = require("./routes/product_routes");
 const customer_crud = require("./routes/Customer_routes/crud_routes");
 const Cardt = require("./routes/cart_routes");
 const catg_route = require("./routes/category_route");
+const review_route = require("./routes/Customer_routes/review_routes");
 const PayRoute = require("./routes/payment_routes");
 const verifyJwtCustomer = require("./middlewares/verifyJwtCus");
 const verifyJwtAdmin = require("./middlewares/verifyJwt");
@@ -30,8 +31,10 @@ app.use("/api/v2/customer", verifyJwtCustomer, customer_crud);
 
 app.use("/api/v2/admin", verifyJwtAdmin, catg_route);
 app.use("/api/v2/admin", verifyJwtAdmin, RouterProduct);
+app.use("/api/v2/admin", verifyJwtAdmin, review_route);
 
 app.use("/api/v2/customer", verifyJwtCustomer, catg_route);
+app.use("/api/v2/customer", verifyJwtCustomer, review_route);
 app.use("/api/v1/customer", customer_route);
 app.use("/api/customer/card", Cardt);
 app.use("/api/customer/card", Cardt);
