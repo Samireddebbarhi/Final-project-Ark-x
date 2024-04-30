@@ -43,7 +43,11 @@ const customerLogin = async (req, res) => {
         }
         const token = jwt.sign(
           {
-            InfoUser: customer,
+            InfoUser: {
+              id: customer._id,
+              name: customer.name,
+              username: customer.username,
+            },
           },
           process.env.TOKEN_CUSTOMER,
           {

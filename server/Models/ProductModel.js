@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
-<<<<<<< HEAD
-const SchemaProduct = new mongoose.Schema(
-=======
-
+const Category = require("./CategoryModel");
 const productSchema = new mongoose.Schema(
->>>>>>> 52f2c6e9f3e9ec304d09b9e68b967bb5427ed5cf
   {
     name: {
       type: String,
@@ -16,22 +12,6 @@ const productSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-<<<<<<< HEAD
-      required: true,
-    },
-    currency: {
-      type: String,
-      default: "USD",
-    },
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-    },
-
-  location: {
-    type: String,
-    required: true,
-=======
       required: [true, "please add the product price"],
       maxLength: [8, "price is too high only 8 figures are valid"],
     },
@@ -75,21 +55,10 @@ const productSchema = new mongoose.Schema(
       type: Date,
       default: Date.now(),
     },
->>>>>>> 52f2c6e9f3e9ec304d09b9e68b967bb5427ed5cf
   },
-  adsplatform: {
-    type: String,
-    required: true,
-  },
-  rating: {
-    type: String,
-    required: true,
-  },
-},
   {
     timestamps: true,
   }
-
 );
 
 const ProductModel = mongoose.model("Product", productSchema);
