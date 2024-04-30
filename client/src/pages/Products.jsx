@@ -1,9 +1,95 @@
-import React from 'react'
+import React, { useEffect } from "react";
+import { Table, Button } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { BiEdit } from "react-icons/bi";
+import { AiFillDelete } from "react-icons/ai";
+import { getProducts } from "../features/product/productSlice";
+import { Link, useNavigate } from "react-router-dom";
+const columns = [
+  {
+    title: "SNo",
+    dataIndex: "key",
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    sorter: (a, b) => a.name.length - b.name.length,
+  },
+ 
+  {
+    title: "Description",
+    dataIndex: "description",
+    sorter: (a, b) => a.description.length - b.description.length,
+  },
+  {
+    title: "Category",
+    dataIndex: "category",
+    sorter: (a, b) => a.category.length - b.category.length,
+  },
+  
+  {
+    title: "Price",
+    dataIndex: "price",
+    sorter: (a, b) => a.price - b.price,
+  },
+ 
+  {
+    title: "Action",
+    dataIndex: "action",
+  },
+];
 
-export default function Products() {
+
+const Productlist = () => {
+    const dispatch = useDispatch();
+  
+    useEffect(() => {
+      dispatch(getProducts())
+    }, []);
+  
+  const {products} = useSelector((state) => state.product);
+  const data1 = [];
+  for (let i = 0; i < products.length ; i++) {
+    data1.push({
+      key: i + 1,
+      name: products[i].name,
+      description: products[i].description,
+      category: products[i].category,
+      price: `${products[i].price}`,
+      action: (
+        <div className="flex items-center space-x-3">
+          <Link to="/" className="text-2xl">
+            <BiEdit />
+          </Link>
+          <Link to="/" className="text-2xl">
+            <AiFillDelete />
+          </Link>
+      </div>
+      )
+    });
+    
+  }
+  console.log(data1);
+  // console.log(products)
+  const handleAddProduct = () => {
+    const [navigate , setNavigate]= useNavigate()
+    navigate('/add-product')
+   
+  }
   return (
-    <div>
-      <h1>Products page</h1>
-    </div>
-  )
-}
+    <div className="relative">
+  <h3 className="mb-4 title">Products</h3>
+  <div className="absolute top-0 right-0 mt-4 mr-4">
+    <Button type="primary" className="bg-black text-blue-500 " onClick={handleAddProduct}>
+      Add Product
+    </Button>
+  </div>
+  <br />
+  <div>
+    <Table dataSource={data1} columns={columns}/>
+  </div>
+</div>
+  );
+};
+
+export default Productlist;
