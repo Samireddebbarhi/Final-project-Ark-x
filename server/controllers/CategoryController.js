@@ -1,4 +1,5 @@
 const CategoryModel = require("../models/CategoryModel");
+const ProductModel = require("../models/ProductModel");
 const express = require("express");
 const app = express();
 app.use(express.json());
@@ -16,16 +17,40 @@ const addCategory = async (req, res) => {
     res.status(500).send("Failed to add category");
   }
 };
-
+const getAllCategory = async (req, res) => {
+  try {
+    const category = await CategoryModel.find();
+    if (!category) {
+      res.status(404).send("no category exist");
+    } else {
+      res.json(category);
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Failed to retrieve category");
+  }
+};
 const getCategory = async (req, res) => {
   try {
     const categoryId = req.params.id;
     const category = await CategoryModel.findById(categoryId);
+
     if (!category) {
       res.status(404).send("Category not found");
-    } else {
-      res.json(category);
+      return;
     }
+
+    const products = await ProductModel.find({
+      _id: { $in: category.products },
+    });
+
+    res
+      .status(200)
+      .json({
+        msg_Succes: true,
+        Category: category,
+        detailedProducts: products,
+      });
   } catch (err) {
     console.log(err);
     res.status(500).send("Failed to retrieve category");
@@ -67,4 +92,10 @@ const deleteCategory = async (req, res) => {
   }
 };
 
-module.exports = { addCategory, getCategory, updateCategory, deleteCategory };
+module.exports = {
+  addCategory,
+  getCategory,
+  getAllCategory,
+  updateCategory,
+  deleteCategory,
+};

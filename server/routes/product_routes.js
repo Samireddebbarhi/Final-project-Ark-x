@@ -8,8 +8,8 @@ const {
 } = require("../middlewares/verifyRole_permission");
 
 RouterProduct.get(
-  "/",
-//   checkRoleAndPermission(["super_admin", "admin"])
+  "/getAllProducts",
+  checkRoleAndPermission(["super_admin", "admin"], "read"),
   controller.getAllProducts
 );
 RouterProduct.post(
@@ -17,28 +17,29 @@ RouterProduct.post(
   upload.single("image"),
   controller.uploadProductImage
 );
-// RouterProduct.get(
-//   "/:id",
-//   controller.getProductDetails
-// );
+RouterProduct.get(
+  "getProduct/:id",
+  checkRoleAndPermission(["super_admin", "admin"], "read"),
+  controller.getProductDetails
+);
 RouterProduct.post(
   "/createProduct",
   checkRoleAndPermission(["super_admin", "admin"], "create"),
   controller.createProduct
 );
 RouterProduct.put(
-  "/:id",
-  checkRoleAndPermission(["super_admin", "admin"]),
+  "/updateProduct/:id",
+  checkRoleAndPermission(["super_admin", "admin"], "update"),
   controller.updateProduct
 );
 RouterProduct.delete(
-  "/",
-  checkRoleAndPermission(["super_admin", "admin"]),
+  "/deleteAllProducts",
+  checkRoleAndPermission(["super_admin", "admin"], "delete"),
   controller.deleteAllProducts
 );
 RouterProduct.delete(
-  "/:id",
-  checkRoleAndPermission(["super_admin", "admin"]),
+  "/deleteProduct/:id",
+  checkRoleAndPermission(["super_admin", "admin"], "delete"),
   controller.deleteProduct
 );
 

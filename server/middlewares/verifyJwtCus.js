@@ -9,6 +9,8 @@ const verifyJwtCustomer = (req, res, next) => {
       console.log(res);
     }
     req.user = user.InfoUser;
+    //req.userId = user.InfoUser.id;
+    //req.username = user.InfoUser.username;
     next();
   });
 };
