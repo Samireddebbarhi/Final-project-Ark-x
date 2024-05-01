@@ -15,6 +15,8 @@ import {
 import { BiCategoryAlt } from "react-icons/bi";
 import { Button, Layout, Menu, theme } from 'antd';
 import { FaClipboardList } from "react-icons/fa";
+import { Outlet } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 const { Header, Sider, Content } = Layout;
@@ -23,6 +25,7 @@ const MainLyaout = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+  const navigate = useNavigate();
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -31,6 +34,12 @@ const MainLyaout = () => {
           theme="dark"
           mode="inline"
           defaultSelectedKeys={['1']}
+          onClick={({ key}) => {
+            if(key == ""){ 
+            }else {
+              navigate(key);
+            }
+          }}
           items={[
             {
               key: "",
@@ -104,7 +113,7 @@ const MainLyaout = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          Content
+          <Outlet />
         </Content>
       </Layout>
     </Layout>
