@@ -10,7 +10,7 @@ export const getProducts = createAsyncThunk("users/getProducts", async (_, {reje
     })
     .catch((err) => rejectWithValue(err.response.data.message));
 });
-// add product
+//add product
 export const addProduct = createAsyncThunk("users/addProduct", async (_newProduct, {rejectWithValue}) => {
   // return axios.post(`${base_url}/createProduct`, _newProduct)
   // .then((res) => {
@@ -20,10 +20,8 @@ export const addProduct = createAsyncThunk("users/addProduct", async (_newProduc
   // .catch((err) => rejectWithValue(err.response.data.message));
   try  {
     const response = await axios.post(`${base_url}/createProduct`, _newProduct)
-    console.log(response);
-    return response.data;
-
-
+    
+    return response.data
   } catch (error){
     return rejectWithValue(error.response.data.message);
   }
