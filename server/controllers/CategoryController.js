@@ -5,8 +5,11 @@ const app = express();
 app.use(express.json());
 
 const addCategory = async (req, res) => {
+
   try {
-    const { name } = req.body;
+    console.log(req.body);
+    const  {name}  = req.body;
+    console.log(name);
     const category = new CategoryModel({
       name: name,
     });
