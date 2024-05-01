@@ -1,5 +1,8 @@
 const Product = require("../models/ProductModel");
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
 const Category = require("../models/CategoryModel");
 const Image = require("../Models/ImageModel");
 // it work
@@ -27,11 +30,28 @@ const createProduct = async (req, res) => {
     if (!category) {
       throw new Error(`Category '${categoryName}' not found.`);
     }
+<<<<<<< HEAD
 
     // Create a new product
     const newProduct = new Product({
       ...product,
       category: categoryName, // Assign category ID to the product
+=======
+    const newProduct = new Product({ ...product, category: categoryName });
+    newProduct.save().then((newproduct, err) => {
+      if (err) {
+        console.log(err);
+        return res
+          .status(500)
+          .json({ success: false, msg_erreur: `Error creating product` });
+      } else {
+        return res.status(201).json({
+          success: true,
+          msg_success: "The product has been created successfully:",
+          data: newproduct,
+        });
+      }
+>>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
     });
 
     // Save the product
@@ -86,19 +106,19 @@ const updateProduct = async (req, res) => {
     res.status(400).send(err);
   }
 };
-const getProductDetails = async (req, res, next) => {
-  try {
-    let product = await Product.findById(req.params.id);
-    if (product) {
-      res.status(200).json({ success: true, product });
-    } else {
-      res.status(404).json({ success: false, message: "product not found" });
-    }
-  } catch (error) {
-    res.status(404);
-    throw new Error(error.message);
-  }
-};
+// const getProductDetails = async (req, res, next) => {
+//   try {
+//     let product = await Product.findById(req.params.id);
+//     if (product) {
+//       res.status(200).json({ success: true, product });
+//     } else {
+//       res.status(404).json({ success: false, message: "product not found" });
+//     }
+//   } catch (error) {
+//     res.status(404);
+//     throw new Error(error.message);
+//   }
+// };
 const deleteProduct = async (req, res, next) => {
   const deleted = await Product.deleteOne({ _id: req.params.id });
   if (!deleted) {
@@ -150,7 +170,7 @@ const uploadProductImage = async (req, res) => {
 module.exports = {
   getAllProducts,
   createProduct,
-  getProductDetails,
+  
   updateProduct,
   deleteProduct,
   deleteAllProducts,

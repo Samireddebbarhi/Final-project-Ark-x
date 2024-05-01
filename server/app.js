@@ -26,22 +26,32 @@ const verifyJwtAdmin = require("./middlewares/verifyJwt");
 const logs = require("./middlewares/logs");
 const errorHandler = require("./middlewares/errorHandling");
 const app = express();
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
+
 app.use(cookie());
 app.use(express.static("client"));
 app.use(logs);
 // Routes
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
 app.use("/api/v1/admin/super", admin_route.authRoute);
 app.use("/api/v2/admin/super", verifyJwtAdmin, admin_route.adminRouter);
 app.use("/api/v2/admin/super", verifyJwtAdmin, customer_crud);
 app.use("/api/v2/customer", verifyJwtCustomer, customer_crud);
+// i will 
+app.use("/api/v2/admin",catg_route);
+app.use("/api/v2/admin", RouterProduct);
 
+<<<<<<< HEAD
 app.use("/api/v2/admin", verifyJwtAdmin, catg_route);
 app.use("/api/v2/admin", verifyJwtAdmin, RouterProduct);
 app.use("/api/v2/admin", verifyJwtAdmin, review_route);
 
+=======
+>>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
 app.use("/api/v2/customer", verifyJwtCustomer, catg_route);
 app.use("/api/v2/customer", verifyJwtCustomer, review_route);
 app.use("/api/v1/customer", customer_route);

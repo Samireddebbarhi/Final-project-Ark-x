@@ -24,18 +24,28 @@ const productSchema = new mongoose.Schema(
         {
           type: mongoose.Types.ObjectId,
           ref: "Image",
+<<<<<<< HEAD
           //  required: [true, "please Enter the images"],
+=======
+          required: [true, "please Enter the images"],
+>>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
         },
       ],
     },
     category: {
+<<<<<<< HEAD
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
+=======
+      type: String,
+      required: [true, "please Enter the product category"],
+>>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
     },
 
     location: {
       type: String,
     },
+<<<<<<< HEAD
     adsplatform: {
       type: String,
       required: true,
@@ -43,6 +53,24 @@ const productSchema = new mongoose.Schema(
     rating: {
       type: Number,
       required: true,
+=======
+    numofReviews: {
+      type: Number,
+      default: 0,
+    },
+    reviews: [
+      {
+        customers: {
+          type: mongoose.Schema.ObjectId,
+          ref: "Review",
+          required: true,
+        },
+      },
+    ],
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+>>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
     },
   },
   {
