@@ -5,7 +5,7 @@ const getAllProducts = async (req, res, next) => {
   const product = await Product.find();
   if (!product)
     return res
-      .status(401)
+      .status(400)
       .json({ success: false, msg: "No products exists in the database" });
   return res.status(200).json({ succeess: true, product });
 };
@@ -142,7 +142,7 @@ const uploadProductImage = async (req, res) => {
 module.exports = {
   getAllProducts,
   createProduct,
-  
+
   updateProduct,
   deleteProduct,
   deleteAllProducts,
