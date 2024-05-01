@@ -10,13 +10,16 @@ import {
   AiOutlineDashboard,
   AiOutlineShoppingCart,
   AiOutlineUser,
-  AiOutlineBgColors,
+ 
 } from "react-icons/ai";
 import { BiCategoryAlt } from "react-icons/bi";
 import { Button, Layout, Menu, theme } from 'antd';
 import { FaClipboardList } from "react-icons/fa";
 import { Outlet } from "react-router-dom";
+// import { Bounce, ToastContainer} from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+
 
 const { Header, Sider, Content } = Layout;
 const MainLyaout = () => {
@@ -53,11 +56,6 @@ const MainLyaout = () => {
               icon: <AiOutlineShoppingCart className="fs-4" />,
               label: 'Categories',
               children :  [
-                {
-                  key: "add-product",
-                  icon: <AiOutlineShoppingCart className="fs-4" />,
-                  label: "Add Product",
-                },
                 {
                   key: "list-product",
                   icon: <AiOutlineShoppingCart className="fs-4" />,
@@ -114,9 +112,9 @@ const MainLyaout = () => {
             background: colorBgContainer,
            
           }}
-        >
-         
-         <Outlet />
+         >
+        
+          <Outlet />
         </Content>
       </Layout>
     </Layout>

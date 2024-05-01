@@ -10,10 +10,24 @@ import Dropzone from 'react-dropzone';
 import { message, Upload } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { uploadImg } from '../features/upload/uploadSlice';
+import { useNavigate } from 'react-router-dom';
+import { addProduct } from '../features/product/productSlice';
+import {  toast } from 'react-toastify';
 
 const AddProduct = () => {
   const dispatch = useDispatch();
-  const [images, setImages] = useState([]);
+  const navigate = useNavigate()
+  // const [images, setImages] = useState([]);
+  const newProduct = useSelector((state) => state.product)
+  const {isSucess, isError, isLoading, createdProduct} = newProduct;
+  useEffect(() => {
+    if(isSucess && createdProduct) {
+      alert('🦄 Product add Successfully');
+    }
+    if(isError)  {
+     alert('🦄 Somthing Went Wrong!');
+    }
+  }, [isSucess, isError, isLoading, createdProduct])
   
   let schema = yup.object().shape({
     name: yup.string().required("Name is Required"),
@@ -34,8 +48,9 @@ const AddProduct = () => {
     },
     validationSchema: schema,
     onSubmit: (values) => {
-      dispatch(createProducts(values));
-      formik.resetForm
+      dispatch(addProduct(values));
+      formik.resetForm();
+      
     },
   });
 
