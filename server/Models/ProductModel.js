@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Category = require("./CategoryModel");
 const productSchema = new mongoose.Schema(
   {
     name: {
@@ -60,11 +59,17 @@ const productSchema = new mongoose.Schema(
     },
     reviews: [
       {
+<<<<<<< HEAD
         customers: {
           type: mongoose.Schema.ObjectId,
           ref: "Review",
           required: true,
         },
+=======
+        type: mongoose.Schema.ObjectId,
+        ref: "Review",
+        required: true,
+>>>>>>> 4c21d3e4f07d69293a84aaa3ce534eb17ac811dd
       },
     ],
     createdAt: {

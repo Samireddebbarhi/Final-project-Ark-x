@@ -4,11 +4,15 @@ const Product = require("../models/ProductModel");
 =======
 >>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
 const Category = require("../models/CategoryModel");
+<<<<<<< HEAD
 const Image = require("../Models/ImageModel");
 // it work
 =======
 const Category = require("../Models/CategoryModel");
 >>>>>>> 918275d63eace52fee2029bd92b40557419f189f
+=======
+const Image = require("../models/ImageModel");
+>>>>>>> 4c21d3e4f07d69293a84aaa3ce534eb17ac811dd
 const getAllProducts = async (req, res, next) => {
   const product = await Product.find();
   if (!product)
@@ -17,7 +21,6 @@ const getAllProducts = async (req, res, next) => {
       .json({ success: false, msg: "No products exists in the database" });
   return res.status(200).json({ succeess: true, product });
 };
-// it work
 
 const createProduct = async (req, res) => {
   try {
@@ -32,9 +35,9 @@ const createProduct = async (req, res) => {
     }
 <<<<<<< HEAD
 
-    // Create a new product
     const newProduct = new Product({
       ...product,
+<<<<<<< HEAD
       category: categoryName, // Assign category ID to the product
 =======
     const newProduct = new Product({ ...product, category: categoryName });
@@ -52,16 +55,18 @@ const createProduct = async (req, res) => {
         });
       }
 >>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
+=======
+      category: categoryName,
+>>>>>>> 4c21d3e4f07d69293a84aaa3ce534eb17ac811dd
     });
 
-    // Save the product
+    //Save the product
     await newProduct.save();
 
     // Push the product ID to the category's products array
     category.products.push(newProduct._id);
     await category.save();
 
-    // Populate the products array in the category with product details
     await category.populate("products");
 
     return res.status(201).json({
