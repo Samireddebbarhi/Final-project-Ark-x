@@ -78,19 +78,19 @@ const updateProduct = async (req, res) => {
     res.status(400).send(err);
   }
 };
-const getProductDetails = async (req, res, next) => {
-  try {
-    let product = await Product.findById(req.params.id);
-    if (product) {
-      res.status(200).json({ success: true, product });
-    } else {
-      res.status(404).json({ success: false, message: "product not found" });
-    }
-  } catch (error) {
-    res.status(404);
-    throw new Error(error.message);
-  }
-};
+// const getProductDetails = async (req, res, next) => {
+//   try {
+//     let product = await Product.findById(req.params.id);
+//     if (product) {
+//       res.status(200).json({ success: true, product });
+//     } else {
+//       res.status(404).json({ success: false, message: "product not found" });
+//     }
+//   } catch (error) {
+//     res.status(404);
+//     throw new Error(error.message);
+//   }
+// };
 const deleteProduct = async (req, res, next) => {
   const deleted = await Product.deleteOne({ _id: req.params.id });
   if (!deleted) {
@@ -142,7 +142,7 @@ const uploadProductImage = async (req, res) => {
 module.exports = {
   getAllProducts,
   createProduct,
-  getProductDetails,
+  
   updateProduct,
   deleteProduct,
   deleteAllProducts,
