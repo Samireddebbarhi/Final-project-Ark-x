@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import CustomInput from "../components/CustomInput";
+import CustomerInput from "../admin/components/CustomerInput";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
@@ -32,7 +32,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      navigate("admin");
+      navigate("/list-product");
     } else {
       navigate("");
     }
@@ -51,7 +51,7 @@ const Login = () => {
           {message.message == "Rejected" ? "You are not an Admin" : ""}
         </div>
         <form action="" onSubmit={formik.handleSubmit}>
-          <CustomInput
+          <CustomerInput
             type="text"
             label="Email Address"
             id="email"
@@ -63,7 +63,7 @@ const Login = () => {
           <div className="error mt-2">
             {formik.touched.email && formik.errors.email}
           </div>
-          <CustomInput
+          <CustomerInput
             type="password"
             label="Password"
             id="pass"

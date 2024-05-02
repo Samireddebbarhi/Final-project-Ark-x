@@ -1,32 +1,16 @@
 import axios from "axios";
 import { config } from "../../utils/axiosConfig";
-import { base_url } from "../../utils/baseUrl";
+import { base_url, admin_url } from "../../utils/baseUrl";
 const login = async (user) => {
-  const response = await axios.post(`${base_url}user/admin-login`, user);
+  const response = await axios.post(`${admin_url}/login`, user);
   if (response.data) {
-    localStorage.setItem("user", JSON.stringify(response.data));
+    localStorage.setItem("userAdmin", JSON.stringify(response.data));
   }
-  return response.data;
-};
-const getOrders = async () => {
-  const response = await axios.get(`${base_url}user/getallorders`, config);
-
-  return response.data;
-};
-const getOrder = async (id) => {
-  const response = await axios.post(
-    `${base_url}user/getorderbyuser/${id}`,
-    "",
-    config
-  );
-
   return response.data;
 };
 
 const authService = {
   login,
-  getOrders,
-  getOrder,
 };
 
 export default authService;

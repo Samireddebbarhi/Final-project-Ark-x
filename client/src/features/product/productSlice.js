@@ -2,33 +2,40 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { base_url } from "../../utils/baseUrl";
 // get all products
-export const getProducts = createAsyncThunk("users/getProducts", async (_, {rejectWithValue}) => {
-    return axios.get(`${base_url}/getAllProducts`)
-    .then((res) => {
-      console.log(res);
-      return res.data
-    })
-    .catch((err) => rejectWithValue(err.response.data.message));
-});
-// add product
-export const addProduct = createAsyncThunk("users/addProduct", async (_newProduct, {rejectWithValue}) => {
-  // return axios.post(`${base_url}/createProduct`, _newProduct)
-  // .then((res) => {
-  //   console.log(res);
-  //   return res.data
-  // })
-  // .catch((err) => rejectWithValue(err.response.data.message));
-  try  {
-    const response = await axios.post(`${base_url}/createProduct`, _newProduct)
-    console.log(response);
-    return response.data;
-
-
-  } catch (error){
-    return rejectWithValue(error.response.data.message);
+export const getProducts = createAsyncThunk(
+  "users/getProducts",
+  async (_, { rejectWithValue }) => {
+    return axios
+      .get(`${base_url}/getAllProducts`)
+      .then((res) => {
+        console.log(res);
+        return res.data;
+      })
+      .catch((err) => rejectWithValue(err.response.data.message));
   }
-});
-
+);
+// add product
+export const addProduct = createAsyncThunk(
+  "users/addProduct",
+  async (_newProduct, { rejectWithValue }) => {
+    // return axios.post(`${base_url}/createProduct`, _newProduct)
+    // .then((res) => {
+    //   console.log(res);
+    //   return res.data
+    // })
+    // .catch((err) => rejectWithValue(err.response.data.message));
+    try {
+      const response = await axios.post(
+        `${base_url}/createProduct`,
+        _newProduct
+      );
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 
 const initialState = {
   products: [],
