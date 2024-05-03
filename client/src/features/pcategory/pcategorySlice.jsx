@@ -15,6 +15,7 @@ export const getCategories = createAsyncThunk(
     }
   }
 );
+
 export const createCategory = createAsyncThunk(
   "productCategory/create-category",
   async (name, { rejectWithValue }) => {
@@ -33,11 +34,10 @@ export const createCategory = createAsyncThunk(
 
 export const updateAProductCategory = createAsyncThunk(
   "productCategory/update-category",
-  async (category , {rejectWithValue}) => {
+  async ({id, name} , {rejectWithValue}) => {
     try {
       const response = await axios.put(
-        `${base_url}updateCategory/${category.id}`,
-        { name: category.name }
+        `${base_url}updateCategory/${id}`, name 
       );
       return response.data;
     } catch (error) {
