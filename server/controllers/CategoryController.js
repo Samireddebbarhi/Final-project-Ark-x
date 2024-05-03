@@ -22,17 +22,24 @@ const addCategory = async (req, res) => {
 };
 const getAllCategory = async (req, res) => {
   try {
-    const category = await CategoryModel.find();
-    if (!category) {
-      res.status(404).send("no category exist");
+    const categories = await CategoryModel.find()
+      .populate({
+        path: 'products',
+        model: 'Product',
+        select: 'name description price' // Add more fields as needed
+      });
+
+    if (!categories) {
+      res.status(404).send("No categories exist");
     } else {
-      res.json(category);
+      res.json(categories);
     }
   } catch (err) {
     console.log(err);
-    res.status(500).send("Failed to retrieve category");
+    res.status(500).send("Failed to retrieve categories");
   }
 };
+
 const getCategory = async (req, res) => {
   try {
     const categoryId = req.params.id;
