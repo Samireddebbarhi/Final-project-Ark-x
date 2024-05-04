@@ -26,7 +26,19 @@ export const addProduct = createAsyncThunk("users/addProduct", async (_newProduc
     return rejectWithValue(error.response.data.message);
   }
 });
-
+// delete product 
+export const deleteProduct = createAsyncThunk(
+  "products/deleteProduct",
+  async (productId, { rejectWithValue }) => {
+    try {
+      await axios.delete(`${base_url}/deleteProduct/${productId}`);
+      return productId;
+    } catch (error) {
+      // If the request fails, reject the promise with the error message
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 
 const initialState = {
   products: [],
@@ -70,6 +82,19 @@ export const productSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
+      })
+      .addCase(deleteProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.products = state.products.filter(
+          (product) => product.id !== action.payload
+        );
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.payload;
       });
   },
 });
