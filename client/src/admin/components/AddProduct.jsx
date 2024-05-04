@@ -5,8 +5,8 @@ import { Select } from "antd";
 // import 'antd/dist/antd.css';
 import Dropzone from 'react-dropzone';
 import { useDispatch, useSelector } from 'react-redux';
-import { uploadImg } from '../features/upload/uploadSlice';
-import { addProduct } from '../features/product/productSlice';
+import { uploadImg } from '../../features/upload/uploadSlice';
+import { addProduct } from '../../features/product/productSlice';
 
 
 
@@ -58,7 +58,7 @@ const AddProduct = () => {
 
   return (
     <div className="px-8 py-6">
-      <h1 className="text-3xl font-bold mb-7">Add Product</h1>
+      <h1 className="text-3xl font-bold mb-7">Add Produ</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">Enter Name :</label>
@@ -75,7 +75,6 @@ const AddProduct = () => {
 
         <div className="mb-4">
           <label htmlFor="description" className="block text-sm font-medium text-gray-700">Enter Description :</label>
-          <br/>
           <input 
             type="text" 
             className="form-control"

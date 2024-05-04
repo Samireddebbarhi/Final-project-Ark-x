@@ -7,8 +7,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import AddProduct from './AddProduct';
+
 import EditeProduct from './EditeProduct';
+import AddProduct from './AddProduct';
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({

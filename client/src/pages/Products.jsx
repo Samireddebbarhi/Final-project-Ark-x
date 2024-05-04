@@ -6,7 +6,8 @@ import { AiFillDelete } from "react-icons/ai";
 import { getProducts } from "../features/product/productSlice";
 import { Link, useNavigate } from "react-router-dom";
 import CustomizedDialogs from "../admin/components/Dialog"
-import AddProduct from "./AddProduct";
+import AddProduct from "../admin/components/AddProduct";
+import EditeProduct from "../admin/components/EditeProduct";
 const columns = [
   {
     title: "SNo",
@@ -49,8 +50,12 @@ const Productlist = () => {
     useEffect(() => {
       dispatch(getProducts())
     }, []);
+    
   
   const {products} = useSelector((state) => state.product);
+  const handleEditClick = () => {
+    setOpenDialog(true);
+  };
   const data1 = [];
   for (let i = 0; i < products.length ; i++) {
     data1.push({
@@ -61,13 +66,14 @@ const Productlist = () => {
       price: `${products[i].price}`,
       action: (
         <div className="flex items-center space-x-3">
-          <Link to="/" className="text-2xl">
-            <BiEdit />
-          </Link>
-          <Link to="/" className="text-2xl">
-            <AiFillDelete />
-          </Link>
+        <button >
+          <BiEdit />
+        </button>
+        <button>
+          <AiFillDelete />
+        </button>
       </div>
+    
       )
     });
     
@@ -81,8 +87,7 @@ const Productlist = () => {
     <div className="relative">
   <h3 className="mb-4 title">Products</h3>
   <div className="absolute top-0 right-0 mt-4 mr-4">
-    {/* <Button type="primary"  onClick={handleAddProduct}>
-    </Button> */}
+   
     <CustomizedDialogs open={openDialog} onClose={() => setOpenDialog(false)} >
       <AddProduct />
     </CustomizedDialogs>
