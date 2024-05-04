@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button } from "antd";
+import { Table, Button, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-
+import { ExclamationCircleFilled } from '@ant-design/icons';
 import { deleteProduct, getProducts } from "../features/product/productSlice";
 import { Link, useNavigate } from "react-router-dom";
 import CustomizedDialogs from "../admin/components/Dialog"
@@ -11,7 +11,7 @@ import axios from 'axios'
 import {EditOutlined, DeleteOutlined,} from '@ant-design/icons'
 import EditeProduct from "../admin/components/EditeProduct";
 
-
+const { confirm } = Modal;
 const Productlist = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const dispatch = useDispatch();
@@ -20,12 +20,13 @@ const Productlist = () => {
   useEffect(() => {
     dispatch(getProducts());
   }, [deleteConfirmed]);
-  const handleDelete = async (index) => {
+  // delete product
+  const handleDelete = async (productId) => {
     try {
-      await axios.delete(`${base_url}/deleteProduct/${index.key}`);
-      dispatch(deleteProduct(index.key));
-      console.log("Product Deleted Successfully:", index.key);
-      alert('Product Deleted Successfully')
+      await axios.delete(`${base_url}/deleteProduct/${productId}`);
+      dispatch(deleteProduct(productId));
+      console.log("Product Deleted Successfully:", productId);
+      // alert('Product Deleted Successfully')
       
       setDeleteConfirmed(true); // Set delete confirmation to true
     } catch (error) {
@@ -61,22 +62,22 @@ const Productlist = () => {
     const handleAddProduct = () => {
       setOpenDialog(true); // Open the dialog when the button is clicked
     };
-    // const showDeleteConfirm = () => {
-    //   confirm({
-    //     title: 'Are you sure delete this task?',
-    //     icon: <ExclamationCircleFilled />,
-    //     content: 'Some descriptions',
-    //     okText: 'Yes',
-    //     okType: 'danger',
-    //     cancelText: 'No',
-    //     onOk() {
-    //       console.log('OK');
-    //     },
-    //     onCancel() {
-    //       console.log('Cancel');
-    //     },
-    //   });
-    // }
+    const showDeleteConfirm = (productId) => { // Pass the productId as argument
+      confirm({
+        title: 'Are you sure delete this Product?',
+        icon: <ExclamationCircleFilled />,
+        content: 'Sure You Want To Delete it.',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
+        onOk() { // Call handleDelete with productId when user clicks "Yes"
+          handleDelete(productId);
+        },
+        onCancel() {
+          console.log('Cancel');
+        },
+      });
+    }
     const columns = [
       {
         title: "SNo",
@@ -112,9 +113,7 @@ const Productlist = () => {
               <>
                 <Button />
                 
-                 <Button  onClick={()=>{
-                  handleDelete(index)
-                 } }> Delete</Button>
+                <Button onClick={() => showDeleteConfirm(index.key)} icon={<DeleteOutlined />} danger>Delete</Button>
               </>
             )
           }
