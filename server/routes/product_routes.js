@@ -39,7 +39,7 @@ RouterProduct.delete(
 );
 RouterProduct.delete(
   "/deleteProduct/:id",
-  checkRoleAndPermission(["super_admin", "admin"], "delete"),
+  // checkRoleAndPermission(["super_admin", "admin"], "delete"),
   controller.deleteProduct
 );
 
