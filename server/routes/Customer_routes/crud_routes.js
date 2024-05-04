@@ -8,7 +8,7 @@ const {
 
 crudRouter.get(
   "/customers/All",
-  checkRoleAndPermission(["super_admin", "admin"], "read"),
+  // checkRoleAndPermission(["super_admin", "admin"], "read"),
   Crud.getAllCustomers
 );
 crudRouter.get(
