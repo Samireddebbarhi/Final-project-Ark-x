@@ -46,11 +46,22 @@ const SchemaCustomer = new mongoose.Schema(
     resetPasswordExpire: {
       type: Date,
     },
+    permissions: [
+      {
+        type: String,
+        default :{
+          enum: ["create", "read", "update", "delete"]},
+      },
+    ],
   },
   {
     timestamps: true,
   }
 );
 
-const CustomerModel = mongoose.model("Customer", SchemaCustomer);
+// HEAD
+const  CustomerModel = mongoose.model("Customer", SchemaCustomer);
+
+//const CustomerModel = mongoose.model("Customer", SchemaCustomer);
+//e4ebd8e905e4957ceeec146e9e4f44a8b0375ba7
 module.exports = CustomerModel;
