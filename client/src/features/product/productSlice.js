@@ -1,14 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { config } from "../../utils/axiosConfig";
 import { base_url } from "../../utils/baseUrl";
 // get all products
 export const getProducts = createAsyncThunk(
   "users/getProducts",
   async (_, { rejectWithValue }) => {
     return axios
-      .get(`${base_url}/getAllProducts`)
+      .get(`${base_url}/getAllProducts`, config)
       .then((res) => {
         console.log(res);
+
         return res.data;
       })
       .catch((err) => rejectWithValue(err.response.data.message));
@@ -27,7 +29,8 @@ export const addProduct = createAsyncThunk(
     try {
       const response = await axios.post(
         `${base_url}/createProduct`,
-        _newProduct
+        _newProduct,
+        config
       );
       console.log(response);
       return response.data;
