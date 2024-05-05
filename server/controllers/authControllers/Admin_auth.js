@@ -29,23 +29,31 @@ const AdminModel = require("../../models/AdminModel.js");
 exports.login = (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password)
+  if (!email || !password){
     return res.status(400).json({ msg: "Missing fields" });
-
+  }else {
+    console.log("email and password data", email , password)
+  }
+    
   AdminModel.findOne({ email }).then(async (admin) => {
-    if (!admin) return res.status(400).json({ msg: "Invalid credentials" });
+    
+    if (!admin) {
+     return res.status(400).json({ msg: "Invalid credentials" })
+    }
 
     await bcrypt.compare(password, admin.password).then((isMatch) => {
-      if (!isMatch)
-        return res.status(400).json({ msg: "error password, Try again !!" });
+      if (!isMatch){
+        return res.status(400).json({ msg: "error password, Try again !!" })};
 
       const token = jwt.sign({ InfoAdmin: admin }, process.env.TOKEN_ADMIN, {
         expiresIn: "20m",
       });
 
-      res
-        .status(200)
-        .send(`${admin.username} logged in with a token: ${token}`);
+      // res
+      //   .status(200)
+      //   .send(`${admin.username} logged in with a token: ${token}`);`
+
+      res.status(200).json({admin : admin , message:true});
     });
   });
 };

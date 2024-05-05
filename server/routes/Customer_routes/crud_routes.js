@@ -8,16 +8,18 @@ const {
 
 crudRouter.get(
   "/customers/All",
-  checkRoleAndPermission(["super_admin", "admin"], "read"),
+  // checkRoleAndPermission(["super_admin", "admin"], "read"),
   Crud.getAllCustomers
 );
 crudRouter.get(
   "/customers/:id",
+  checkRoleAndPermission(["admin", "super_admin","user"], "read"),
   checkRoleAndPermission(["admin", "super_admin", "user"], "read"),
   Crud.getById
 );
 crudRouter.delete(
   "/customers/:id",
+  checkRoleAndPermission(["admin", "super_admin","user"], "delete"),
   checkRoleAndPermission(["admin", "super_admin", "user"], "delete"),
   Crud.deleteById
 );
