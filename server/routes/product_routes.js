@@ -17,11 +17,11 @@ RouterProduct.post(
   upload.single("image"),
   controller.uploadProductImage
 );
-// RouterProduct.get(
-//   "getProduct/:id",
-//   checkRoleAndPermission(["super_admin", "admin"], "read"),
-//   controller.getProductDetails
-// );
+RouterProduct.get(
+  "/getProduct/:id",
+  // checkRoleAndPermission(["super_admin", "admin"], "read"),
+  controller.getProductDetails
+);
 RouterProduct.post(
   "/createProduct",
   // checkRoleAndPermission(["super_admin", "admin"], "create"),
@@ -29,7 +29,7 @@ RouterProduct.post(
 );
 RouterProduct.put(
   "/updateProduct/:id",
-  checkRoleAndPermission(["super_admin", "admin"], "update"),
+  // checkRoleAndPermission(["super_admin", "admin"], "update"),
   controller.updateProduct
 );
 RouterProduct.delete(
