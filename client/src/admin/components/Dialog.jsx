@@ -22,7 +22,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 export default function CustomizedDialogs({childern}) {
   const [open, setOpen] = React.useState(false);
-  const [mode, setMode] = React.useState('add');
+  
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -33,7 +33,7 @@ export default function CustomizedDialogs({childern}) {
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
+      <Button variant="outlined" onClick={handleClickOpen} >
         Add Product 
       </Button>
       <BootstrapDialog

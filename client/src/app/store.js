@@ -4,7 +4,8 @@ import uploadReducer from "../features/upload/uploadSlice"
 import addproductReducer from '../features/product/productSlice';
 import pCategoryReducer from "../features/pcotegory/pcotegorySlice";
 import customerReducer from "../features/customer/customerSlice";
-import deleteproductReduced from "../features/product/productSlice"
+import deleteproductReducer from "../features/product/productSlice"
+import editproductReducer from "../features/product/productSlice"
 
 export const store = configureStore({
     reducer:{
@@ -13,6 +14,7 @@ export const store = configureStore({
         addProduct: addproductReducer, 
         pCategory: pCategoryReducer,
         customer: customerReducer,
-        deleteProduct : deleteproductReduced,
+        deleteProduct : deleteproductReducer,
+        editeProduct : editproductReducer,
     },
 });

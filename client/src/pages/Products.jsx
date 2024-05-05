@@ -16,10 +16,16 @@ const Productlist = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const dispatch = useDispatch();
   const [deleteConfirmed, setDeleteConfirmed] = useState(false);
+  const [isEditing, setIsEditing] = useState(false)
+  const [productId, setProductId] = useState(null);
   const {products} = useSelector((state) => state.product);
   useEffect(() => {
     dispatch(getProducts());
   }, [deleteConfirmed]);
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [productId]);
+
   // delete product
   const handleDelete = async (productId) => {
     try {
@@ -33,7 +39,11 @@ const Productlist = () => {
       console.error("Error deleting product:", error);
     }
   }
-
+// edite product
+const handleEdit = (productId) => {
+  setIsEditing(true);
+  setProductId(productId); // Set the productId for editing
+}
     
   
    
@@ -108,12 +118,12 @@ const Productlist = () => {
      
       {
         title: "Actions",
-          render: (index) =>{
+          render: (record) =>{
             return(
               <>
-                <Button />
+                <Button  key={`edit_${record.key}`}  onClick={()=> handleEdit(record.key)} icon={<EditOutlined/>}  className="mr-2"></Button>
                 
-                <Button onClick={() => showDeleteConfirm(index.key)} icon={<DeleteOutlined />} danger>Delete</Button>
+                <Button  key={`delete_${record.key}`} onClick={() => showDeleteConfirm(record.key)} icon={<DeleteOutlined />} danger></Button>
               </>
             )
           }
@@ -131,6 +141,19 @@ const Productlist = () => {
         <br />
         <div>
         <Table dataSource={data1} columns={columns}/>
+        </div>
+        <div>
+          <Modal
+          title="Edit Poroduct"
+          open={isEditing}
+          okText="save"
+          onCancel={()=>{
+            setIsEditing(false)
+          }}
+          onOk={()=>{setIsEditing(false)}}
+          >
+            <EditeProduct  key = {productId} productId={productId}/>
+          </Modal>
         </div>
       </div>
     );

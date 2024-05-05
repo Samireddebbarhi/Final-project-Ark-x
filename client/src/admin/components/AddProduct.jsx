@@ -6,7 +6,7 @@ import { Select } from "antd";
 import Dropzone from 'react-dropzone';
 import { useDispatch, useSelector } from 'react-redux';
 import { uploadImg } from '../../features/upload/uploadSlice';
-import { addProduct } from '../../features/product/productSlice';
+import { addProduct, getProducts } from '../../features/product/productSlice';
 
 
 
@@ -41,6 +41,8 @@ const AddProduct = () => {
       .then((result) => {
         console.log("Product added successfully:", result);
         // Reset form values after successful submission
+        alert("Product Added Successfully")
+        dispatch(getProducts())
         setFormValues({
           name: "",
           description: "",
@@ -48,17 +50,17 @@ const AddProduct = () => {
           category: "",
           stock: "",
         });
-        alert("Product added successfully!");
+     
       })
       .catch((error) => {
         console.error("Failed to add product:", error);
-        alert("Product added successfully!");
+        alert("somthing went wrong!");
       });
   };
 
   return (
     <div className="px-8 py-6">
-      <h1 className="text-3xl font-bold mb-7">Add Produ</h1>
+      <h1 className="text-3xl font-bold mb-7">Add Produt</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">Enter Name :</label>
@@ -70,6 +72,7 @@ const AddProduct = () => {
             name="name"
             value={formValues.name}
             onChange={handleInputChange}
+            required={true}
           />
         </div>
 
@@ -83,6 +86,7 @@ const AddProduct = () => {
             name="description"
             value={formValues.description}
             onChange={handleInputChange}
+            required={true}
           />
         </div>
 
@@ -96,6 +100,7 @@ const AddProduct = () => {
             name="price"
             value={formValues.price}
             onChange={handleInputChange}
+            required={true}
           />
         </div>
 
@@ -109,10 +114,11 @@ const AddProduct = () => {
             name="category"
             value={formValues.category}
             onChange={handleInputChange}
+            required={true}
           />
         </div>
 
-
+        <br />
         <div className="mb-4">
           <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Enter Quantity :</label>
           <input 
@@ -123,6 +129,7 @@ const AddProduct = () => {
             name="stock"
             value={formValues.stock}
             onChange={handleInputChange}
+            required={true}
           />
         </div>
 

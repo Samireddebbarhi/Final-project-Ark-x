@@ -11,7 +11,7 @@ export const getProducts = createAsyncThunk("users/getProducts", async (_, {reje
     .catch((err) => rejectWithValue(err.response.data.message));
 });
 //add product
-export const addProduct = createAsyncThunk("users/addProduct", async (_newProduct, {rejectWithValue}) => {
+export const addProduct = createAsyncThunk("products/addProduct", async (_newProduct, {rejectWithValue}) => {
   // return axios.post(`${base_url}/createProduct`, _newProduct)
   // .then((res) => {
   //   console.log(res);
@@ -36,6 +36,26 @@ export const deleteProduct = createAsyncThunk(
     } catch (error) {
       // If the request fails, reject the promise with the error message
       return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+// update product
+export const updateProduct = createAsyncThunk(
+  "products/updateProduct",
+  async ({ productId, updatedProduct }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${base_url}/updateProduct/${productId}`,
+        updatedProduct
+      );
+
+      if (response.status !== 200 || !response.data) {
+        throw new Error("Failed to update product. Invalid response data.");
+      }
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -95,7 +115,27 @@ export const productSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.errorMessage = action.payload;
+      })
+      .addCase(updateProduct.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isError = false;
+        // Assuming the API returns the updated product
+        state.products = state.products.map((product) =>
+          product.id === action.payload.id ? action.payload : product
+        );
+        console.log('updatestate', state)
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.errorMessage = action.payload;
       });
+
   },
 });
 export default productSlice.reducer;

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { BiEdit } from "react-icons/bi";
-import { AiFillDelete } from "react-icons/ai";
+
+import { DeleteOutlined } from "@ant-design/icons";
 // import CustomizedDialogs from "../admin/components/Dialog"
 // import EditeProduct from "../admin/components/EditeProduct";
 import { getCustomers } from "../features/customer/customerSlice";
@@ -21,6 +21,15 @@ const columns = [
     title: "Email",
     dataIndex: "email",
     sorter: (a, b) => a.email.length - b.email.length,
+  },
+  {
+    title: "Action",
+    render : ()=>{
+      return <>
+      <Button  icon={<DeleteOutlined />} danger></Button>
+      </>
+    }
+    
   },
 
 ];
@@ -48,12 +57,7 @@ const Customerlist = () => {
         key: i + 1,
         username: customer.username,
         email: customer.email,
-        action: (
-          <div className="flex items-center space-x-3">
-            <button className="text-2xl" onClick={() => handleUpdate(customer._id, 'New Category Name')}><BiEdit /></button>
-            <button className="text-2xl" onClick={() => handleDelete(customer._id)}><AiFillDelete /></button>
-          </div>
-        ),
+       
       });
     }
 
