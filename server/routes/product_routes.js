@@ -9,7 +9,7 @@ const {
 
 RouterProduct.get(
   "/getAllProducts",
-  // checkRoleAndPermission(["super_admin", "admin"], "read"),
+  checkRoleAndPermission(["super_admin", "admin"], "read"),
   controller.getAllProducts
 );
 RouterProduct.post(
@@ -19,17 +19,17 @@ RouterProduct.post(
 );
 RouterProduct.get(
   "/getProduct/:id",
-  // checkRoleAndPermission(["super_admin", "admin"], "read"),
+  checkRoleAndPermission(["super_admin", "admin"], "read"),
   controller.getProductDetails
 );
 RouterProduct.post(
   "/createProduct",
-  // checkRoleAndPermission(["super_admin", "admin"], "create"),
+  checkRoleAndPermission(["super_admin", "admin"], "create"),
   controller.createProduct
 );
 RouterProduct.put(
   "/updateProduct/:id",
-  // checkRoleAndPermission(["super_admin", "admin"], "update"),
+  checkRoleAndPermission(["super_admin", "admin"], "update"),
   controller.updateProduct
 );
 RouterProduct.delete(
@@ -39,7 +39,7 @@ RouterProduct.delete(
 );
 RouterProduct.delete(
   "/deleteProduct/:id",
-  // checkRoleAndPermission(["super_admin", "admin"], "delete"),
+  checkRoleAndPermission(["super_admin", "admin"], "delete"),
   controller.deleteProduct
 );
 
