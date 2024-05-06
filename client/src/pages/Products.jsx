@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { getProducts } from "../features/product/productSlice";
 import { Link, useNavigate } from "react-router-dom";
+import CustomizedDialogs from "../admin/components/Dialog"
+import AddProduct from "./AddProduct";
 const columns = [
   {
     title: "SNo",
@@ -41,6 +43,7 @@ const columns = [
 
 
 const Productlist = () => {
+  const [openDialog, setOpenDialog] = useState(false);
     const dispatch = useDispatch();
   
     useEffect(() => {
@@ -72,17 +75,17 @@ const Productlist = () => {
   console.log(data1);
   // console.log(products)
   const handleAddProduct = () => {
-    const [navigate , setNavigate]= useNavigate()
-    navigate('/add-product')
-   
-  }
+    setOpenDialog(true); // Open the dialog when the button is clicked
+  };
   return (
     <div className="relative">
   <h3 className="mb-4 title">Products</h3>
   <div className="absolute top-0 right-0 mt-4 mr-4">
-    <Button type="primary" className="bg-black text-blue-500 " onClick={handleAddProduct}>
-      Add Product
-    </Button>
+    {/* <Button type="primary"  onClick={handleAddProduct}>
+    </Button> */}
+    <CustomizedDialogs open={openDialog} onClose={() => setOpenDialog(false)} >
+      <AddProduct />
+    </CustomizedDialogs>
   </div>
   <br />
   <div>

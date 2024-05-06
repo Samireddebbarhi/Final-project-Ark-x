@@ -5,6 +5,7 @@ const Product = require("../models/ProductModel");
 >>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
 const Category = require("../models/CategoryModel");
 <<<<<<< HEAD
+<<<<<<< HEAD
 const Image = require("../Models/ImageModel");
 // it work
 =======
@@ -13,11 +14,14 @@ const Category = require("../Models/CategoryModel");
 =======
 const Image = require("../models/ImageModel");
 >>>>>>> 4c21d3e4f07d69293a84aaa3ce534eb17ac811dd
+=======
+const Image = require("../models/ImageModel");
+>>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
 const getAllProducts = async (req, res, next) => {
   const product = await Product.find();
   if (!product)
     return res
-      .status(401)
+      .status(400)
       .json({ success: false, msg: "No products exists in the database" });
   return res.status(200).json({ succeess: true, product });
 };
@@ -33,6 +37,7 @@ const createProduct = async (req, res) => {
     if (!category) {
       throw new Error(`Category '${categoryName}' not found.`);
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     const newProduct = new Product({
@@ -58,6 +63,12 @@ const createProduct = async (req, res) => {
 =======
       category: categoryName,
 >>>>>>> 4c21d3e4f07d69293a84aaa3ce534eb17ac811dd
+=======
+
+    const newProduct = new Product({
+      ...product,
+      category: categoryName,
+>>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
     });
 
     //Save the product
@@ -175,7 +186,7 @@ const uploadProductImage = async (req, res) => {
 module.exports = {
   getAllProducts,
   createProduct,
-  
+
   updateProduct,
   deleteProduct,
   deleteAllProducts,

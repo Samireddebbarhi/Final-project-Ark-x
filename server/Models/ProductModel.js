@@ -24,10 +24,14 @@ const productSchema = new mongoose.Schema(
           type: mongoose.Types.ObjectId,
           ref: "Image",
 <<<<<<< HEAD
+<<<<<<< HEAD
           //  required: [true, "please Enter the images"],
 =======
           required: [true, "please Enter the images"],
 >>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
+=======
+          //  required: [true, "please Enter the images"],
+>>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
         },
       ],
     },
@@ -60,6 +64,7 @@ const productSchema = new mongoose.Schema(
     reviews: [
       {
 <<<<<<< HEAD
+<<<<<<< HEAD
         customers: {
           type: mongoose.Schema.ObjectId,
           ref: "Review",
@@ -70,6 +75,11 @@ const productSchema = new mongoose.Schema(
         ref: "Review",
         required: true,
 >>>>>>> 4c21d3e4f07d69293a84aaa3ce534eb17ac811dd
+=======
+        type: mongoose.Schema.ObjectId,
+        ref: "Review",
+        required: true,
+>>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
       },
     ],
     createdAt: {

@@ -7,6 +7,14 @@ const {
 } = require("../middlewares/verifyRole_permission");
 
 catg_route.get(
+<<<<<<< HEAD
+=======
+  "/getAllCategory",
+  checkRoleAndPermission(["super_admin", "admin", "user"], "read"),
+  catg_controller.getAllCategory
+);
+catg_route.get(
+>>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
   "/getCategory/:id",
   checkRoleAndPermission(["super_admin", "admin", "user"], "read"),
   catg_controller.getCategory
@@ -17,7 +25,7 @@ catg_route.post(
   catg_controller.addCategory
 );
 catg_route.put(
-  "/updateCategory",
+  "/updateCategory/:id",
   checkRoleAndPermission(["super_admin", "admin"], "update"),
   catg_controller.updateCategory
 );
