@@ -1,5 +1,5 @@
 import React from "react";
-import './customInput.css'
+import "./customInput.css";
 const CustomInput = (props) => {
   const { type, label, i_id, i_class, name, val, onChng, onBlr } = props;
   return (

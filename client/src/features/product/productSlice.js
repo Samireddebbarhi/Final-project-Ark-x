@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import {config} from '../../utils/axiosconfig'
 import { base_url } from "../../utils/baseUrl";
 // get all products
 export const getProducts = createAsyncThunk("users/getProducts", async (_, {rejectWithValue}) => {
-    return axios.get(`${base_url}/getAllProducts`)
+    return axios.get(`${base_url}/getAllProducts`, config)
     .then((res) => {
       console.log(res);
       return res.data
@@ -19,8 +20,11 @@ export const addProduct = createAsyncThunk("products/addProduct", async (_newPro
   // })
   // .catch((err) => rejectWithValue(err.response.data.message));
   try  {
-    const response = await axios.post(`${base_url}/createProduct`, _newProduct)
-    
+    const response = await axios.post(
+      `${base_url}/createProduct`,
+      _newProduct,
+      config
+    );
     return response.data
   } catch (error){
     return rejectWithValue(error.response.data.message);
@@ -31,7 +35,7 @@ export const deleteProduct = createAsyncThunk(
   "products/deleteProduct",
   async (productId, { rejectWithValue }) => {
     try {
-      await axios.delete(`${base_url}/deleteProduct/${productId}`);
+      await axios.delete(`${base_url}/deleteProduct/${productId}`, config);
       return productId;
     } catch (error) {
       // If the request fails, reject the promise with the error message
@@ -46,7 +50,7 @@ export const updateProduct = createAsyncThunk(
     try {
       const response = await axios.put(
         `${base_url}/updateProduct/${productId}`,
-        updatedProduct
+        updatedProduct, config
       );
 
       if (response.status !== 200 || !response.data) {

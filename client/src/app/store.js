@@ -5,7 +5,8 @@ import addproductReducer from '../features/product/productSlice';
 import pCategoryReducer from "../features/pcotegory/pcotegorySlice";
 import customerReducer from "../features/customer/customerSlice";
 import deleteproductReducer from "../features/product/productSlice"
-import editproductReducer from "../features/product/productSlice"
+import editproductReducer from "../features/product/productSlice";
+import authReducer from "../features/auth/authSlice";
 
 export const store = configureStore({
     reducer:{
@@ -16,5 +17,6 @@ export const store = configureStore({
         customer: customerReducer,
         deleteProduct : deleteproductReducer,
         editeProduct : editproductReducer,
+        auth: authReducer,
     },
 });
