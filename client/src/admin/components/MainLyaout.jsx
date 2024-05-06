@@ -62,11 +62,6 @@ const MainLyaout = () => {
                   label: "Product List",
                 },
                 {
-                  key: "add-category",
-                  icon: <BiCategoryAlt className="fs-4" />,
-                  label: " Add Category",
-                },
-                {
                   key: "list-category",
                   icon: <BiCategoryAlt className="fs-4" />,
                   label: "Category List",

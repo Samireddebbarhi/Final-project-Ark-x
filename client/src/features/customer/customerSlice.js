@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { cust_url} from "../../utils/baseUrl";
+import { config } from "../../utils/axiosconfig";
 
 // get all customers
 export  const getCustomers = createAsyncThunk("users/getCustomers", async (_, {rejectWithValue}) =>{
    try{
-    const response= await axios.get(`${cust_url}/customers/All` )
+    const response= await axios.get(`${cust_url}/customers/All` , config)
     console.log(response)
     return response.data
    }catch(error){

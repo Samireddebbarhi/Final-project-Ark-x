@@ -2,12 +2,13 @@ import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 // import pCategoryService from './pcotegoryservice';
 import { base_url } from "../../utils/baseUrl";
 import axios from "axios";
+import { config } from "../../utils/axiosconfig";
 
 export const getCategories = createAsyncThunk(
   "productCategory/get-categories",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${base_url}/getAllCategory`);
+      const response = await axios.get(`${base_url}/getAllCategory`, config);
 
       return response.data;
     } catch (error) {

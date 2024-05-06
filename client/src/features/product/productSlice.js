@@ -30,18 +30,18 @@ export const addProduct = createAsyncThunk("products/addProduct", async (_newPro
     return rejectWithValue(error.response.data.message);
   }
 });
-// delete product 
+  // delete product 
 export const deleteProduct = createAsyncThunk(
-  "products/deleteProduct",
-  async (productId, { rejectWithValue }) => {
-    try {
-      await axios.delete(`${base_url}/deleteProduct/${productId}`, config);
-      return productId;
-    } catch (error) {
-      // If the request fails, reject the promise with the error message
-      return rejectWithValue(error.response.data.message);
+    "products/deleteProduct",
+    async (productId, { rejectWithValue }) => {
+      try {
+        await axios.delete(`${base_url}/deleteProduct/${productId}`, config);
+        return productId;
+      } catch (error) {
+        // If the request fails, reject the promise with the error message
+        return rejectWithValue(error.response.data.message);
+      }
     }
-  }
 );
 // update product
 export const updateProduct = createAsyncThunk(
