@@ -27,13 +27,14 @@ const getAllCategory = async (req, res) => {
         path: 'products',
         model: 'Product',
         select: 'name description price' // Add more fields as needed
-      });
+      })
+      .lean(); // To convert Mongoose documents to plain JavaScript objects
 
-    if (!categories) {
-      res.status(404).send("No categories exist");
-    } else {
-      res.json(categories);
+    if (!categories || categories.length === 0) {
+      return res.status(404).send("No categories exist");
     }
+
+    res.json(categories);
   } catch (err) {
     console.log(err);
     res.status(500).send("Failed to retrieve categories");

@@ -37,7 +37,7 @@ export const updateAProductCategory = createAsyncThunk(
   async ({id, name} , {rejectWithValue}) => {
     try {
       const response = await axios.put(
-        `${base_url}updateCategory/${id}`, name 
+        `${base_url}updateCategory/${id}`, {name} 
       );
       return response.data;
     } catch (error) {
@@ -108,7 +108,8 @@ export const pCategorySlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.createdCategory = action.payload;
+        state.pCategories.push(action.payload.name);
+        // state.createdCategory = action.payload;
       })
       .addCase(createCategory.rejected, (state, action) => {
         state.isLoading = false;
@@ -123,7 +124,8 @@ export const pCategorySlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.updatedCategory = action.payload;
+        // state.updatedCategory = action.payload;
+        state.pCategories = state.pCategories.map(category => category._id === action.payload._id ? action.payload : category);
       })
       .addCase(updateAProductCategory.rejected, (state, action) => {
         state.isLoading = false;

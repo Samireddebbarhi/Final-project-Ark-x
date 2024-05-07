@@ -9,7 +9,7 @@ const {
 
 RouterProduct.get(
   "/getAllProducts",
-  checkRoleAndPermission(["super_admin", "admin"], "read"),
+  // checkRoleAndPermission(["super_admin", "admin"], "read"),
   controller.getAllProducts
 );
 RouterProduct.post(
