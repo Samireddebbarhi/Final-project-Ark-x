@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Header from './Header'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -19,7 +20,7 @@ import { Outlet } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
 
-const { Header, Sider, Content } = Layout;
+const { Sider, Content } = Layout;
 const MainLyaout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -87,23 +88,7 @@ const MainLyaout = () => {
         />
       </Sider>
       <Layout>
-        <Header
-          style={{
-            padding: 0,
-            background: colorBgContainer,
-          }}
-        >
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64,
-            }}
-          />
-        </Header>
+      <Header />
         <Content
           style={{
             margin: '24px 16px',

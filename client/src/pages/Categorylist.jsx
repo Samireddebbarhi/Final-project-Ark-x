@@ -6,34 +6,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCategories, createCategory, deleteAProductCategory, updateAProductCategory } from '../features/pcategory/pcategorySlice';
 import { Dialog, Transition } from '@headlessui/react';
 
-const columns = [
-  {
-    title: "SNo",
-    dataIndex: "key",
-  },
-  {
-    title: "Product name",
-    dataIndex: "ProductName",
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-  },
-  {
-    title: "Action",
-    dataIndex: "action",
-  },
-];
-
 const Categorylist = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const cancelButtonRef = useRef(null);
   const [name, setName] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const pCatStat = useSelector((state)=> state.pCategory.pCategories);
+  const pCatStat = useSelector((state) => state.pCategory.pCategories);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [categoriesPerPage] = useState(2);
 
-  useEffect(()=> {
+  useEffect(() => {
     dispatch(getCategories());
   }, []);
 
@@ -44,7 +27,6 @@ const Categorylist = () => {
   }
 
   const handleDelete = (id) => {
-    console.log(id);
     dispatch(deleteAProductCategory(id));
   }
 
@@ -52,54 +34,99 @@ const Categorylist = () => {
   const handleEdit = (id) => {
     const categoryToEdit = pCatStat.find(category => category._id === id);
     setIdToUpdate(categoryToEdit._id);
-    console.log(idToUpdate);
     setName(categoryToEdit.name);
-    setIsEditing(true); 
+    setIsEditing(true);
     setOpen(true);
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    console.log(name)
     dispatch(updateAProductCategory({ id: idToUpdate, name: name }));
     setOpen(false);
-
   };
 
-  const data1 = [];
-  for (let i = 0; i < pCatStat.length; i++) {
-    const productsInfo = pCatStat[i].products.map(product => `${product.name} - `);
-    // - ${product.description} - ${product.price}
-    data1.push({
-      key: i + 1,
-      name: pCatStat[i].name,
-      ProductName: productsInfo.join(", "),
-      action: (
-        <>
-          <button className="fs-3 text-danger" onClick={() => handleEdit(pCatStat[i]._id)}><BiEdit /></button>
-          <button className="fs-3 text-danger" onClick={() => { handleDelete(pCatStat[i]._id) }}><AiFillDelete /></button>
-        </>
-      ),
-    });
-  }
+  // Calculate current categories based on pagination
+  const indexOfLastCategory = currentPage * categoriesPerPage;
+  const indexOfFirstCategory = indexOfLastCategory - categoriesPerPage;
+  const currentCategories = pCatStat.slice(indexOfFirstCategory, indexOfLastCategory);
+
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
     <div>
-       <header className="">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold leading-tight">Categories</h2>
-              <button
-                onClick={() => setOpen(true)}
-                className="hover:bg-blue-400  group flex items-center rounded-md bg-blue-500 text-white text-lg font-medium pl-2 pr-3 py-2 shadow-sm ">
-                <svg width="20" height="20" fill="currentColor" className="mr-2" aria-hidden="true">
-                  <path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z" />
-                </svg>
-                New
-              </button>
-            </div>
-          
-          </header>
+      <header className="">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold leading-tight">Categories</h2>
+          <button
+            onClick={() => {setOpen(true); setIdToUpdate("")}}
+            className="hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-lg font-medium pl-2 pr-3 py-2 shadow-sm ">
+            <svg width="20" height="20" fill="currentColor" className="mr-2" aria-hidden="true">
+              <path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z" />
+            </svg>
+            New
+          </button>
+        </div>
+      </header>
       <div>
-        <Table columns={columns} dataSource={data1} />
-       
+        <div className="py-8">
+          <table className="min-w-full leading-normal">
+            <thead>
+              <tr>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">SNo</th>
+                {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Product name</th> */}
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Name</th>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentCategories.map((category, index) => (
+                <tr key={category._id} className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}>
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm"><p className="text-gray-900 whitespace-no-wrap">{index + 1}</p></td>
+                  {/* <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm"><p className="text-gray-900 whitespace-no-wrap">{category.products.map(product => `${product.name}`).join(" - ")}</p></td> */}
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm"><p className="text-gray-900 whitespace-no-wrap">{category.name}</p></td>
+                  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                    <button className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-3 border border-blue-500 hover:border-transparent rounded" onClick={() => handleEdit(category._id)}><BiEdit /></button>
+                    <button className="bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-3 border border-red-500 hover:border-transparent rounded m-1" onClick={() => handleDelete(category._id)}><AiFillDelete /></button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="flex justify-center space-x-1 dark:text-gray-800 py-8">
+            <button
+              title="Previous"
+              type="button"
+              className="inline-flex items-center justify-center w-8 h-8 py-0 border rounded-md shadow-md dark:bg-gray-50 dark:border-gray-100"
+              onClick={() => setCurrentPage(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-4">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            {Array.from({ length: Math.ceil(pCatStat.length / categoriesPerPage) }, (_, i) => (
+              <button
+                key={i}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`inline-flex items-center justify-center w-8 h-8 text-sm font-semibold border rounded shadow-md dark:bg-gray-50 dark:text-violet-600 dark:border-violet-600 ${currentPage === i + 1 ? 'bg-gray-200' : ''}`}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              title="Next"
+              type="button"
+              className="inline-flex items-center justify-center w-8 h-8 py-0 border rounded-md shadow-md dark:bg-gray-50 dark:border-gray-100"
+              onClick={() => setCurrentPage(currentPage + 1)}
+              disabled={currentPage === Math.ceil(pCatStat.length / categoriesPerPage)}
+            >
+              <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-4">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
         <Transition.Root show={open} as={Fragment}>
         <Dialog
           as="div"
@@ -179,7 +206,7 @@ const Categorylist = () => {
           </Transition.Child>
         </Dialog>
       </Transition.Root>
-    </div>
+      </div>
     </div>
   )
 }
