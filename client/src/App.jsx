@@ -9,6 +9,7 @@ import Categorylist from './pages/Categorylist';
 import Login from './pages/Login';
 import ProtectedRoute from './admin/components/ProtectedRoute';
 import Customers from './pages/Customers';
+import ImageUpload from './ImageUplaod';
 function App () {
   
   return (
@@ -21,6 +22,7 @@ function App () {
             <Route path="/list-product" element={<Products />} />
             <Route path="/list-category" element={<Categorylist />} />
             <Route path="/customers" element={<Customers/>} />
+            <Route path="/upload" element={<ImageUpload />}/>
           </Route>
           </Route>
 

@@ -64,6 +64,7 @@ const handleEdit = (productId) => {
         description: products[i].description,
         category: products[i].category,
         price: `${products[i].price}`,
+        image:products[i].image,
       
       });
       
@@ -99,8 +100,13 @@ const handleEdit = (productId) => {
         dataIndex: "name",
         sorter: (a, b) => a.name.length - b.name.length,
       },
-     
-      {
+     {
+      title: "Images",
+      dataIndex: "image",
+      render: (image) => <img src={image} alt="Product" style={{ width: "50px", height: "50px" }} />,
+      
+     },
+    {
         title: "Description",
         dataIndex: "description",
         sorter: (a, b) => a.description.length - b.description.length,

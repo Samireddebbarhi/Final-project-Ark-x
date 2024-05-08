@@ -18,10 +18,49 @@ const AddProduct = () => {
     price: "",
     category: "",
     stock: "",
+    image:""
   });
   // const [desc, setDesc] = useState("");
-  const imgState = useSelector((state) => state.upload.images);
+  const [images, setImage] = useState(null);
 
+    
+  
+  const uploadImage = async () => {
+    try {
+      const data = new FormData();
+      data.append("file", images);
+      data.append("upload_preset", "mnrlqvyj");
+      data.append("cloud_name", "dx1axcvms");
+      data.append("folder", "Cloudinary-React");
+  
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/dx1axcvms/image/upload`,
+        {
+          method: "POST",
+          body: data,
+        }
+      );
+  
+      const responseData = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(`Failed to upload image: ${responseData.message}`);
+      }
+  
+      console.log("response:", responseData);
+      
+      return responseData; // Return the response data
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw error; // Rethrow the error to be caught by the caller
+    }
+  };
+    const handleImageChange = (event) => {
+      const file = event.target.files[0];
+      setImage(file);
+      console.log(file)
+
+    }
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues({
@@ -34,29 +73,50 @@ const AddProduct = () => {
   //   setDesc(value);
   // };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(addProduct(formValues))
-      .unwrap()
-      .then((result) => {
-        console.log("Product added successfully:", result);
+  
+    try {
+      // Upload the image
+      const uploadedImage = await uploadImage();
+  
+      // Create the product object with the uploaded image URL
+      const productData = {
+        ...formValues,
+        image: uploadedImage.secure_url // Assuming the image URL is returned in the response from uploadImage
+      };
+  
+      // Dispatch the addProduct action
+      const actionResult = await dispatch(addProduct(productData));
+      const result = actionResult.payload;
+  
+      // If product was added successfully
+      if (result) {
         // Reset form values after successful submission
-        alert("Product Added Successfully")
-        dispatch(getProducts())
         setFormValues({
           name: "",
           description: "",
           price: "",
           category: "",
           stock: "",
+          image: ""
         });
-     
-      })
-      .catch((error) => {
-        console.error("Failed to add product:", error);
-        alert("somthing went wrong!");
-      });
+  
+        // Fetch updated products
+        dispatch(getProducts());
+  
+        // Show success message
+        alert("Product Added Successfully");
+      } else {
+        // Show error message if product addition failed
+        alert("Something went wrong!");
+      }
+    } catch (error) {
+      console.error("Error adding product:", error);
+      alert("Something went wrong!");
+    }
   };
+  
 
   return (
     <div className="px-8 py-6">
@@ -133,26 +193,11 @@ const AddProduct = () => {
           />
         </div>
 
-        <div className="border-2 border-dashed border-gray-400 rounded-lg p-4">
-          <Dropzone onDrop={acceptedFiles => dispatch(uploadImg(acceptedFiles))}>
-            {({getRootProps, getInputProps}) => (
-              <section>
-                <div {...getRootProps()}>
-                  <input {...getInputProps()} />
-                  <p>Drag 'n' drop some files here, or click to select files</p>
-                </div>
-              </section>
-            )}
-          </Dropzone>
-        </div>
+        <input type="file"
+        name="image" onChange={(e)=>handleImageChange(e)} />
 
-        <div className='showImage'>
-          {imgState.map((image, index) => (
-            <div key={index}>
-              <img src={image.url} alt={`Uploaded Image ${index}`} />
-            </div>
-          ))}
-        </div>
+        
+        
           <br/>
         <button 
           className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" 

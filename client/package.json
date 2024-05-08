@@ -18,6 +18,7 @@
     "@reduxjs/toolkit": "^2.2.3",
     "antd": "^5.16.5",
     "axios": "^1.6.8",
+    "cloudinary-react": "^1.8.1",
     "formik": "^2.4.6",
     "ra-data-json-server": "^4.16.16",
     "ra-data-simple-rest": "^4.16.16",
