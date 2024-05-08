@@ -121,23 +121,23 @@ const deleteAllProducts = async (req, res, next) => {
   }
 };
 // Function to upload an image for a product
-const uploadProductImage = async (req, res) => {
-  if (!req.file) {
-    return res.status(400).send("No image file uploaded");
-  }
+// const uploadProductImage = async (req, res) => {
+//   if (!req.file) {
+//     return res.status(400).send("No image file uploaded");
+//   }
 
-  const image = new Image({
-    filename: req.file.filename,
-    path: req.file.path,
-  });
+//   const image = new Image({
+//     filename: req.file.filename,
+//     path: req.file.path,
+//   });
 
-  try {
-    await image.save();
-    res.status(200).send("Image uploaded and saved successfully");
-  } catch (error) {
-    res.status(500).send("Error saving image to the database");
-  }
-};
+//   try {
+//     await image.save();
+//     res.status(200).send("Image uploaded and saved successfully");
+//   } catch (error) {
+//     res.status(500).send("Error saving image to the database");
+//   }
+// };
 
 module.exports = {
   getAllProducts,
@@ -146,5 +146,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   deleteAllProducts,
-  uploadProductImage,
+ 
 };

@@ -12,11 +12,11 @@ RouterProduct.get(
   checkRoleAndPermission(["super_admin", "admin"], "read"),
   controller.getAllProducts
 );
-RouterProduct.post(
-  "/upload",
-  upload.single("image"),
-  controller.uploadProductImage
-);
+// RouterProduct.post(
+//   "/upload",
+//   upload.single("image"),
+//   controller.uploadProductImage
+// );
 RouterProduct.get(
   "/getProduct/:id",
   checkRoleAndPermission(["super_admin", "admin"], "read"),
