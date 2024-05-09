@@ -30,9 +30,9 @@ app.use("/api/v2/admin/super", verifyJwtAdmin, admin_route.adminRouter);
 app.use("/api/v2/admin/super", verifyJwtAdmin, customer_crud);
 app.use("/api/v2/customer", verifyJwtCustomer, customer_crud);
 
-app.use("/api/v2/admin", /*verifyJwtAdmin,*/ catg_route);
+app.use("/api/v2/admin", verifyJwtAdmin, catg_route);
 app.use("/api/v2/admin", verifyJwtAdmin, RouterProduct);
-app.use("/api/v2/admin", /*verifyJwtAdmin,*/ review_route);
+app.use("/api/v2/admin", verifyJwtAdmin, review_route);
 
 app.use("/api/v2/customer", verifyJwtCustomer, catg_route);
 app.use("/api/v2/customer", verifyJwtCustomer, review_route);

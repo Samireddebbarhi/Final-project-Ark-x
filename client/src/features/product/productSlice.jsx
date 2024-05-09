@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import { deleteProduct, getProducts } from "../features/product/productSlice";
+//import { deleteProduct, getProducts } from "./product/productSlice";
 import { Link, useNavigate } from "react-router-dom";
-import CustomizedDialogs from "../admin/components/Dialog";
-import AddProduct from "../admin/components/AddProduct";
-import { base_url } from "../utils/baseUrl";
+import CustomizedDialogs from "../../admin/components/Dialog";
+import AddProduct from "../../admin/components/AddProduct";
+import { base_url } from "../../utils/baseUrl";
 import axios from "axios";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import EditeProduct from "../admin/components/EditeProduct";
-import { config } from "../utils/axiosConfig";
+import EditeProduct from "../../admin/components/EditeProduct";
+import { config } from "../../utils/axiosConfig";
 
 const { confirm } = Modal;
 const Productlist = () => {
@@ -27,13 +27,11 @@ const Productlist = () => {
     dispatch(getProducts());
   }, [productId]);
 
-  // delete product
   const handleDelete = async (productId) => {
     try {
       await axios.delete(`${base_url}/deleteProduct/${productId}`, config);
       dispatch(deleteProduct(productId));
       console.log("Product Deleted Successfully:", productId);
-      // alert('Product Deleted Successfully')
 
       setDeleteConfirmed(true); // Set delete confirmation to true
     } catch (error) {
@@ -128,7 +126,7 @@ const Productlist = () => {
               onClick={() => showDeleteConfirm(record.key)}
               icon={<DeleteOutlined />}
               danger
-            ></Button>
+            />
           </>
         );
       },

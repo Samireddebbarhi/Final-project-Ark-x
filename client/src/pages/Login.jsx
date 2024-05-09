@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../features/auth/authSlice";
+import { getProducts } from "../features/product/productSlice";
 
 let schema = yup.object().shape({
   email: yup
@@ -32,7 +33,8 @@ const Login = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      navigate("/list-product");
+      navigate("/");
+      dispatch(getProducts);
     } else {
       navigate("");
     }
