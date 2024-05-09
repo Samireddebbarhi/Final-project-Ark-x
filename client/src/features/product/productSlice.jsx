@@ -10,7 +10,7 @@ import { base_url } from "../../utils/baseUrl";
 import axios from "axios";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import EditeProduct from "../../admin/components/EditeProduct";
-import { config } from "../../utils/axiosConfig";
+import { config } from "../../utils/axiosconfig";
 
 const { confirm } = Modal;
 const Productlist = () => {

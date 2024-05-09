@@ -1,10 +1,6 @@
 import React from "react";
 import "./customInput.css";
-<<<<<<< HEAD
-const CustomerInput = (props) => {
-=======
 const CustomInput = (props) => {
->>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
   const { type, label, i_id, i_class, name, val, onChng, onBlr } = props;
   return (
     <div className="custom-input">
@@ -23,4 +19,4 @@ const CustomInput = (props) => {
   );
 };
 
-export default CustomerInput;
+export default CustomInput;

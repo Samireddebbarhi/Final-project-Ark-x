@@ -19,13 +19,8 @@ catg_route.post(
   catg_controller.addCategory
 );
 catg_route.put(
-<<<<<<< HEAD
   "/updateCategory/:id",
   checkRoleAndPermission(["super_admin", "admin"], "update"),
-=======
-  "/updateCategory",
-  // checkRoleAndPermission(["super_admin", "admin"], "update"),
->>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
   catg_controller.updateCategory
 );
 catg_route.delete(
