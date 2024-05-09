@@ -4,6 +4,11 @@ import authService from "./authServices";
 const getUserfromLocalStorage = localStorage.getItem("user")
   ? JSON.parse(localStorage.getItem("user"))
   : null;
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
 const initialState = {
   user: getUserfromLocalStorage,
   isError: false,
@@ -47,4 +52,8 @@ export const authSlice = createSlice({
   },
 });
 
+<<<<<<< HEAD
 export default authSlice.reducer;
+=======
+export default authSlice.reducer;
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70

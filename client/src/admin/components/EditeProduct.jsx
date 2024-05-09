@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
+=======
+import React, { useEffect, useState } from 'react';
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Select } from "antd";
 // import 'antd/dist/antd.css';
+<<<<<<< HEAD
 import Dropzone from "react-dropzone";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImg } from "../../features/upload/uploadSlice";
@@ -15,6 +20,16 @@ import { base_url } from "../../utils/baseUrl";
 
 const EditProduct = ({ productId }) => {
   // Accept productId as props
+=======
+import Dropzone from 'react-dropzone';
+import { useDispatch, useSelector } from 'react-redux';
+import { uploadImg } from '../../features/upload/uploadSlice';
+import { getProducts, updateProduct } from '../../features/product/productSlice'; // Updated import
+import axios from 'axios'
+import { base_url } from '../../utils/baseUrl';
+
+const EditProduct = ({ productId }) => { // Accept productId as props
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
   const dispatch = useDispatch();
   const [formValues, setFormValues] = useState({
     name: "",
@@ -30,7 +45,11 @@ const EditProduct = ({ productId }) => {
       try {
         const response = await axios.get(`${base_url}/getProduct/${productId}`);
         const product = response.data;
+<<<<<<< HEAD
         console.log(product);
+=======
+        console.log(product)
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
         setFormValues(product);
       } catch (error) {
         console.error("Failed to fetch product details:", error);
@@ -43,16 +62,25 @@ const EditProduct = ({ productId }) => {
     }
   }, [productId]);
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues({
       ...formValues,
+<<<<<<< HEAD
       [name]: value,
+=======
+      [name]: value
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
 
     try {
       // Dispatch the updateProduct action with the productId and formValues
@@ -65,10 +93,23 @@ const EditProduct = ({ productId }) => {
         console.log("Product edited successfully:", result.payload);
         dispatch(getProducts()); // to get the product list with the upadate product
         alert("product updated !!!");
+=======
+  
+    try {
+      // Dispatch the updateProduct action with the productId and formValues
+      const result =  await dispatch(updateProduct({ productId, updatedProduct: formValues }));
+      
+      // Check if the action was successful
+      if (updateProduct.fulfilled.match(result)) {
+        console.log("Product edited successfully:", result.payload);
+        dispatch(getProducts()) // to get the product list with the upadate product
+       alert("product updated !!!")
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
       }
     } catch (error) {
       console.error("Failed to edit product:", error);
       // Optionally, show an error notification to the user
+<<<<<<< HEAD
     }
   };
 
@@ -87,15 +128,37 @@ const EditProduct = ({ productId }) => {
             type="text"
             className="form-control"
             id="name"
+=======
+    }}
+
+
+  return (
+    <div className="px-8 py-6">
+      
+     
+      <h1 className="text-3xl font-bold mb-7">Edite Product</h1>
+      <form onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Enter Name :</label>
+          <input 
+            type="text" 
+            className="form-control"
+            id="name" 
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
             placeholder="Enter Product Title"
             name="name"
             value={formValues.name}
             onChange={handleInputChange}
+<<<<<<< HEAD
             required={true}
+=======
+            required= {true}
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
           />
         </div>
 
         <div className="mb-4">
+<<<<<<< HEAD
           <label
             htmlFor="description"
             className="block text-sm font-medium text-gray-700"
@@ -106,12 +169,20 @@ const EditProduct = ({ productId }) => {
             type="text"
             className="form-control"
             id="description"
+=======
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700">Enter Description :</label>
+          <input 
+            type="text" 
+            className="form-control"
+            id="description" 
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
             placeholder="Enter Product Description"
             name="description"
             value={formValues.description}
             onChange={handleInputChange}
             require={true}
           />
+<<<<<<< HEAD
         </div>
 
         <div className="mb-4">
@@ -125,15 +196,31 @@ const EditProduct = ({ productId }) => {
             type="number"
             className="form-control"
             id="price"
+=======
+
+        </div>
+
+        <div className="mb-4">
+          <label htmlFor="price" className="block text-sm font-medium text-gray-700">Enter Price :</label>
+          <input 
+            type="number" 
+            className="form-control"
+            id="price" 
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
             placeholder="Enter Product Price"
             name="price"
             value={formValues.price}
             onChange={handleInputChange}
+<<<<<<< HEAD
             required={true}
+=======
+            required= {true}
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
           />
         </div>
 
         <div>
+<<<<<<< HEAD
           <label
             htmlFor="category"
             className="block text-sm font-medium text-gray-700"
@@ -145,6 +232,14 @@ const EditProduct = ({ productId }) => {
             className="form-control"
             id="category"
             placeholder="Enter Category"
+=======
+        <label htmlFor="category" className="block text-sm font-medium text-gray-700">Select Category :</label>
+        <input 
+            type="text" 
+            className="form-control"
+            id="category" 
+            placeholder="Enter Category" 
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
             name="category"
             value={formValues.category}
             onChange={handleInputChange}
@@ -152,6 +247,7 @@ const EditProduct = ({ productId }) => {
           />
         </div>
 
+<<<<<<< HEAD
         <div className="mb-4">
           <label
             htmlFor="stock"
@@ -164,6 +260,16 @@ const EditProduct = ({ productId }) => {
             className="form-control"
             id="stock"
             placeholder="Enter Product Quantity"
+=======
+
+        <div className="mb-4">
+          <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Enter Quantity :</label>
+          <input 
+            type="number" 
+            className="form-control"
+            id="stock" 
+            placeholder="Enter Product Quantity" 
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
             name="stock"
             value={formValues.stock}
             onChange={handleInputChange}
@@ -172,10 +278,15 @@ const EditProduct = ({ productId }) => {
         </div>
 
         <div className="border-2 border-dashed border-gray-400 rounded-lg p-4">
+<<<<<<< HEAD
           <Dropzone
             onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
           >
             {({ getRootProps, getInputProps }) => (
+=======
+          <Dropzone onDrop={acceptedFiles => dispatch(uploadImg(acceptedFiles))}>
+            {({getRootProps, getInputProps}) => (
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
               <section>
                 <div {...getRootProps()}>
                   <input {...getInputProps()} />
@@ -186,23 +297,39 @@ const EditProduct = ({ productId }) => {
           </Dropzone>
         </div>
 
+<<<<<<< HEAD
         <div className="showImage">
+=======
+        <div className='showImage'>
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
           {imgState.map((image, index) => (
             <div key={index}>
               <img src={image.url} alt={`Uploaded Image ${index}`} />
             </div>
           ))}
         </div>
+<<<<<<< HEAD
         <br />
         <button
           className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+=======
+          <br/>
+        <button 
+          className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" 
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
           type="submit"
         >
           Edit Product
         </button>
       </form>
     </div>
+<<<<<<< HEAD
   );
 };
+=======
+  
+  );
+}
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
 
 export default EditProduct;

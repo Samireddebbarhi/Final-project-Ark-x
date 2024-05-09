@@ -1,12 +1,25 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
+=======
+import React, { useEffect, useState } from 'react';
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Select } from "antd";
 // import 'antd/dist/antd.css';
+<<<<<<< HEAD
 import Dropzone from "react-dropzone";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImg } from "../../features/upload/uploadSlice";
 import { addProduct, getProducts } from "../../features/product/productSlice";
+=======
+import Dropzone from 'react-dropzone';
+import { useDispatch, useSelector } from 'react-redux';
+import { uploadImg } from '../../features/upload/uploadSlice';
+import { addProduct, getProducts } from '../../features/product/productSlice';
+
+
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
 
 const AddProduct = () => {
   const dispatch = useDispatch();
@@ -16,15 +29,65 @@ const AddProduct = () => {
     price: "",
     category: "",
     stock: "",
+<<<<<<< HEAD
   });
   // const [desc, setDesc] = useState("");
   const imgState = useSelector((state) => state.upload.images);
 
+=======
+    image:""
+  });
+  // const [desc, setDesc] = useState("");
+  const [images, setImage] = useState(null);
+
+    
+  
+  const uploadImage = async () => {
+    try {
+      const data = new FormData();
+      data.append("file", images);
+      data.append("upload_preset", "mnrlqvyj");
+      data.append("cloud_name", "dx1axcvms");
+      data.append("folder", "Cloudinary-React");
+  
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/dx1axcvms/image/upload`,
+        {
+          method: "POST",
+          body: data,
+        }
+      );
+  
+      const responseData = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(`Failed to upload image: ${responseData.message}`);
+      }
+  
+      console.log("response:", responseData);
+      
+      return responseData; // Return the response data
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      throw error; // Rethrow the error to be caught by the caller
+    }
+  };
+    const handleImageChange = (event) => {
+      const file = event.target.files[0];
+      setImage(file);
+      console.log(file)
+
+    }
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues({
       ...formValues,
+<<<<<<< HEAD
       [name]: value,
+=======
+      [name]: value
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
     });
   };
 
@@ -32,6 +95,7 @@ const AddProduct = () => {
   //   setDesc(value);
   // };
 
+<<<<<<< HEAD
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(addProduct(formValues))
@@ -41,12 +105,35 @@ const AddProduct = () => {
         // Reset form values after successful submission
         alert("Product Added Successfully");
         dispatch(getProducts());
+=======
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  
+    try {
+      // Upload the image
+      const uploadedImage = await uploadImage();
+  
+      // Create the product object with the uploaded image URL
+      const productData = {
+        ...formValues,
+        image: uploadedImage.secure_url // Assuming the image URL is returned in the response from uploadImage
+      };
+  
+      // Dispatch the addProduct action
+      const actionResult = await dispatch(addProduct(productData));
+      const result = actionResult.payload;
+  
+      // If product was added successfully
+      if (result) {
+        // Reset form values after successful submission
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
         setFormValues({
           name: "",
           description: "",
           price: "",
           category: "",
           stock: "",
+<<<<<<< HEAD
         });
       })
       .catch((error) => {
@@ -54,12 +141,33 @@ const AddProduct = () => {
         alert("somthing went wrong!");
       });
   };
+=======
+          image: ""
+        });
+  
+        // Fetch updated products
+        dispatch(getProducts());
+  
+        // Show success message
+        alert("Product Added Successfully");
+      } else {
+        // Show error message if product addition failed
+        alert("Something went wrong!");
+      }
+    } catch (error) {
+      console.error("Error adding product:", error);
+      alert("Something went wrong!");
+    }
+  };
+  
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
 
   return (
     <div className="px-8 py-6">
       <h1 className="text-3xl font-bold mb-7">Add Produt</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
+<<<<<<< HEAD
           <label
             htmlFor="name"
             className="block text-sm font-medium text-gray-700"
@@ -70,6 +178,13 @@ const AddProduct = () => {
             type="text"
             className="form-control"
             id="name"
+=======
+          <label htmlFor="name" className="block text-sm font-medium text-gray-700">Enter Name :</label>
+          <input 
+            type="text" 
+            className="form-control"
+            id="name" 
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
             placeholder="Enter Product Title"
             name="name"
             value={formValues.name}
@@ -79,6 +194,7 @@ const AddProduct = () => {
         </div>
 
         <div className="mb-4">
+<<<<<<< HEAD
           <label
             htmlFor="description"
             className="block text-sm font-medium text-gray-700"
@@ -89,6 +205,13 @@ const AddProduct = () => {
             type="text"
             className="form-control"
             id="description"
+=======
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700">Enter Description :</label>
+          <input 
+            type="text" 
+            className="form-control"
+            id="description" 
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
             placeholder="Enter Product Description"
             name="description"
             value={formValues.description}
@@ -98,6 +221,7 @@ const AddProduct = () => {
         </div>
 
         <div className="mb-4">
+<<<<<<< HEAD
           <label
             htmlFor="price"
             className="block text-sm font-medium text-gray-700"
@@ -108,6 +232,13 @@ const AddProduct = () => {
             type="number"
             className="form-control"
             id="price"
+=======
+          <label htmlFor="price" className="block text-sm font-medium text-gray-700">Enter Price :</label>
+          <input 
+            type="number" 
+            className="form-control"
+            id="price" 
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
             placeholder="Enter Product Price"
             name="price"
             value={formValues.price}
@@ -117,6 +248,7 @@ const AddProduct = () => {
         </div>
 
         <div>
+<<<<<<< HEAD
           <label
             htmlFor="category"
             className="block text-sm font-medium text-gray-700"
@@ -128,6 +260,14 @@ const AddProduct = () => {
             className="form-control"
             id="category"
             placeholder="Enter Category"
+=======
+        <label htmlFor="category" className="block text-sm font-medium text-gray-700">Select Category :</label>
+        <input 
+            type="text" 
+            className="form-control"
+            id="category" 
+            placeholder="Enter Category" 
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
             name="category"
             value={formValues.category}
             onChange={handleInputChange}
@@ -137,6 +277,7 @@ const AddProduct = () => {
 
         <br />
         <div className="mb-4">
+<<<<<<< HEAD
           <label
             htmlFor="stock"
             className="block text-sm font-medium text-gray-700"
@@ -148,6 +289,14 @@ const AddProduct = () => {
             className="form-control"
             id="stock"
             placeholder="Enter Product Quantity"
+=======
+          <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Enter Quantity :</label>
+          <input 
+            type="number" 
+            className="form-control"
+            id="stock" 
+            placeholder="Enter Product Quantity" 
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
             name="stock"
             value={formValues.stock}
             onChange={handleInputChange}
@@ -155,6 +304,7 @@ const AddProduct = () => {
           />
         </div>
 
+<<<<<<< HEAD
         <div className="border-2 border-dashed border-gray-400 rounded-lg p-4">
           <Dropzone
             onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
@@ -180,6 +330,16 @@ const AddProduct = () => {
         <br />
         <button
           className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+=======
+        <input type="file"
+        name="image" onChange={(e)=>handleImageChange(e)} />
+
+        
+        
+          <br/>
+        <button 
+          className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" 
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
           type="submit"
         >
           Add Product
@@ -187,6 +347,10 @@ const AddProduct = () => {
       </form>
     </div>
   );
+<<<<<<< HEAD
 };
+=======
+}
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
 
 export default AddProduct;

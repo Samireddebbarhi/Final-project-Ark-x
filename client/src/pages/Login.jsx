@@ -33,8 +33,14 @@ const Login = () => {
 
   useEffect(() => {
     if (isSuccess) {
+<<<<<<< HEAD
       navigate("/");
       dispatch(getProducts);
+=======
+      dispatch(getProducts());
+      navigate("/list-product");
+      
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
     } else {
       navigate("");
     }
@@ -95,4 +101,8 @@ const Login = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Login;
+=======
+export default Login;
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70

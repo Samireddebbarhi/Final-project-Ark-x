@@ -53,7 +53,28 @@ const MainLayout = () => {
             {
               key: "",
               icon: <AiOutlineDashboard className="fs-4" />,
+<<<<<<< HEAD
               label: "Dashboard",
+=======
+              label: 'Dashborad',
+            },
+            {
+              key: 'categories',
+              icon: <AiOutlineShoppingCart className="fs-4" />,
+              label: 'Categories',
+              children :  [
+                {
+                  key: "list-product",
+                  icon: <AiOutlineShoppingCart className="fs-4" />,
+                  label: "Product List",
+                },
+                {
+                  key: "list-category",
+                  icon: <BiCategoryAlt className="fs-4" />,
+                  label: "Category List",
+                },
+              ]
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
             },
             {
               key: "customers",

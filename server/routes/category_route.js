@@ -5,7 +5,7 @@ const {
 } = require("../middlewares/verifyRole_permission");
 catg_route.get(
   "/getAllCategory",
-  checkRoleAndPermission(["super_admin", "admin", "user"], "read"),
+  // checkRoleAndPermission(["super_admin", "admin", "user"], "read"),
   catg_controller.getAllCategory
 );
 catg_route.get(
@@ -15,17 +15,22 @@ catg_route.get(
 );
 catg_route.post(
   "/addCategory",
-  checkRoleAndPermission(["super_admin", "admin"], "create"),
+  // checkRoleAndPermission(["super_admin", "admin"], "create"),
   catg_controller.addCategory
 );
 catg_route.put(
+<<<<<<< HEAD
   "/updateCategory/:id",
   checkRoleAndPermission(["super_admin", "admin"], "update"),
+=======
+  "/updateCategory",
+  // checkRoleAndPermission(["super_admin", "admin"], "update"),
+>>>>>>> a85132681e307261995b03843ce68c4ca45f8b70
   catg_controller.updateCategory
 );
 catg_route.delete(
   "/deleteCategory/:id",
-  checkRoleAndPermission(["super_admin", "admin"], "delete"),
+  // checkRoleAndPermission(["super_admin", "admin"], "delete"),
   catg_controller.deleteCategory
 );
 

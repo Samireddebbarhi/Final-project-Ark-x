@@ -11,19 +11,19 @@ RouterProduct.get(
   checkRoleAndPermission(["super_admin", "admin"], "read"),
   controller.getAllProducts
 );
-RouterProduct.post(
-  "/upload",
-  upload.single("image"),
-  controller.uploadProductImage
-);
-// RouterProduct.get(
-//   "getProduct/:id",
-//   checkRoleAndPermission(["super_admin", "admin"], "read"),
-//   controller.getProductDetails
+// RouterProduct.post(
+//   "/upload",
+//   upload.single("image"),
+//   controller.uploadProductImage
 // );
+RouterProduct.get(
+  "/getProduct/:id",
+  checkRoleAndPermission(["super_admin", "admin"], "read"),
+  controller.getProductDetails
+);
 RouterProduct.post(
   "/createProduct",
-  // checkRoleAndPermission(["super_admin", "admin"], "create"),
+  checkRoleAndPermission(["super_admin", "admin"], "create"),
   controller.createProduct
 );
 RouterProduct.put(
