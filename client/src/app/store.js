@@ -7,7 +7,7 @@ import customerReducer from "../features/customer/customerSlice";
 import deleteproductReducer from "../features/product/productSlice";
 import editproductReducer from "../features/product/productSlice";
 import authReducer from "../features/auth/authSlice";
-
+import adminReducer from "../features/admins/adminSlice";
 export const store = configureStore({
   reducer: {
     product: productReducer,
@@ -15,6 +15,7 @@ export const store = configureStore({
     addProduct: addproductReducer,
     pCategory: pCategoryReducer,
     customer: customerReducer,
+    admin: adminReducer,
     deleteProduct: deleteproductReducer,
     editeProduct: editproductReducer,
     auth: authReducer,

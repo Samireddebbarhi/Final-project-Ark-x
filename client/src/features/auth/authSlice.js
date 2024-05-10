@@ -22,12 +22,27 @@ export const login = createAsyncThunk(
   }
 );
 
+export const logout = () => (dispatch) => {
+  // Clear user from local storage
+  localStorage.removeItem("user");
+  // Dispatch action to reset user state
+  dispatch(authSlice.actions.logout());
+};
+
 export const authSlice = createSlice({
   name: "auth",
   initialState: initialState,
-  reducers: {},
-  extraReducers: (buildeer) => {
-    buildeer
+  reducers: {
+    logout: (state) => {
+      state.user = null;
+      state.isSuccess = false;
+      state.isError = false;
+      state.isLoading = false;
+      state.message = "";
+    },
+  },
+  extraReducers: (builder) => {
+    builder
       .addCase(login.pending, (state) => {
         state.isLoading = true;
       })

@@ -16,60 +16,62 @@ const columns = [
     dataIndex: "username",
     sorter: (a, b) => a.username.length - b.username.length,
   },
- 
+
   {
     title: "Email",
     dataIndex: "email",
     sorter: (a, b) => a.email.length - b.email.length,
   },
   {
-    title: "Action",
-    render : ()=>{
-      return <>
-      <Button  icon={<DeleteOutlined />} danger></Button>
-      </>
-    }
-    
+    title: "Role",
+    dataIndex: "role",
+    sorter: (a, b) => a.role.length - b.role.length,
   },
-
+  {
+    title: "Action",
+    render: () => {
+      return (
+        <>
+          <Button icon={<DeleteOutlined />} danger></Button>
+        </>
+      );
+    },
+  },
 ];
 
-
 const Customerlist = () => {
-    const [openDialog, setOpenDialog] = useState(false);
-    
-    const { customers } = useSelector((state) => state.customer);
-    const dispatch = useDispatch();
-  
-    useEffect(() => {
-      dispatch(getCustomers())
-    }, [dispatch]);
-    
- 
+  const [openDialog, setOpenDialog] = useState(false);
+
+  const { customers } = useSelector((state) => state.customer);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCustomers());
+  }, [dispatch]);
+
   const handleEditClick = () => {
     setOpenDialog(true);
   };
   const data2 = [];
- 
-    for (let i = 0; i < customers.length; i++) {
-      const customer = customers[i];
-      data2.push({
-        key: i + 1,
-        username: customer.username,
-        email: customer.email,
-       
-      });
-    }
+
+  for (let i = 0; i < customers.length; i++) {
+    const customer = customers[i];
+    data2.push({
+      key: i + 1,
+      username: customer.username,
+      email: customer.email,
+      role: customer.role,
+    });
+  }
 
   return (
     <div className="relative">
-  <h3 className="mb-4 text-2xl font-bold">Customers</h3>
-  <br />
-  <div>
-    <Table dataSource={data2} columns={columns} />
-     
-  </div>
-</div>
+      <h3 className="mb-4 text-2xl font-bold">Customers</h3>
+      <br />
+      <div>
+        <Table dataSource={data2} columns={columns} />
+      </div>
+    </div>
   );
 };
 
