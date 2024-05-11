@@ -3,7 +3,7 @@ import adminService from "./adminService";
 
 export const getAdmins = createAsyncThunk(
   "admins/get-admins",
-  async (thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
       return await adminService.getAdmins();
     } catch (error) {
@@ -11,6 +11,7 @@ export const getAdmins = createAsyncThunk(
     }
   }
 );
+
 const initialState = {
   admins: [],
   isError: false,
@@ -18,8 +19,9 @@ const initialState = {
   isSuccess: false,
   message: "",
 };
+
 export const adminSlice = createSlice({
-  name: "admins",
+  name: "data",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -31,14 +33,15 @@ export const adminSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.admins = action.payload;
+        state.admins = action.payload.data;
       })
       .addCase(getAdmins.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = action.error;
+        state.message = action.error.message || "An error occurred.";
       });
   },
 });
+
 export default adminSlice.reducer;

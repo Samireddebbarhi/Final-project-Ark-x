@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getAdmins } from "../features/admins/adminSlice";
+
 const columns = [
   {
     title: "SNo",
@@ -29,32 +30,32 @@ const columns = [
     title: "Role",
     dataIndex: "role",
   },
-
   {
     title: "Permissions",
-    dataIndex: "permission",
+    dataIndex: "permissions",
   },
 ];
 
 const Admins = () => {
   const dispatch = useDispatch();
+  const adminstate = useSelector((state) => state.admin);
+
   useEffect(() => {
     dispatch(getAdmins());
   }, [dispatch]);
-  const adminstate = useSelector((state) => state.admin);
   const data1 = [];
   for (let i = 0; i < adminstate.length; i++) {
+    const admin = adminstate[i];
     data1.push({
       key: i + 1,
-      username: adminstate[i].username,
-      name: adminstate[i].name,
-      email: adminstate[i].email,
-      password: adminstate[i].password,
-      role: adminstate[i].role,
-      permissions: adminstate[i].permissions,
+      name: admin.name,
+      username: admin.username,
+      email: admin.email,
+      password: admin.password,
+      role: admin.role,
+      //permissions: admin.permissions.join(","),
     });
   }
-
   return (
     <div>
       <h3 className="mb-4 title">Admins</h3>
