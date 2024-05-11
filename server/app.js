@@ -13,6 +13,7 @@ const Cardt = require("./routes/cart_routes");
 const catg_route = require("./routes/category_route");
 const review_route = require("./routes/Customer_routes/review_routes");
 const PayRoute = require("./routes/payment_routes");
+const OrderRoute = require("./routes/order_routes")
 const verifyJwtCustomer = require("./middlewares/verifyJwtCus");
 const verifyJwtAdmin = require("./middlewares/verifyJwt");
 const logs = require("./middlewares/logs");
@@ -28,6 +29,8 @@ app.use(logs);
 app.use("/api/v1/admin/super", admin_route.authRoute);
 app.use("/api/v2/admin/super", verifyJwtAdmin, admin_route.adminRouter);
 app.use("/api/v2/admin/super", verifyJwtAdmin, customer_crud);
+// get all orders
+app.use("/api/v2/customer", verifyJwtAdmin, OrderRoute)
 app.use("/api/v2/customer", verifyJwtCustomer, customer_crud);
 
 app.use("/api/v2/admin", verifyJwtAdmin, catg_route);

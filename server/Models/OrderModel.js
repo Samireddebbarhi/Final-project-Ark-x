@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const SchemaOrder = new mongoose.Schema({
-  customerId: {
-    type: mongoose.Schema.Types.ObjectId, ref : "Customer", required: true,
-    required: true,
-  },
+  // customerId: {
+  //   type: mongoose.Schema.Types.ObjectId, ref : "Customer", required: true,
+  //   required: false,
+  // },
   products: [
     { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
   ],
@@ -13,12 +13,7 @@ const SchemaOrder = new mongoose.Schema({
     ref: "Payment",
     required: true,
   },
-  status: {
-    type: String,
-    enum: ["Pending", "Processing"],
-    default: "Pending",
-  },
-
+ 
   orderDate: {
     type: Date,
     default: Date.now,

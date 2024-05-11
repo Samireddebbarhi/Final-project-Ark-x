@@ -1,7 +1,24 @@
 const OrderModel = require('../Models/OrderModel');
-const CustomerModel = require('../Models/CustomerModel.js')
-const ProductModel = require('../Models/ProductModel.js')
+const CustomerModel = require('../models/CustomerModel.js')
+const ProductModel = require('../models/ProductModel.js')
+// view order by the admin 
+const viewOrders = async (req, res) => {
+  try {
+    // Assuming checkRoleAndPermission middleware sets user role in req.user.role
+    if (req.user.role !== 'admin' && req.user.role !== 'super_admin') {
+      return res.status(403).json({ success: false, msg: "Unauthorized: Insufficient role permissions" });
+    }
 
+    const orders = await OrderModel.find();
+    if (!orders || orders.length === 0) {
+      return res.status(404).json({ success: false, msg: "No orders exist in the database" });
+    }
+    return res.status(200).json({ success: true, orders });
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    return res.status(500).json({ success: false, msg: "Failed to fetch orders", error: error.message });
+  }
+};  
 // Get All orders
 const getAllOrders = async (req, res) => {
     try {
@@ -137,7 +154,6 @@ const updateOrder = async (req, res) => {
     }
   };
   
-  module.exports = { updateOrder };
   
 //  Delete order
 const deleteOrder = async (req, res) => {
@@ -172,4 +188,5 @@ module.exports ={
     getAllOrders,
     updateOrder,
     deleteOrder,
+    viewOrders
 }

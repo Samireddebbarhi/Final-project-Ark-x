@@ -1,7 +1,7 @@
 const express = require("express");
 var RouterProduct = express.Router();
 const controller = require("../controllers/ProductController");
-const upload = require("../middlewares/uploadImage");
+
 //localhost:3001/api/customer/product
 const {
   checkRoleAndPermission,

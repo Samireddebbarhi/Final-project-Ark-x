@@ -1,4 +1,5 @@
 const CustomerModel = require("../../models/CustomerModel");
+const mongoose = require('mongoose');
 
 //Get all customers
 
@@ -35,16 +36,21 @@ const getById = async (req, res) => {
 // Delete a customer by ID
 const deleteById = async (req, res) => {
   try {
-    const deletedCustomer = await CustomerModel.findByIdAndDelete({
+    // Check if req.params.id is a valid ObjectId
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(400).json({ message: "Invalid customer ID" });
+    }
+
+    const deletedCustomer = await CustomerModel.deleteOne({
       _id: req.params.id,
     });
 
     if (!deletedCustomer) {
-      return res.status(404).json({ message: "CustomerModel not found" });
+      return res.status(404).json({ message: "Customer not found" });
     }
     res
       .status(200)
-      .json({ message: "CustomerModel deleted successfully", deletedCustomer });
+      .json({ message: "Customer deleted successfully", deletedCustomer });
   } catch (error) {
     console.error("Error deleting customer by ID:", error);
     res
