@@ -5,7 +5,7 @@ import { Select } from "antd";
 // import 'antd/dist/antd.css';
 import Dropzone from 'react-dropzone';
 import { useDispatch, useSelector } from 'react-redux';
-import { uploadImg } from '../../features/upload/uploadSlice';
+
 import { addProduct, getProducts } from '../../features/product/productSlice';
 
 
@@ -192,12 +192,13 @@ const AddProduct = () => {
             required={true}
           />
         </div>
+        <br/>
 
         <input type="file"
         name="image" onChange={(e)=>handleImageChange(e)} />
 
         
-        
+    
           <br/>
         <button 
           className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" 

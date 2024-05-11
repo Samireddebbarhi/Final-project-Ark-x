@@ -5,7 +5,7 @@ import { Select } from "antd";
 // import 'antd/dist/antd.css';
 import Dropzone from 'react-dropzone';
 import { useDispatch, useSelector } from 'react-redux';
-import { uploadImg } from '../../features/upload/uploadSlice';
+;
 import { getProducts, updateProduct } from '../../features/product/productSlice'; // Updated import
 import axios from 'axios'
 import { base_url } from '../../utils/baseUrl';

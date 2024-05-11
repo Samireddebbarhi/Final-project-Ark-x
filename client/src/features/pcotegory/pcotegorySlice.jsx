@@ -21,24 +21,28 @@ export const createCategory = createAsyncThunk(
   async (name, { rejectWithValue }) => {
     try {
       console.log(name);
-      const response = await axios.post(`http://localhost:3001/api/v2/admin/addCategory`, {name:name});
-      console.log(response)
-      return response.data.category
+      const response = await axios.post(
+        `http://localhost:3001/api/v2/admin/addCategory`,
+        { name: name },
+        config
+      );
+      console.log(response);
+      return response.data.category;
     } catch (error) {
-      console.log(error)
+      console.log(error);
       return rejectWithValue(response.data.error);
     }
   }
 );
 
-
 export const updateAProductCategory = createAsyncThunk(
   "productCategory/update-category",
-  async (category , {rejectWithValue}) => {
+  async (category, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `${base_url}updateCategory/${category.id}`,
-        { name: category.name }
+        `${base_url}/updateCategory/${category.id}`,
+        { name: category.name },
+        config
       );
       return response.data;
     } catch (error) {
@@ -48,12 +52,11 @@ export const updateAProductCategory = createAsyncThunk(
   }
 );
 
-
 export const deleteAProductCategory = createAsyncThunk(
   "productCategory/delete-category",
-  async (id, { rejectWithValue}) => {
+  async (id, { rejectWithValue }) => {
     try {
-      await axios.delete(`${base_url}deleteCategory/${id}`);
+      await axios.delete(`${base_url}/deleteCategory/${id}`, config);
       return id;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -139,7 +142,9 @@ export const pCategorySlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.pCategories = state.pCategories.filter((category) => category._id !== action.payload);
+        state.pCategories = state.pCategories.filter(
+          (category) => category._id !== action.payload
+        );
       })
       .addCase(deleteAProductCategory.rejected, (state, action) => {
         state.isLoading = false;
@@ -147,22 +152,22 @@ export const pCategorySlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
       })
-    //   .addCase(getAProductCategory.pending, (state) => {
-    //     state.isLoading = true;
-    //   })
-    //   .addCase(getAProductCategory.fulfilled, (state, action) => {
-    //     state.isLoading = false;
-    //     state.isError = false;
-    //     state.isSuccess = true;
-    //     state.categoryName = action.payload.title;
-    //   })
-    //   .addCase(getAProductCategory.rejected, (state, action) => {
-    //     state.isLoading = false;
-    //     state.isError = true;
-    //     state.isSuccess = false;
-    //     state.message = action.error;
-    //   })
-        .addCase(resetState, () => initialState);
+      //   .addCase(getAProductCategory.pending, (state) => {
+      //     state.isLoading = true;
+      //   })
+      //   .addCase(getAProductCategory.fulfilled, (state, action) => {
+      //     state.isLoading = false;
+      //     state.isError = false;
+      //     state.isSuccess = true;
+      //     state.categoryName = action.payload.title;
+      //   })
+      //   .addCase(getAProductCategory.rejected, (state, action) => {
+      //     state.isLoading = false;
+      //     state.isError = true;
+      //     state.isSuccess = false;
+      //     state.message = action.error;
+      //   })
+      .addCase(resetState, () => initialState);
   },
 });
 export default pCategorySlice.reducer;

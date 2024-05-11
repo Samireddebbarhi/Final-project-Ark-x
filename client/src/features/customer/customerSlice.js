@@ -7,12 +7,31 @@ import { config } from "../../utils/axiosconfig";
 export  const getCustomers = createAsyncThunk("users/getCustomers", async (_, {rejectWithValue}) =>{
    try{
     const response= await axios.get(`${cust_url}/customers/All` , config)
+    
     console.log(response)
     return response.data
    }catch(error){
     return rejectWithValue(error.response.data.message);
    }
 })
+// delete customer  by id
+export const deleteCustomerById = createAsyncThunk(
+    'users/deleteCustomers',
+    async (customerId, { rejectWithValue }) => {
+      try {
+        console.log("customer id",customerId)
+        await axios.delete(`${cust_url}/customersDelete/${customerId}`, config);
+
+        return customerId; // Return the ID of the deleted customer upon success
+      } catch (error) {
+        // If an error occurs during the deletion process, handle it
+        console.error("Error deleting customer:", error);
+        // Return rejected value with error message
+        return rejectWithValue(error.response.data.message);
+      }
+    }
+  );
+// 
 const initialState = {
     customers: [],
     isError: false,
@@ -40,7 +59,22 @@ export const customerSlice = createSlice({
                 state.isError = true;
                 state.isSuccess = false;
                 state.message = action.error;
-              })
+            })
+            .addCase(deleteCustomerById.pending, (state) =>{
+                state.isLoading=true;
+            })
+            .addCase(deleteCustomerById.fulfilled, (state, action) => {
+                // Filter out the deleted customer from the state based on customerId
+                state.users = state.users.filter(
+                    (user) => user.id !== action.payload
+                );
+            })
+            .addCase(deleteCustomerById.rejected, (state, action)=> {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
 
     }
 });
