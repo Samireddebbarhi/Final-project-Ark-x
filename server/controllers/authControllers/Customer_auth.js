@@ -51,9 +51,17 @@ const customerLogin = async (req, res) => {
           }
         );
 
-        res
-          .status(200)
-          .send(`${customer.name} logged in with a token: ${token}`);
+        res.status(200).json({
+          Login_Success: true,
+          token: token,
+          customer: {
+            name: customer.name,
+            email: customer.email,
+            username: customer.username,
+            role: customer.role,
+            permissions: customer.permissions,
+          },
+        });
       });
     });
   } catch {

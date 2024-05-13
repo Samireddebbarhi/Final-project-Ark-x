@@ -1,191 +1,155 @@
-const OrderModel = require("../models/OrderModel");
-const CustomerModel = require("../models/CustomerModel.js");
-const ProductModel = require("../models/ProductModel.js");
+const Order = require("../models/OrderModel");
+const Product = require("../models/ProductModel");
 
-// Get All orders
-const getAllOrders = async (req, res) => {
+const newOrder = async (req, res) => {
   try {
-    const orders = await OrderModel.find().populate("products").populate({
-      path: "customerId", // Populate the 'customerId' field
-      select: "username", // Select only the 'username' field of the customer
-    });
+    const productId = req.params.id;
+    const { quantityItem, paymentInfo, itemPrice, totalPrice } = req.body;
 
-    res.status(200).json({
-      success: true,
-      message: "Orders retrieved successfully",
-      data: orders,
-    });
-  } catch (error) {
-    console.error("Error fetching orders:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch orders",
-      error: error.message,
-    });
-  }
-};
+    // Validate the product ID (assuming you have a Product model)
+    /* if (!mongoose.Types.ObjectId.isValid(productId)) {
+      res.status(400).json({ success: false, message: "Invalid product ID" });
+      return;
+    }*/
 
-// Add order
-const addOrders = async (req, res) => {
-  const order = req.body;
-  try {
-    const customerId = req.id; // Assuming req.id holds the customer ID
-    console.log("Customer ID:", customerId);
-
-    const findCustomer = await CustomerModel.findById(customerId);
-    if (!findCustomer) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Customer not found" });
+    // Check if the product exists
+    const product = await Product.findById(productId);
+    if (!product) {
+      res.status(404).json({ success: false, message: "Product not found" });
+      return;
     }
 
-    const productNames = order.products; // Array of product names
-    if (!productNames || productNames.length === 0) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Products array is empty or missing",
-        });
-    }
-
-    const productIds = [];
-    for (const productName of productNames) {
-      const foundProduct = await ProductModel.findOne({ name: productName });
-      if (!foundProduct) {
-        return res
-          .status(404)
-          .json({
-            success: false,
-            message: `Product '${productName}' not found`,
-          });
-      }
-      productIds.push(foundProduct._id); // Collect product IDs
-    }
-
-    // Create a new order with customer ID and product IDs
-    const newOrder = new OrderModel({
-      customerId: findCustomer._id,
-      products: productIds,
-      totalAmount: order.totalAmount, // Assuming totalAmount is provided in the order object
+    // Create the order
+    const order = await Order.create({
+      orderItem: [
+        {
+          name: product.name,
+          price: product.price,
+          quantity: quantityItem,
+          image: product.image,
+          Idproduct: product._id,
+        },
+      ],
+      // Assuming you want to add the entire product
+      paymentInfo,
+      itemPrice,
+      totalPrice,
+      paidAt: Date.now(),
+      userInfo: { userId: req.user._id, username: req.user.username },
     });
-
-    await newOrder.save();
 
     res.status(201).json({
       success: true,
-      message: "Order created successfully",
-      data: newOrder,
+      order,
     });
   } catch (error) {
-    console.error("Error adding order:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error adding order",
-      error: error.message,
-    });
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 
-// Update order
+const getSingleOrder = async (req, res) => {
+  const order = await Order.findById(req.params.id).populate(
+    "user",
+    "name ",
+    "email"
+  );
+  if (!order) {
+    res.status(404);
+    throw new Error("order not found with this id");
+  }
+  res.status(200).json({
+    success: true,
+    order,
+  });
+};
+const myOrder = async (req, res) => {
+  const orders = await Order.find({ user: req.user._id });
+  if (!orders) {
+    res.status(404);
+    throw new Error("order not found with this id");
+  }
+  res.status(200).json({
+    success: true,
+
+    orders,
+  });
+};
+
+async function updateStock(id, quantity) {
+  const product = await Product.findById(id);
+  product.stock -= quantity;
+  await product.save({ validateBeforeSave: false });
+}
 const updateOrder = async (req, res) => {
-  const orderId = req.params.id; // Assuming order ID is provided in the request parameters
-  const updateData = req.body; // Updated data for the order
-
   try {
-    // Find the existing order by ID
-    const existingOrder = await OrderModel.findById(orderId);
-    if (!existingOrder) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Order not found" });
+    console.log("the body", req.body);
+    const orders = await Order.findById(req.params.id);
+
+    if (!orders) {
+      res.status(404);
+      throw new Error("order not found with this id");
     }
-
-    // Update order properties based on the request body
-    if (updateData.customerId) {
-      const customer = await CustomerModel.findById(updateData.customerId);
-      if (!customer) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Customer not found" });
-      }
-      existingOrder.customerId = updateData.customerId;
+    console.log("1");
+    if (orders.orderStatus === "Delivered") {
+      res.status(400);
+      throw new Error("you have already delivered this order");
     }
+    console.log("2");
 
-    if (updateData.products) {
-      const productIds = [];
-      for (const productName of updateData.products) {
-        const foundProduct = await ProductModel.findOne({ name: productName });
-        if (!foundProduct) {
-          return res
-            .status(404)
-            .json({
-              success: false,
-              message: `Product '${productName}' not found`,
-            });
-        }
-        productIds.push(foundProduct._id);
-      }
-      existingOrder.products = productIds;
-    }
-
-    if (updateData.totalAmount) {
-      existingOrder.totalAmount = updateData.totalAmount;
-    }
-
-    // Save the updated order
-    const updatedOrder = await existingOrder.save();
-
-    // Respond with success message and updated order data
-    res.status(200).json({
-      success: true,
-      message: "Order updated successfully",
-      data: updatedOrder,
+    orders.orderItem.forEach((order) => {
+      updateStock(order.product, order.quantity);
     });
-  } catch (error) {
-    console.error("Error updating order:", error);
-    res.status(500).json({
-      success: false,
-      message: "Error updating order",
-      error: error.message,
-    });
-  }
-};
-
-module.exports = { updateOrder };
-
-//  Delete order
-const deleteOrder = async (req, res) => {
-  const orderId = req.params.id; // Assuming order ID is provided in the request parameters
-
-  try {
-    // Find and delete the order by ID
-    const deletedOrder = await OrderModel.findByIdAndDelete(orderId);
-
-    if (!deletedOrder) {
-      return res
-        .status(404)
-        .json({ success: false, message: "Order not found" });
+    console.log("3");
+    orders.orderStatus = req.body.status;
+    if (req.body.status === "Delivered") {
+      orders.deliveredAt = Date.now();
     }
+    console.log("4");
+
+    await orders.save({ validateBeforeSave: false });
+    console.log("5");
 
     res.status(200).json({
       success: true,
-      message: "Order deleted successfully",
-      deletedOrder: deletedOrder,
+      orders,
     });
   } catch (error) {
-    console.error("Error deleting order:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to delete order",
-      error: error.message,
-    });
+    res.status(400);
+    throw new Error(error.message);
   }
 };
 
+const getAllOrders = async (req, res) => {
+  const orders = await Order.find();
+  let totalAmount = 0;
+  orders.forEach((order) => {
+    totalAmount += order.totalPrice;
+  });
+
+  res.status(200).json({
+    success: true,
+    totalAmount,
+    orders,
+  });
+};
+const deleteOrders = async (req, res) => {
+  const orders = await Order.find(req.params.id);
+  if (!orders) {
+    res.status(404);
+    throw new Error("Order not found with this Id");
+  }
+
+  await orders.remove();
+
+  res.status(200).json({
+    success: true,
+  });
+};
 module.exports = {
-  addOrders,
+  newOrder,
+  getSingleOrder,
+  myOrder,
   getAllOrders,
   updateOrder,
-  deleteOrder,
+  deleteOrders,
 };
