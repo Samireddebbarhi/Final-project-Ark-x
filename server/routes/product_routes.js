@@ -10,6 +10,7 @@ RouterProduct.get(
 <<<<<<< HEAD
 <<<<<<< HEAD
   "/getAllProducts",
+<<<<<<< HEAD
   checkRoleAndPermission(["super_admin", "admin"], "read"),
 =======
   "/",
@@ -19,6 +20,9 @@ RouterProduct.get(
   "/getAllProducts",
   checkRoleAndPermission(["super_admin", "admin"], "read"),
 >>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
+=======
+  // checkRoleAndPermission(["super_admin", "admin"], "read"),
+>>>>>>> 84e9bf8410621722a931961e62aafb56ee0cbd24
   controller.getAllProducts
 );
 <<<<<<< HEAD

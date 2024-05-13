@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -53,6 +54,29 @@ function App() {
             <Route path="/upload" element={<ImageUpload />} />
           </Route>
 >>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
+=======
+import React from 'react'
+import "./App.css"
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import Home from './pages/Home';
+import MainLyaout from './admin/components/MainLyaout';
+import Categorylist from './pages/Categorylist';
+import Products from './pages/Products';
+
+
+function App () {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainLyaout />} >
+        {/* <Route  path="/dashborad" element={<Dashborad/>} />
+          <Route  path="/add-product" element={<AddProduct/>}/>
+          <Route path="/list-product"  element={<Products/>}/>
+          <Route path="/add-category"  element={<AddCat/>}/> */}
+          <Route path="/list-category"  element={<Categorylist/>}/>
+          <Route path="/product"  element={<Products/>}/>
+
+>>>>>>> 84e9bf8410621722a931961e62aafb56ee0cbd24
         </Route>
       </Routes>
     </Router>

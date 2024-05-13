@@ -1,6 +1,18 @@
+<<<<<<< HEAD
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux"; // Import Redux hooks
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+=======
+import React, { useState } from 'react';
+import Header from './Header'
+import {
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  UploadOutlined,
+  UserOutlined,
+  VideoCameraOutlined,
+} from '@ant-design/icons';
+>>>>>>> 84e9bf8410621722a931961e62aafb56ee0cbd24
 import {
   AiOutlineDashboard,
   AiOutlineShoppingCart,
@@ -18,17 +30,29 @@ import { IoIosNotifications } from "react-icons/io";
 import { FaClipboardList, FaBloggerB } from "react-icons/fa";
 import { SiBrandfolder } from "react-icons/si";
 import { BiCategoryAlt } from "react-icons/bi";
+<<<<<<< HEAD
 import { Layout, Menu, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../features/auth/authSlice";
 import ProfileAdmin from "./ProfileAdmin";
 const { Header, Sider, Content } = Layout;
 const MainLayout = () => {
+=======
+import { Button, Layout, Menu, theme } from 'antd';
+import { FaClipboardList } from "react-icons/fa";
+import { Outlet } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+
+const { Sider, Content } = Layout;
+const MainLyaout = () => {
+>>>>>>> 84e9bf8410621722a931961e62aafb56ee0cbd24
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   const navigate = useNavigate();
+<<<<<<< HEAD
 
   // Access user state from Redux store
   const user = useSelector((state) => state.auth.user);
@@ -41,6 +65,8 @@ const MainLayout = () => {
     navigate("/login");
   };
 
+=======
+>>>>>>> 84e9bf8410621722a931961e62aafb56ee0cbd24
   return (
     <Layout /*onContextMenu={(e) => e.preventDefault()}*/>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -51,11 +77,18 @@ const MainLayout = () => {
         <Menu
           theme="dark"
           mode="inline"
+<<<<<<< HEAD
           defaultSelectedKeys={[""]}
           onClick={({ key }) => {
             if (key === "signout") {
               handleLogout(); // Call handleLogout when signout is clicked
             } else {
+=======
+          defaultSelectedKeys={['1']}
+          onClick={({ key}) => {
+            if(key == ""){ 
+            }else {
+>>>>>>> 84e9bf8410621722a931961e62aafb56ee0cbd24
               navigate(key);
             }
           }}
@@ -106,7 +139,12 @@ const MainLayout = () => {
           ]}
         />
       </Sider>
+<<<<<<< HEAD
       <Layout className="site-layout">
+=======
+      <Layout>
+      <Header />
+>>>>>>> 84e9bf8410621722a931961e62aafb56ee0cbd24
         <Content
           style={{
             margin: "24px 16px",
@@ -115,6 +153,7 @@ const MainLayout = () => {
             background: colorBgContainer,
           }}
         >
+<<<<<<< HEAD
           <ToastContainer
             position="top-right"
             autoClose={250}
@@ -126,6 +165,8 @@ const MainLayout = () => {
             draggable
             theme="light"
           />
+=======
+>>>>>>> 84e9bf8410621722a931961e62aafb56ee0cbd24
           <Outlet />
         </Content>
       </Layout>

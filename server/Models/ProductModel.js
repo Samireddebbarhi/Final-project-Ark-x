@@ -1,4 +1,8 @@
 const mongoose = require("mongoose");
+<<<<<<< HEAD
+=======
+
+>>>>>>> 84e9bf8410621722a931961e62aafb56ee0cbd24
 const productSchema = new mongoose.Schema(
   {
     name: {
@@ -38,10 +42,15 @@ const productSchema = new mongoose.Schema(
     },
     category: {
 <<<<<<< HEAD
+<<<<<<< HEAD
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
 =======
       type: String,
+=======
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category", // Reference the Category model
+>>>>>>> 84e9bf8410621722a931961e62aafb56ee0cbd24
       required: [true, "please Enter the product category"],
 >>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
     },
@@ -108,7 +117,6 @@ const productSchema = new mongoose.Schema(
   {
     timestamps: true,
   }
-
 );
 
 const ProductModel = mongoose.model("Product", productSchema);

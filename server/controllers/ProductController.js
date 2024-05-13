@@ -1,13 +1,17 @@
 const Product = require("../models/ProductModel");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
+=======
+>>>>>>> 84e9bf8410621722a931961e62aafb56ee0cbd24
 const Category = require("../models/CategoryModel");
 <<<<<<< HEAD
 <<<<<<< HEAD
 const Image = require("../Models/ImageModel");
 // it work
+<<<<<<< HEAD
 =======
 const Category = require("../Models/CategoryModel");
 >>>>>>> 918275d63eace52fee2029bd92b40557419f189f
@@ -17,6 +21,8 @@ const Image = require("../models/ImageModel");
 =======
 const Image = require("../models/ImageModel");
 >>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
+=======
+>>>>>>> 84e9bf8410621722a931961e62aafb56ee0cbd24
 const getAllProducts = async (req, res, next) => {
   const product = await Product.find();
   if (!product)
