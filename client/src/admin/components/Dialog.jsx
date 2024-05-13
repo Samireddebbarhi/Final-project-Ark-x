@@ -7,7 +7,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import AddProduct from '../../pages/AddProduct';
+import AddProduct from './AddProduct';
+import EditeProduct from './EditeProduct';
+
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -20,6 +22,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 
 export default function CustomizedDialogs({childern}) {
   const [open, setOpen] = React.useState(false);
+  
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,8 +33,8 @@ export default function CustomizedDialogs({childern}) {
 
   return (
     <React.Fragment>
-      <Button variant="outlined" onClick={handleClickOpen}>
-       Add Product
+      <Button variant="outlined" onClick={handleClickOpen} >
+        Add Product 
       </Button>
       <BootstrapDialog
         onClose={handleClose}
@@ -39,7 +42,7 @@ export default function CustomizedDialogs({childern}) {
         open={open}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Add Product
+           Add Product
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -55,7 +58,9 @@ export default function CustomizedDialogs({childern}) {
         </IconButton>
         <DialogContent dividers>
           <AddProduct />
+          
           {childern}
+        
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>

@@ -14,12 +14,19 @@ import Reviews from "./Reviews";
 =======
 import MainLyaout from "./admin/components/MainLyaout";
 import Products from "./pages/Products";
-import Dashborad from "./pages/Dashborad";
-import AddCat from "./pages/AddCat";
-import CategoryList from "./pages/CategoryList";
+import Dashboard from "./pages/Dashboard";
+
+import Categorylist from "./pages/CategoryList";
 import Login from "./pages/Login";
+<<<<<<< HEAD
 import ProtectedRoute from "./components/ProtectedRoute";
 >>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
+=======
+import ProtectedRoute from "./admin/components/ProtectedRoute";
+import Customers from "./pages/Customers";
+import ImageUpload from "./ImageUplaod";
+import Admins from "./pages/Admins";
+>>>>>>> 6226091131c60c2f9ff4afe1ad48997511ac607d
 function App() {
   return (
     <Router>
@@ -38,10 +45,12 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<MainLyaout />}>
-            <Route path="/dashboard" element={<Dashborad />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/list-product" element={<Products />} />
-            <Route path="/add-category" element={<AddCat />} />
-            <Route path="/list-category" element={<CategoryList />} />
+            <Route path="/list-category" element={<Categorylist />} />
+            <Route path="/admins" element={<Admins />} />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/upload" element={<ImageUpload />} />
           </Route>
 >>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
         </Route>
@@ -51,3 +60,15 @@ function App() {
 }
 
 export default App;
+
+{
+  /* <Route  path="/dashborad" element={<Dashborad/>} />
+          <Route path="/list-product"  element={<Products/>}/>
+          <Route path="/add-category"  element={<AddCat/>}/>
+          <Route path="/list-category"  element={<Categorylist/>}/>
+          <Route path="/customers"  element={<Customers/>}/>
+          
+
+        </Route>
+      </Routes> */
+}

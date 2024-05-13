@@ -1,7 +1,7 @@
 const express = require("express");
 var RouterProduct = express.Router();
 const controller = require("../controllers/ProductController");
-const upload = require("../middlewares/uploadImage");
+//const upload = require("../middlewares/uploadImage");
 const {
   checkRoleAndPermission,
 } = require("../middlewares/verifyRole_permission");
@@ -21,6 +21,7 @@ RouterProduct.get(
 >>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
   controller.getAllProducts
 );
+<<<<<<< HEAD
 RouterProduct.post(
   "/upload",
   upload.single("image"),
@@ -45,9 +46,21 @@ RouterProduct.get(
 >>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
 =======
 >>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
+=======
+// RouterProduct.post(
+//   "/upload",
+//   upload.single("image"),
+//   controller.uploadProductImage
+// );
+RouterProduct.get(
+  "/getProduct/:id",
+  checkRoleAndPermission(["super_admin", "admin"], "read"),
+  controller.getProductDetails
+);
+>>>>>>> 6226091131c60c2f9ff4afe1ad48997511ac607d
 RouterProduct.post(
   "/createProduct",
-  // checkRoleAndPermission(["super_admin", "admin"], "create"),
+  checkRoleAndPermission(["super_admin", "admin"], "create"),
   controller.createProduct
 );
 RouterProduct.put(

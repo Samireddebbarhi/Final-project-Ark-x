@@ -44,12 +44,16 @@ app.use("/api/v2/customer", verifyJwtCustomer, customer_crud);
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 app.use("/api/v2/admin", verifyJwtAdmin, catg_route);
 =======
 app.use("/api/v2/admin", /*verifyJwtAdmin,*/ catg_route);
 >>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
+=======
+app.use("/api/v2/admin", verifyJwtAdmin, catg_route);
+>>>>>>> 6226091131c60c2f9ff4afe1ad48997511ac607d
 app.use("/api/v2/admin", verifyJwtAdmin, RouterProduct);
-app.use("/api/v2/admin", /*verifyJwtAdmin,*/ review_route);
+app.use("/api/v2/admin", verifyJwtAdmin, review_route);
 
 <<<<<<< HEAD
 =======

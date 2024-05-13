@@ -46,7 +46,7 @@ exports.login = (req, res) => {
       }
 
       const token = jwt.sign({ InfoAdmin: admin }, process.env.TOKEN_ADMIN, {
-        expiresIn: "20m",
+        expiresIn: "1h",
       });
 
       // res

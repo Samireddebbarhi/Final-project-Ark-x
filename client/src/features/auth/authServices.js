@@ -1,5 +1,5 @@
 import axios from "axios";
-import { config } from "../../utils/axiosConfig";
+import { config } from "../../utils/axiosconfig";
 import { base_url, admin_url } from "../../utils/baseUrl";
 const login = async (user) => {
   const response = await axios.post(`${admin_url}/login`, user);

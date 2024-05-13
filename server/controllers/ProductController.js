@@ -122,19 +122,19 @@ const updateProduct = async (req, res) => {
     res.status(400).send(err);
   }
 };
-// const getProductDetails = async (req, res, next) => {
-//   try {
-//     let product = await Product.findById(req.params.id);
-//     if (product) {
-//       res.status(200).json({ success: true, product });
-//     } else {
-//       res.status(404).json({ success: false, message: "product not found" });
-//     }
-//   } catch (error) {
-//     res.status(404);
-//     throw new Error(error.message);
-//   }
-// };
+const getProductDetails = async (req, res, next) => {
+  try {
+    let product = await Product.findById(req.params.id);
+    if (product) {
+      res.status(200).json({ success: true, product });
+    } else {
+      res.status(404).json({ success: false, message: "product not found" });
+    }
+  } catch (error) {
+    res.status(404);
+    throw new Error(error.message);
+  }
+};
 const deleteProduct = async (req, res, next) => {
   const deleted = await Product.deleteOne({ _id: req.params.id });
   if (!deleted) {
@@ -165,30 +165,29 @@ const deleteAllProducts = async (req, res, next) => {
   }
 };
 // Function to upload an image for a product
-const uploadProductImage = async (req, res) => {
-  if (!req.file) {
-    return res.status(400).send("No image file uploaded");
-  }
+// const uploadProductImage = async (req, res) => {
+//   if (!req.file) {
+//     return res.status(400).send("No image file uploaded");
+//   }
 
-  const image = new Image({
-    filename: req.file.filename,
-    path: req.file.path,
-  });
+//   const image = new Image({
+//     filename: req.file.filename,
+//     path: req.file.path,
+//   });
 
-  try {
-    await image.save();
-    res.status(200).send("Image uploaded and saved successfully");
-  } catch (error) {
-    res.status(500).send("Error saving image to the database");
-  }
-};
+//   try {
+//     await image.save();
+//     res.status(200).send("Image uploaded and saved successfully");
+//   } catch (error) {
+//     res.status(500).send("Error saving image to the database");
+//   }
+// };
 
 module.exports = {
   getAllProducts,
   createProduct,
-
+  getProductDetails,
   updateProduct,
   deleteProduct,
   deleteAllProducts,
-  uploadProductImage,
 };

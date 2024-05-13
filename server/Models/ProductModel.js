@@ -18,6 +18,7 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+<<<<<<< HEAD
     image: {
       details: [
         {
@@ -58,10 +59,26 @@ const productSchema = new mongoose.Schema(
       required: true,
 =======
     numofReviews: {
+=======
+   image:{
+    type: String,
+   },
+  category: {
+      type: String,
+      required: [true, "please Enter the product category"],
+  },
+  stock: {
+      type: Number,
+      required: [true, "please Enter the product stock"],
+      maxLength: [4, "max stock is of 4 figure"],
+      default: 1,
+  },
+  numofReviews: {
+>>>>>>> 6226091131c60c2f9ff4afe1ad48997511ac607d
       type: Number,
       default: 0,
-    },
-    reviews: [
+  },
+  reviews: [
       {
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -81,8 +98,8 @@ const productSchema = new mongoose.Schema(
         required: true,
 >>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
       },
-    ],
-    createdAt: {
+  ],
+  createdAt: {
       type: Date,
       default: Date.now(),
 >>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8

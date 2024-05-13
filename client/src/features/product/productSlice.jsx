@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import { deleteProduct, getProducts } from "../features/product/productSlice";
+//import { deleteProduct, getProducts } from "./product/productSlice";
 import { Link, useNavigate } from "react-router-dom";
-import CustomizedDialogs from "../admin/components/Dialog";
-import AddProduct from "../admin/components/AddProduct";
-import { base_url } from "../utils/baseUrl";
+import CustomizedDialogs from "../../admin/components/Dialog";
+import AddProduct from "../../admin/components/AddProduct";
+import { base_url } from "../../utils/baseUrl";
 import axios from "axios";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import EditeProduct from "../admin/components/EditeProduct";
-import { config } from "../utils/axiosconfig";
+import EditeProduct from "../../admin/components/EditeProduct";
+import { config } from "../../utils/axiosconfig";
 
 const { confirm } = Modal;
 const Productlist = () => {
@@ -27,13 +27,11 @@ const Productlist = () => {
     dispatch(getProducts());
   }, [productId]);
 
-  // delete product
   const handleDelete = async (productId) => {
     try {
       await axios.delete(`${base_url}/deleteProduct/${productId}`, config);
       dispatch(deleteProduct(productId));
       console.log("Product Deleted Successfully:", productId);
-      // alert('Product Deleted Successfully')
 
       setDeleteConfirmed(true); // Set delete confirmation to true
     } catch (error) {
@@ -58,7 +56,6 @@ const Productlist = () => {
       description: products[i].description,
       category: products[i].category,
       price: `${products[i].price}`,
-      image: products[i].image,
     });
   }
   console.log(data1);
@@ -94,17 +91,7 @@ const Productlist = () => {
       dataIndex: "name",
       sorter: (a, b) => a.name.length - b.name.length,
     },
-    {
-      title: "Images",
-      dataIndex: "image",
-      render: (image) => (
-        <img
-          src={image}
-          alt="Product"
-          style={{ width: "50px", height: "50px" }}
-        />
-      ),
-    },
+
     {
       title: "Description",
       dataIndex: "description",
@@ -139,7 +126,7 @@ const Productlist = () => {
               onClick={() => showDeleteConfirm(record.key)}
               icon={<DeleteOutlined />}
               danger
-            ></Button>
+            />
           </>
         );
       },
