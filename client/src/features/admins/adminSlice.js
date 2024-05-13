@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import adminService from "./adminService";
+import { fetchAdmins } from "./adminService";
 
 export const getAdmins = createAsyncThunk(
   "admins/get-admins",
   async (_, thunkAPI) => {
     try {
-      return await adminService.getAdmins();
+      return await fetchAdmins();
     } catch (error) {
       return thunkAPI.rejectWithValue(error);
     }
