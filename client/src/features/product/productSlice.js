@@ -11,6 +11,16 @@ export const getProducts = createAsyncThunk("users/getProducts", async (_, {reje
     })
     .catch((err) => rejectWithValue(err.response.data.message));
 });
+// get reviews ==============================================================================================================
+// export const getReviews= createAsyncThunk("users/getReviews", async (_, {rejectWithValue}) => {
+//   return axios.get(`${base_url}/getAllReviews`, config)
+//   .then((res) => {
+//     console.log(res);
+//     return res.data
+//   })
+//   .catch((err) => rejectWithValue(err.response.data.message));
+// });
+// =========================================================================================================================
 //add product
 export const addProduct = createAsyncThunk("products/addProduct", async (_newProduct, {rejectWithValue}) => {
   // return axios.post(`${base_url}/createProduct`, _newProduct)
@@ -131,13 +141,28 @@ export const productSlice = createSlice({
         state.products = state.products.map((product) =>
           product.id === action.payload.id ? action.payload : product
         );
-        console.log('updatestate', state)
       })
       .addCase(updateProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.errorMessage = action.payload;
+      })
+      .addCase(getReviews.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getReviews.fulfilled, (state) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        // to see
+        state.reviews = action.payload;
+      })
+      .addCase(getReviews.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
       });
 
   },

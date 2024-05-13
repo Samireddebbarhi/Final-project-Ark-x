@@ -3,7 +3,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { Select } from "antd";
 // import 'antd/dist/antd.css';
-import Dropzone from 'react-dropzone';
+
 import { useDispatch, useSelector } from 'react-redux';
 ;
 import { getProducts, updateProduct } from '../../features/product/productSlice'; // Updated import
@@ -19,7 +19,7 @@ const EditProduct = ({ productId }) => { // Accept productId as props
     category: "",
     stock: "",
   });
-  const imgState = useSelector((state) => state.upload.images);
+
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -144,27 +144,7 @@ const EditProduct = ({ productId }) => { // Accept productId as props
             required={true}
           />
         </div>
-
-        <div className="border-2 border-dashed border-gray-400 rounded-lg p-4">
-          <Dropzone onDrop={acceptedFiles => dispatch(uploadImg(acceptedFiles))}>
-            {({getRootProps, getInputProps}) => (
-              <section>
-                <div {...getRootProps()}>
-                  <input {...getInputProps()} />
-                  <p>Drag 'n' drop some files here, or click to select files</p>
-                </div>
-              </section>
-            )}
-          </Dropzone>
-        </div>
-
-        <div className='showImage'>
-          {imgState.map((image, index) => (
-            <div key={index}>
-              <img src={image.url} alt={`Uploaded Image ${index}`} />
-            </div>
-          ))}
-        </div>
+          <br/>
           <br/>
         <button 
           className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50" 
