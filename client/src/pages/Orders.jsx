@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Order from "./Order"; // Assuming this component correctly displays each order's details
+import Order from "./Order"; // Assuming Order is a component that displays each order
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -12,10 +12,10 @@ const Orders = () => {
       try {
         const response = await axios.get("/api/orders");
         setOrders(response.data);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching orders:", error);
         setError('Failed to fetch orders. Please try again later.');
+      } finally {
         setLoading(false);
       }
     };
@@ -23,28 +23,20 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
-  if (loading) {
-    return <p>Loading orders...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
+  if (loading) return <p>Loading orders...</p>;
+  if (error) return <p>{error}</p>;
+  if (!orders.length) return <p>No orders found.</p>;
 
   return (
     <div>
       <h2>Orders</h2>
-      {orders.length > 0 ? (
-        <ul>
-          {orders.map((order) => (
-            <li key={order._id}> {/* Use MongoDB's _id */}
-              <Order order={order} />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No orders found.</p>
-      )}
+      <ul>
+        {orders.map((order) => (
+          <li key={order._id}>
+            <Order order={order} />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

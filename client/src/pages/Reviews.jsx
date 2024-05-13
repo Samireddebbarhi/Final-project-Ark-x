@@ -4,15 +4,17 @@ import axios from "axios";
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchReviews = async () => {
       try {
         const response = await axios.get("/api/reviews");
         setReviews(response.data);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching reviews:", error);
+        setError('Failed to fetch reviews. Please try again later.');
+      } finally {
         setLoading(false);
       }
     };
@@ -20,21 +22,20 @@ const Reviews = () => {
     fetchReviews();
   }, []);
 
+  if (loading) return <p>Loading reviews...</p>;
+  if (error) return <p>{error}</p>;
+  if (!reviews.length) return <p>No reviews found.</p>;
+
   return (
     <div>
       <h2>Reviews</h2>
-      {loading ? (
-        <p>Loading reviews...</p>
-      ) : (
-        <ul>
-          {reviews.map((review) => (
-            <li key={review.id}>
-              Review ID: {review.id}, Rating: {review.rating}, Comment:{" "}
-              {review.comment}
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul>
+        {reviews.map((review) => (
+          <li key={review.id}>
+            Review ID: {review.id}, Rating: {review.rating}, Comment: {review.comment}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
