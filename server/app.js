@@ -22,6 +22,7 @@ const RouterProduct = require("./routes/product_routes");
 const customer_crud = require("./routes/Customer_routes/crud_routes");
 const Cardt = require("./routes/cart_routes");
 const catg_route = require("./routes/category_route");
+const order_route = require("./routes/Customer_routes/crud_order");
 const review_route = require("./routes/Customer_routes/review_routes");
 const PayRoute = require("./routes/payment_routes");
 const verifyJwtCustomer = require("./middlewares/verifyJwtCus");
@@ -61,12 +62,17 @@ app.use("/api/v2/admin", verifyJwtAdmin, catg_route);
 >>>>>>> 6226091131c60c2f9ff4afe1ad48997511ac607d
 app.use("/api/v2/admin", verifyJwtAdmin, RouterProduct);
 app.use("/api/v2/admin", verifyJwtAdmin, review_route);
+app.use("/api/v2/admin", verifyJwtAdmin, order_route);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
 >>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
 =======
 >>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
+=======
+app.use("/api/v2/customer", verifyJwtCustomer, order_route);
+>>>>>>> dce8edbb472ad98ec716dab2e885ef236ba3e939
 app.use("/api/v2/customer", verifyJwtCustomer, catg_route);
 =======
 app.use("/api/v2/admin", catg_route);
