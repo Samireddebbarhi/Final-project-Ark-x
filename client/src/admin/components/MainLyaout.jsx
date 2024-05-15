@@ -54,7 +54,7 @@ const MainLayout = () => {
           mode="inline"
           defaultSelectedKeys={[""]}
           onClick={({ key }) => {
-            if (key === "signout") {
+            if (key === "SignOut") {
               handleLogout(); // Call handleLogout when signout is clicked
             } else {
               navigate(key);
@@ -103,7 +103,7 @@ const MainLayout = () => {
             {
               key: "SignOut",
               icon: <LogOut className="fs-4" />,
-              label: "Signout",
+              label: "SignOut",
             },
           ]}
         />

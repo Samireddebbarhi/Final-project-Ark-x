@@ -1,79 +1,110 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
-import { cust_url } from "../../utils/baseUrl";
-import { config } from "../../utils/axiosconfig";
+import React, { useEffect, useState } from "react";
+import { Table, Button, Modal } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteCustomerById } from "../features/customer/customerSlice";
+import { ExclamationCircleFilled } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
+import { getCustomers } from "../features/customer/customerSlice";
 
-// get all customers
-export const getCustomers = createAsyncThunk(
-  "users/getCustomers",
-  async (_, { rejectWithValue }) => {
+const { confirm } = Modal;
+
+const Customerlist = () => {
+  const [deleteConfirmed, setDeleteConfirmed] = useState(false);
+  const { customers } = useSelector((state) => state.customer);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCustomers());
+  }, [deleteConfirmed]);
+  useEffect(() => {
+    dispatch(getCustomers());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getCustomers());
+  }, []);
+
+  const handleDelete = async (customerId) => {
     try {
-      const response = await axios.get(`${cust_url}/customers/All`, config);
+      dispatch(deleteCustomerById(customerId));
+      console.log("Customer deleted Successfully", customerId);
 
-      console.log(response);
-      return response.data;
+      setDeleteConfirmed(true);
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      console.error("Error deleting  customer:", error);
     }
-  }
-);
-// delete customer  by id
-export const deleteCustomerById = createAsyncThunk(
-  "users/deleteCustomers",
-  async (customerId, { rejectWithValue }) => {
-    try {
-      console.log("customer id", customerId);
-      await axios.delete(`${cust_url}/customersDelete/${customerId}`, config);
+  };
+  const data2 = [];
 
-      return customerId; // Return the ID of the deleted customer upon success
-    } catch (error) {
-      console.error("Error deleting customer:", error);
-      return rejectWithValue(error.response.data.message);
-    }
+  for (let i = 0; i < customers.length; i++) {
+    const customer = customers[i];
+    data2.push({
+      key: customer._id,
+      username: customer.username,
+      email: customer.email,
+      role: customer.role,
+    });
   }
-);
-//
-const initialState = {
-  customers: [],
-  isError: false,
-  isLoading: false,
-  isSuccess: false,
-  message: "",
+  const showDeleteConfirm = (customerId) => {
+    confirm({
+      title: "Are you sure you want to delete this customer?",
+      icon: <ExclamationCircleFilled />,
+      content: "This action cannot be undone.",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        handleDelete(customerId); // Pass customerId instead of record
+      },
+      onCancel() {
+        console.log("Deletion canceled");
+      },
+    });
+  };
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "key",
+    },
+    {
+      title: "Username",
+      dataIndex: "username",
+      sorter: (a, b) => a.username.length - b.username.length,
+    },
+
+    {
+      title: "Email",
+      dataIndex: "email",
+      sorter: (a, b) => a.email.length - b.email.length,
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+    },
+    {
+      title: "Action",
+      render: (record) => {
+        return (
+          <>
+            <Button
+              onClick={() => showDeleteConfirm(record.key)}
+              icon={<DeleteOutlined />}
+              danger
+            ></Button>
+          </>
+        );
+      },
+    },
+  ];
+
+  return (
+    <div className="relative">
+      <h3 className="mb-4 text-2xl font-bold">Customers</h3>
+      <br />
+      <div>
+        <Table dataSource={data2} columns={columns} />
+      </div>
+    </div>
+  );
 };
-export const customerSlice = createSlice({
-  name: "users",
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(getCustomers.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getCustomers.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.isSuccess = true;
-        state.customers = action.payload.users;
-      })
-      .addCase(getCustomers.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error;
-      })
-      .addCase(deleteCustomerById.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(deleteCustomerById.fulfilled, (state, action) => {
-        // Filter out the deleted customer from the state based on customerId
-        state.users = state.users.filter((user) => user.id !== action.payload);
-      })
-      .addCase(deleteCustomerById.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error;
-      });
-  },
-});
-export default customerSlice.reducer;
+
+export default Customerlist;

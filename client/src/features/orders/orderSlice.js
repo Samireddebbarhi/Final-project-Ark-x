@@ -1,76 +1,54 @@
-import React, { useEffect, useState } from "react";
-import { Table, Button } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { order_url } from "../../utils/baseUrl"; // Assuming you have the order URL defined
+import { config } from "../../utils/axiosconfig";
 
-import { DeleteOutlined } from "@ant-design/icons";
-// import CustomizedDialogs from "../admin/components/Dialog"
-// import EditeProduct from "../admin/components/EditeProduct";
-import { getAllOrders } from "../features/orders/orderSlice";
-const columns = [
-  {
-    title: "SNo",
-    dataIndex: "key",
-  },
-  {
-    title: "Customer",
-    dataIndex: "customerId",
-    sorter: (a, b) => a.customerId.length - b.customerId.length,
-  },
-
-  {
-    title: "Products",
-    dataIndex: "products",
-    sorter: (a, b) => a.products.length - b.products.length,
-  },
-  {
-    title: "Payment Info",
-    dataIndex: "paymentInfo",
-    sorter: (a, b) => a.products.length - b.products.length,
-  },
-  {
-    title: "Order Date",
-    dataIndex: "orderDate",
-    sorter: (a, b) => a.date.length - b.date.length,
-  },
-  {
-    title: "Total",
-    dataIndex: "totalAmount",
-    sorter: (a, b) => a.total.length - b.total.length,
-  },
-];
-
-const Orderlist = () => {
-  const orders = useSelector((state) => state.order);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getAllOrders());
-  }, [dispatch]);
-
-  const data3 = [];
-
-  // Populate the data array with order information
-  for (let i = 0; i < orders.length; i++) {
-    data3.push({
-      key: i + 1,
-      customer: orders[i].userInfo.username,
-      products: orders[i].orderItem.Idproduct,
-      paymentInfo: orders[i].paymentInfo,
-      orderDate: orders[i].paidAt,
-      totalPrice: orders[i].totalPrice,
-    });
+// Async thunk for getting all orders
+export const getAllOrders = createAsyncThunk(
+  "orders/viewOrders",
+  async ({ rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${order_url}/getOrder`, config);
+      console.log("respone is ", response);
+      return response.data; // Assuming the response contains the orders data
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
   }
+);
 
-  return (
-    <div className="relative">
-      <h3 className="mb-4 text-2xl font-bold">Orders</h3>
-      <br />
-      <div>
-        <Table dataSource={data3} columns={columns} />
-      </div>
-    </div>
-  );
+const initialState = {
+  orders: [],
+  isError: false,
+  isLoading: false,
+  isSuccess: false,
+  message: "",
 };
-
-export default Orderlist;
+export const orderSlice = createSlice({
+  name: "orders",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getAllOrders.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAllOrders.fulfilled, (state, action) => {
+        (state.isLoading = false),
+          (state.isError = false),
+          (state.isSuccess = true),
+          (state.orders = action.payload);
+      })
+      .addCase(getAllOrders.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+      });
+  },
+});
+export default orderSlice.reducer;
+//  // state.isLoading= false;
+// state.isError = false;
+// state.isSuccess = true;
+// state.orderss= action.payload.oreders;
