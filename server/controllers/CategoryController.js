@@ -1,5 +1,5 @@
-const CategoryModel = require("../models/CategoryModel");
-const ProductModel = require("../models/ProductModel");
+const CategoryModel = require("../Models/CategoryModel");
+const ProductModel = require("../Models/ProductModel");
 const express = require("express");
 const app = express();
 app.use(express.json());

@@ -13,13 +13,13 @@ const Cardt = require("./routes/cart_routes");
 const catg_route = require("./routes/category_route");
 const review_route = require("./routes/Customer_routes/review_routes");
 const PayRoute = require("./routes/payment_routes");
-const OrderRoute = require("./routes/order_routes")
+const order_route = require("./routes/Customer_routes/crud_order")
 const verifyJwtCustomer = require("./middlewares/verifyJwtCus");
 const verifyJwtAdmin = require("./middlewares/verifyJwt");
 const logs = require("./middlewares/logs");
 const errorHandler = require("./middlewares/errorHandling");
 const app = express();
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use(cors({ credentials: true, origin: ["http://localhost:5173","http://localhost:5174" ]  }));
 app.use(express.json());
 
 app.use(cookie());
@@ -30,12 +30,14 @@ app.use("/api/v1/admin/super", admin_route.authRoute);
 app.use("/api/v2/admin/super", verifyJwtAdmin, admin_route.adminRouter);
 app.use("/api/v2/admin/super", verifyJwtAdmin, customer_crud);
 // get all orders
-app.use("/api/v2/customer", verifyJwtAdmin, OrderRoute)
+
+
 app.use("/api/v2/customer", verifyJwtCustomer, customer_crud);
 
 app.use("/api/v2/admin", verifyJwtAdmin, catg_route);
 app.use("/api/v2/admin", verifyJwtAdmin, RouterProduct);
 app.use("/api/v2/admin", verifyJwtAdmin, review_route);
+app.use("/api/v2/admin", verifyJwtAdmin, order_route);
 
 app.use("/api/v2/customer", verifyJwtCustomer, catg_route);
 app.use("/api/v2/customer", verifyJwtCustomer, review_route);

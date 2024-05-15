@@ -56,15 +56,15 @@ const Orderlist = () => {
     const data3 = [];
   
     // Populate the data array with order information
-    for (let i = 0; i < orders; i++) {
+    for (let i = 0; i < orders.length; i++) {
      
       data3.push({
         key: i + 1,
-        customer: orders[i].customerId,
-        products: orders[i].products,
+        customer: orders[i].userInfo.username,
+        products: orders[i].orderItem.Idproduct,
         paymentInfo: orders[i].paymentInfo,
-        orderDate: orders[i].orderDate,
-        total: orders[i].totalAmount,
+        orderDate: orders[i].paidAt,
+        totalPrice: orders[i].totalPrice,
       });
      
     }

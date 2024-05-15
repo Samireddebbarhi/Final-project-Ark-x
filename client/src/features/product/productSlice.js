@@ -147,23 +147,8 @@ export const productSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.errorMessage = action.payload;
-      })
-      .addCase(getReviews.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(getReviews.fulfilled, (state) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.isSuccess = true;
-        // to see
-        state.reviews = action.payload;
-      })
-      .addCase(getReviews.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error;
       });
+      
 
   },
 });

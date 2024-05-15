@@ -36,23 +36,16 @@ const SchemaCustomer = new mongoose.Schema(
       type: String,
       default: "user",
     },
-    permissions: {
-      type: [String],
-      default: ["create", "read", "update", "delete"],
-    },
     resetPasswordToken: {
       type: String,
     },
     resetPasswordExpire: {
       type: Date,
     },
-    permissions: [
-      {
-        type: String,
-        default :{
-          enum: ["create", "read", "update", "delete"]},
-      },
-    ],
+    permissions: {
+      type: [String],
+      default: ["create", "read", "update", "delete"],
+    },
   },
   {
     timestamps: true,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { ExclamationCircleFilled } from '@ant-design/icons';
-import { deleteProduct, getProducts , getReviews} from "../features/product/productSlice";
+import { deleteProduct, getProducts } from "../features/product/productSlice";
 import { Link, useNavigate } from "react-router-dom";
 import CustomizedDialogs from "../admin/components/Dialog"
 import AddProduct from "../admin/components/AddProduct";
@@ -168,7 +168,7 @@ const handleEdit = (productId) => {
               <>
                 <Button  key={`edit_${record.key}`}  onClick={()=> handleEdit(record.key)} icon={<EditOutlined/>}  className="mr-2"></Button>
                 
-                <Button  key={`delete_${record.key}`} onClick={() => showDeleteConfirm(record.key)} icon={<DeleteOutlined />} danger></Button>
+                <Button  key={`delete_${record.key}`} onClick={() => showDeleteConfirm(record.key)} icon={<DeleteOutlined />} danger className="mr-2"></Button>
 
                 <Button  onClick={() => handleView(record)} icon={<LuView />} ></Button>
               </>

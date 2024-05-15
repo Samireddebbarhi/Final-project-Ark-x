@@ -8,7 +8,7 @@ export const getAllOrders = createAsyncThunk(
   "orders/viewOrders",
   async ({ rejectWithValue }) => {
     try {
-      const response = await axios.get(`${order_url}/viewOrders`, config); 
+      const response = await axios.get(`${order_url}/order/getOrder`, config); 
       console.log("respone is ", response)
       return response.data; // Assuming the response contains the orders data
     } catch (error) {
