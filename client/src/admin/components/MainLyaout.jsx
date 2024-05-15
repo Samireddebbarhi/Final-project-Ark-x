@@ -22,6 +22,7 @@ import { Layout, Menu, theme } from "antd";
 import { useNavigate } from "react-router-dom";
 import { logout } from "../../features/auth/authSlice";
 import ProfileAdmin from "./ProfileAdmin";
+import { isSuperAdmin } from "../../utils/authUtils";
 const { Header, Sider, Content } = Layout;
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -82,7 +83,8 @@ const MainLayout = () => {
                 },
               ],
             },
-            {
+
+            isSuperAdmin(user.admin) && {
               key: "admins",
               icon: <AiOutlineUser className="fs-4" />,
               label: "Admins",
