@@ -131,7 +131,7 @@ const getAllOrders = async (req, res) => {
     orders,
   });
 };
-const deleteOrders = async (req, res) => {
+const deleteOrder = async (req, res) => {
   const orders = await Order.findByIdAndDelete(req.params.id);
   if (!orders) {
     res.status(404);
@@ -148,5 +148,5 @@ module.exports = {
   myOrder,
   getAllOrders,
   updateOrder,
-  deleteOrders,
+  deleteOrder,
 };
