@@ -8,6 +8,8 @@ import deleteproductReducer from "../features/product/productSlice";
 import editproductReducer from "../features/product/productSlice";
 import authReducer from "../features/auth/authSlice";
 import adminReducer from "../features/admins/adminSlice";
+import orderReducer from "../features/orders/orderSlice";
+
 export const store = configureStore({
   reducer: {
     product: productReducer,
@@ -19,5 +21,6 @@ export const store = configureStore({
     deleteProduct: deleteproductReducer,
     editeProduct: editproductReducer,
     auth: authReducer,
+    vOrder: orderReducer,
   },
 });

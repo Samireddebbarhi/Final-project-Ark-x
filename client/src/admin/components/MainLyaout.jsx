@@ -101,7 +101,7 @@ const MainLayout = () => {
               label: "Orders",
             },
             {
-              key: "signout",
+              key: "SignOut",
               icon: <LogOut className="fs-4" />,
               label: "Signout",
             },

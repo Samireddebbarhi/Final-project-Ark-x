@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainLyaout from "./admin/components/MainLyaout";
 import Products from "./pages/Products";
 import Dashboard from "./pages/Dashboard";
+import Orders from "./pages/Orders";
 
 import Categorylist from "./pages/CategoryList";
 import Login from "./pages/Login";
@@ -24,6 +25,7 @@ function App() {
             <Route path="/admins" element={<Admins />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/upload" element={<ImageUpload />} />
+            <Route path="/orders" element={<Orders />} />
           </Route>
         </Route>
       </Routes>

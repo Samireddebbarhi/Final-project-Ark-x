@@ -27,7 +27,9 @@ export const deleteCustomerById = createAsyncThunk(
 
       return customerId; // Return the ID of the deleted customer upon success
     } catch (error) {
+      // If an error occurs during the deletion process, handle it
       console.error("Error deleting customer:", error);
+      // Return rejected value with error message
       return rejectWithValue(error.response.data.message);
     }
   }
