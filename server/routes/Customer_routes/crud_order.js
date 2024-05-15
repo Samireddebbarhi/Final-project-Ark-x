@@ -23,7 +23,7 @@ route.put(
   orderController.updateOrder
 );
 route.delete(
-  "order/:id",
+  "/order/:id",
   checkRoleAndPermission(["super_admin", "admin"], "delete"),
   orderController.deleteOrders
 );
