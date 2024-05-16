@@ -24,7 +24,7 @@ route.put(
 );
 route.delete(
   "/order/:id",
-  checkRoleAndPermission(["super_admin", "admin"], "delete"),
+  checkRoleAndPermission(["super_admin", "admin", "user"], "delete"),
   orderController.deleteOrder
 );
 route.get(
