@@ -3,14 +3,10 @@ import { Table, Button, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { deleteProduct, getProducts } from "../features/product/productSlice";
-import { Link, useNavigate } from "react-router-dom";
 import CustomizedDialogs from "../admin/components/Dialog";
 import AddProduct from "../admin/components/AddProduct";
-import { base_url } from "../utils/baseUrl";
-import axios from "axios";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import EditeProduct from "../admin/components/EditeProduct";
-import { config } from "../utils/axiosconfig";
 
 const { confirm } = Modal;
 const Productlist = () => {
@@ -30,7 +26,6 @@ const Productlist = () => {
   // delete product
   const handleDelete = async (productId) => {
     try {
-      await axios.delete(`${base_url}/deleteProduct/${productId}`, config);
       dispatch(deleteProduct(productId));
       console.log("Product Deleted Successfully:", productId);
       // alert('Product Deleted Successfully')
@@ -162,7 +157,7 @@ const Productlist = () => {
       </div>
       <div>
         <Modal
-          title="Edit Poroduct"
+          title="Edit Product"
           open={isEditing}
           okText="save"
           onCancel={() => {

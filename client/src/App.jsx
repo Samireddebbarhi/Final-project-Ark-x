@@ -16,6 +16,7 @@ import Reviews from "./Reviews";
 import MainLyaout from "./admin/components/MainLyaout";
 import Products from "./pages/Products";
 import Dashboard from "./pages/Dashboard";
+import Orders from "./pages/Orders";
 
 import Categorylist from "./pages/CategoryList";
 import Login from "./pages/Login";
@@ -52,6 +53,7 @@ function App() {
             <Route path="/admins" element={<Admins />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/upload" element={<ImageUpload />} />
+            <Route path="/orders" element={<Orders />} />
           </Route>
 >>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
 =======

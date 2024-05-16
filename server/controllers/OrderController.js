@@ -6,19 +6,17 @@ const newOrder = async (req, res) => {
     const productId = req.params.id;
     const { quantityItem, paymentInfo, itemPrice, totalPrice } = req.body;
 
-    // Validate the product ID (assuming you have a Product model)
-    /* if (!mongoose.Types.ObjectId.isValid(productId)) {
-      res.status(400).json({ success: false, message: "Invalid product ID" });
-      return;
-    }*/
-
-    // Check if the product exists
     const product = await Product.findById(productId);
     if (!product) {
       res.status(404).json({ success: false, message: "Product not found" });
       return;
     }
-
+    /*const updatedStock = await updateStock(productId, quantityItem);
+    if (!updatedStock) {
+      return res
+        .status(404)
+        .json({ succes: false, message: "Error Updated Stock " });
+    }*/
     // Create the order
     const order = await Order.create({
       orderItem: [
@@ -79,6 +77,7 @@ async function updateStock(id, quantity) {
   const product = await Product.findById(id);
   product.stock -= quantity;
   await product.save({ validateBeforeSave: false });
+  return product;
 }
 const updateOrder = async (req, res) => {
   try {
@@ -97,11 +96,11 @@ const updateOrder = async (req, res) => {
     console.log("2");
 
     orders.orderItem.forEach((order) => {
-      updateStock(order.product, order.quantity);
+      updateStock(order.Idproduct, order.quantity);
     });
     console.log("3");
     orders.orderStatus = req.body.status;
-    if (req.body.status === "Delivered") {
+    if (req.body.status === "purshased") {
       orders.deliveredAt = Date.now();
     }
     console.log("4");
@@ -132,14 +131,12 @@ const getAllOrders = async (req, res) => {
     orders,
   });
 };
-const deleteOrders = async (req, res) => {
-  const orders = await Order.find(req.params.id);
+const deleteOrder = async (req, res) => {
+  const orders = await Order.findByIdAndDelete(req.params.id);
   if (!orders) {
     res.status(404);
     throw new Error("Order not found with this Id");
   }
-
-  await orders.remove();
 
   res.status(200).json({
     success: true,
@@ -151,5 +148,5 @@ module.exports = {
   myOrder,
   getAllOrders,
   updateOrder,
-  deleteOrders,
+  deleteOrder,
 };

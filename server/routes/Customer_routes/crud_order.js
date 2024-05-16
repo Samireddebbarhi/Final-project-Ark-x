@@ -23,8 +23,13 @@ route.put(
   orderController.updateOrder
 );
 route.delete(
-  "order/:id",
+  "/order/:id",
   checkRoleAndPermission(["super_admin", "admin"], "delete"),
-  orderController.deleteOrders
+  orderController.deleteOrder
+);
+route.get(
+  "/order/getAll",
+  checkRoleAndPermission(["super_admin", "admin"], "read"),
+  orderController.getAllOrders
 );
 module.exports = route;
