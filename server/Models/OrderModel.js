@@ -20,8 +20,6 @@ const orderSchema = new mongoose.Schema({
         required: true,
       },
       Idproduct: {
-        // type: mongoose.Schema.ObjectId,
-        // ref: "Product",
         type: String,
         required: true,
       },
@@ -47,11 +45,6 @@ const orderSchema = new mongoose.Schema({
   paidAt: {
     type: Date,
     required: true,
-  },
-  itemPrice: {
-    type: Number,
-    required: true,
-    default: 0,
   },
 
   totalPrice: {

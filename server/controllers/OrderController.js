@@ -4,7 +4,7 @@ const Product = require("../models/ProductModel");
 const newOrder = async (req, res) => {
   try {
     const productId = req.params.id;
-    const { quantityItem, paymentInfo, itemPrice, totalPrice } = req.body;
+    const { quantityItem, paymentInfo } = req.body;
 
     const product = await Product.findById(productId);
     if (!product) {
@@ -30,8 +30,7 @@ const newOrder = async (req, res) => {
       ],
       // Assuming you want to add the entire product
       paymentInfo,
-      itemPrice,
-      totalPrice,
+      totalPrice: product.price * quantityItem,
       paidAt: Date.now(),
       userInfo: { userId: req.user._id, username: req.user.username },
     });
