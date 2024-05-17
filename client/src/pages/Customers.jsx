@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteCustomerById } from "../features/customer/customerSlice";
-import { ExclamationCircleFilled } from "@ant-design/icons";
+import { ExclamationCircleFilled, StopOutlined } from "@ant-design/icons";
 import { DeleteOutlined } from "@ant-design/icons";
 import { getCustomers } from "../features/customer/customerSlice";
 
@@ -12,6 +12,9 @@ const Customerlist = () => {
   const [deleteConfirmed, setDeleteConfirmed] = useState(false);
   const { customers } = useSelector((state) => state.customer);
   const dispatch = useDispatch();
+  const userPermissions = localStorage.getItem("user")
+    ? new Set(JSON.parse(localStorage.getItem("user")).admin.permissions)
+    : new Set();
   useEffect(() => {
     dispatch(getCustomers());
   }, [deleteConfirmed]);
@@ -83,14 +86,16 @@ const Customerlist = () => {
     {
       title: "Action",
       render: (record) => {
-        return (
+        return userPermissions.has("delete") ? (
           <>
             <Button
               onClick={() => showDeleteConfirm(record.key)}
               icon={<DeleteOutlined />}
               danger
-            ></Button>
+            />
           </>
+        ) : (
+          <StopOutlined style={{ color: "#EE4E4E" }} />
         );
       },
     },

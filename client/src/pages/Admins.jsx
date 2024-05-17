@@ -3,7 +3,7 @@ import { Table, Button, Modal } from "antd";
 //import { BiEdit } from "react-icons/bi";
 //import { AiFillDelete } from "react-icons/ai";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { ExclamationCircleFilled } from "@ant-design/icons";
+import { ExclamationCircleFilled, StopOutlined } from "@ant-design/icons";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -21,6 +21,11 @@ const Admins = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [adminId, setAdminId] = useState(null);
   const adminstate = useSelector((state) => state.admin.admins);
+
+  const authenticatedUsername = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null;
+
   console.log(adminstate);
   useEffect(() => {
     dispatch(getAdmins());
@@ -99,14 +104,14 @@ const Admins = () => {
     {
       title: "Action",
       render: (record) => {
-        return (
+        return authenticatedUsername.admin.username !== record.username ? (
           <>
             <Button
               key={`edit_${record.key}`}
               onClick={() => handleEdit(record.key)}
               icon={<EditOutlined />}
               className="mr-2"
-            ></Button>{" "}
+            ></Button>
             <Button
               key={`delete_${record.key}`}
               onClick={() => showDeleteConfirm(record.key)}
@@ -114,6 +119,8 @@ const Admins = () => {
               danger
             ></Button>
           </>
+        ) : (
+          <StopOutlined style={{ color: "EE4E4E" }} />
         );
       },
     },
