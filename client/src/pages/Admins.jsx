@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Table, Button, Modal, Form, Input, Select, message } from "antd";
 import {
   EditOutlined,
@@ -25,18 +26,20 @@ const Admins = () => {
   const dispatch = useDispatch();
   const adminstate = useSelector((state) => state.admin.admins);
   const loading = useSelector((state) => state.admin.isLoading);
+  const navigate = useNavigate();
   const authenticatedUsername = localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
     : null;
 
   useEffect(() => {
     dispatch(getAdmins());
-  }, [dispatch]);
+  }, [dispatch, isEditing, adminId, openDialog]);
 
   const handleDelete = async (adminId) => {
     try {
       await dispatch(deleteAdminsById(adminId)).unwrap();
       message.success("Admin deleted successfully.");
+      navigate("/admins");
     } catch (error) {
       message.error("Error deleting admin.");
     }
@@ -84,13 +87,23 @@ const Admins = () => {
           updateAdminById({ idAdmin: adminId, admin: values })
         ).unwrap();
         message.success("Admin updated successfully.");
+        navigate("/admins");
       } else {
         await dispatch(createAdmins(values)).unwrap();
         message.success("Admin created successfully.");
+        navigate("/admins");
       }
       setOpenDialog(false);
     } catch (error) {
       message.error("Error saving admin.");
+    }
+  };
+
+  const handleValuesChange = (changedValues, allValues) => {
+    if (changedValues.role === "super_admin") {
+      form.setFieldsValue({
+        permissions: ["create", "read", "update", "delete"],
+      });
     }
   };
 
@@ -164,9 +177,12 @@ const Admins = () => {
   return (
     <div>
       <h1 className="mb-4 title font-bold">Administrators</h1>
-      <Button type="primary" onClick={handleAddNewAdmin}>
-        Add New Admin
-      </Button>
+
+      <div className="absolute top-7 right-6 mt-4 mr-4">
+        <Button type="primary" onClick={handleAddNewAdmin}>
+          Add New Admin
+        </Button>
+      </div>
       <div>
         <Table columns={columns} dataSource={data1} loading={loading} />
       </div>
@@ -176,7 +192,12 @@ const Admins = () => {
         onCancel={() => setOpenDialog(false)}
         footer={null}
       >
-        <Form form={form} onFinish={handleFormSubmit} layout="vertical">
+        <Form
+          form={form}
+          onFinish={handleFormSubmit}
+          onValuesChange={handleValuesChange}
+          layout="vertical"
+        >
           <Form.Item
             name="name"
             label="Name"
