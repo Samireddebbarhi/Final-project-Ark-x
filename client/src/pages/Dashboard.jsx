@@ -1,7 +1,11 @@
 import React from "react";
-import { BsArrowDownRight, BsArrowUpRight } from "react-icons/bs";
+import { BsArrowDownRight, BsArrowUpRight, BsBarChart, BsBoxSeam, BsFillPeopleFill } from "react-icons/bs";
 import { Column } from "@ant-design/plots";
-import { Table } from "antd";
+import { Table, Card, Row, Col, Layout, Menu } from "antd";
+import './Dashboard.css';
+
+const { Header, Content } = Layout;
+
 const columns = [
   {
     title: "SNo",
@@ -17,76 +21,41 @@ const columns = [
   },
   {
     title: "Status",
-    dataIndex: "staus",
+    dataIndex: "status",
   },
 ];
+
 const data1 = [];
 for (let i = 0; i < 46; i++) {
   data1.push({
     key: i,
     name: `Edward King ${i}`,
     product: 32,
-    staus: `London, Park Lane no. ${i}`,
+    status: `London, Park Lane no. ${i}`,
   });
 }
+
 const Dashboard = () => {
   const data = [
-    {
-      type: "Jan",
-      sales: 38,
-    },
-    {
-      type: "Feb",
-      sales: 52,
-    },
-    {
-      type: "Mar",
-      sales: 61,
-    },
-    {
-      type: "Apr",
-      sales: 145,
-    },
-    {
-      type: "May",
-      sales: 48,
-    },
-    {
-      type: "Jun",
-      sales: 38,
-    },
-    {
-      type: "July",
-      sales: 38,
-    },
-    {
-      type: "Aug",
-      sales: 38,
-    },
-    {
-      type: "Sept",
-      sales: 38,
-    },
-    {
-      type: "Oct",
-      sales: 38,
-    },
-    {
-      type: "Nov",
-      sales: 38,
-    },
-    {
-      type: "Dec",
-      sales: 38,
-    },
+    { type: "Jan", sales: 38 },
+    { type: "Feb", sales: 52 },
+    { type: "Mar", sales: 61 },
+    { type: "Apr", sales: 145 },
+    { type: "May", sales: 48 },
+    { type: "Jun", sales: 38 },
+    { type: "Jul", sales: 38 },
+    { type: "Aug", sales: 38 },
+    { type: "Sep", sales: 38 },
+    { type: "Oct", sales: 38 },
+    { type: "Nov", sales: 38 },
+    { type: "Dec", sales: 38 },
   ];
+
   const config = {
     data,
     xField: "type",
     yField: "sales",
-    color: ({ type }) => {
-      return "#ffd333";
-    },
+    color: "#ffd333",
     label: {
       position: "middle",
       style: {
@@ -101,68 +70,92 @@ const Dashboard = () => {
       },
     },
     meta: {
-      type: {
-        alias: "Month",
-      },
-      sales: {
-        alias: "Income",
-      },
+      type: { alias: "Month" },
+      sales: { alias: "Income" },
     },
   };
+
   return (
-    <div>
-      <h3 className="mb-4 title">Dashboard</h3>
-      <div className="d-flex justify-content-between align-items-center gap-3">
-        <div className="d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
-          <div>
-            <p className="desc">Total</p>
-            <h4 className="mb-0 sub-title">$1100</h4>
+    <Layout className="dashboard-layout">
+      <Header className="dashboard-header">
+        <div className="logo">My Dashboard</div>
+        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
+          <Menu.Item key="1">Dashboard</Menu.Item>
+          <Menu.Item key="2">Reports</Menu.Item>
+          <Menu.Item key="3">Settings</Menu.Item>
+        </Menu>
+      </Header>
+      <Content className="dashboard-content">
+        <div className="dashboard">
+          <h3 className="mb-4 title">Dashboard</h3>
+          <Row gutter={16} className="mb-4">
+            <Col span={8}>
+              <Card className="dashboard-card dashboard-card--yellow">
+                <div className="card-content">
+                  <BsFillPeopleFill className="card-icon" />
+                  <div>
+                    <p className="desc">Total Users</p>
+                    <h4 className="mb-0 sub-title">1,200</h4>
+                  </div>
+                </div>
+                <div className="d-flex flex-column align-items-end">
+                  <h6 className="red">
+                    <BsArrowDownRight /> 10%
+                  </h6>
+                  <p className="mb-0 desc">Compared to last month</p>
+                </div>
+              </Card>
+            </Col>
+            <Col span={8}>
+              <Card className="dashboard-card dashboard-card--blue">
+                <div className="card-content">
+                  <BsBarChart className="card-icon" />
+                  <div>
+                    <p className="desc">Total Sales</p>
+                    <h4 className="mb-0 sub-title">$2,300</h4>
+                  </div>
+                </div>
+                <div className="d-flex flex-column align-items-end">
+                  <h6 className="green">
+                    <BsArrowUpRight /> 25%
+                  </h6>
+                  <p className="mb-0 desc">Compared to last month</p>
+                </div>
+              </Card>
+            </Col>
+            <Col span={8}>
+              <Card className="dashboard-card dashboard-card--green">
+                <div className="card-content">
+                  <BsBoxSeam className="card-icon" />
+                  <div>
+                    <p className="desc">New Orders</p>
+                    <h4 className="mb-0 sub-title">350</h4>
+                  </div>
+                </div>
+                <div className="d-flex flex-column align-items-end">
+                  <h6 className="red">
+                    <BsArrowDownRight /> 5%
+                  </h6>
+                  <p className="mb-0 desc">Compared to last month</p>
+                </div>
+              </Card>
+            </Col>
+          </Row>
+          <div className="mt-4">
+            <h3 className="mb-5 title">Income Statistics</h3>
+            <div>
+              <Column {...config} />
+            </div>
           </div>
-          <div className="d-flex flex-column align-items-end">
-            <h6>
-              <BsArrowDownRight /> 32%
-            </h6>
-            <p className="mb-0  desc">Compared To April 2022</p>
+          <div className="mt-4">
+            <h3 className="mb-5 title">Recent Orders</h3>
+            <div>
+              <Table columns={columns} dataSource={data1} />
+            </div>
           </div>
         </div>
-        <div className="d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
-          <div>
-            <p className="desc">Total</p>
-            <h4 className="mb-0 sub-title">$1100</h4>
-          </div>
-          <div className="d-flex flex-column align-items-end">
-            <h6 className="red">
-              <BsArrowDownRight /> 32%
-            </h6>
-            <p className="mb-0  desc">Compared To April 2022</p>
-          </div>
-        </div>
-        <div className="d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 roudned-3">
-          <div>
-            <p className="desc">Total</p>
-            <h4 className="mb-0 sub-title">$1100</h4>
-          </div>
-          <div className="d-flex flex-column align-items-end">
-            <h6 className="green">
-              <BsArrowDownRight /> 32%
-            </h6>
-            <p className="mb-0 desc">Compared To April 2022</p>
-          </div>
-        </div>
-      </div>
-      <div className="mt-4">
-        <h3 className="mb-5 title">Income Statics</h3>
-        <div>
-          <Column {...config} />
-        </div>
-      </div>
-      <div className="mt-4">
-        <h3 className="mb-5 title">Recent Orders</h3>
-        <div>
-          <Table columns={columns} dataSource={data1} />
-        </div>
-      </div>
-    </div>
+      </Content>
+    </Layout>
   );
 };
 

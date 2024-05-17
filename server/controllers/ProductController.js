@@ -1,28 +1,6 @@
 const Product = require("../models/ProductModel");
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
-=======
->>>>>>> 84e9bf8410621722a931961e62aafb56ee0cbd24
 const Category = require("../models/CategoryModel");
-<<<<<<< HEAD
-<<<<<<< HEAD
-const Image = require("../Models/ImageModel");
-// it work
-<<<<<<< HEAD
-=======
-const Category = require("../Models/CategoryModel");
->>>>>>> 918275d63eace52fee2029bd92b40557419f189f
-=======
 const Image = require("../models/ImageModel");
->>>>>>> 4c21d3e4f07d69293a84aaa3ce534eb17ac811dd
-=======
-const Image = require("../models/ImageModel");
->>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
-=======
->>>>>>> 84e9bf8410621722a931961e62aafb56ee0cbd24
 const getAllProducts = async (req, res, next) => {
   const product = await Product.find();
   if (!product)
@@ -43,38 +21,10 @@ const createProduct = async (req, res) => {
     if (!category) {
       throw new Error(`Category '${categoryName}' not found.`);
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-    const newProduct = new Product({
-      ...product,
-<<<<<<< HEAD
-      category: categoryName, // Assign category ID to the product
-=======
-    const newProduct = new Product({ ...product, category: categoryName });
-    newProduct.save().then((newproduct, err) => {
-      if (err) {
-        console.log(err);
-        return res
-          .status(500)
-          .json({ success: false, msg_erreur: `Error creating product` });
-      } else {
-        return res.status(201).json({
-          success: true,
-          msg_success: "The product has been created successfully:",
-          data: newproduct,
-        });
-      }
->>>>>>> c93456289441c7f9db61ed7010ac24afe484aab8
-=======
-      category: categoryName,
->>>>>>> 4c21d3e4f07d69293a84aaa3ce534eb17ac811dd
-=======
 
     const newProduct = new Product({
       ...product,
       category: categoryName,
->>>>>>> 49fff52aaa3d806557c0c0d3379b8a03ab7a7940
     });
 
     //Save the product
