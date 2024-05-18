@@ -59,7 +59,7 @@ export const updateProduct = createAsyncThunk(
   async ({ productId, updatedProduct }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `${admin_url}/updateProduct/${productId}`,
+        `${base_url}/updateProduct/${productId}`,
         updatedProduct, config
       );
 

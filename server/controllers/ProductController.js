@@ -1,7 +1,7 @@
 const Product = require("../Models/ProductModel");
 const Category = require("../Models/CategoryModel");
 
-
+// i update this
 const getAllProducts = async (req, res, next) => {
   const product = await Product.find().populate('category', 'name');
   if (!product)
@@ -10,7 +10,7 @@ const getAllProducts = async (req, res, next) => {
       .json({ success: false, msg: "No products exists in the database" });
   return res.status(200).json({ succeess: true, product });
 };
-
+// i update this
 const createProduct = async (req, res) => {
   try {
     const product = req.body;
@@ -52,34 +52,34 @@ const createProduct = async (req, res) => {
       .json({ success: false, msg_error: "Error creating product" });
   }
 };
-
+// i update this
 const updateProduct = async (req, res) => {
   try {
-    const categoryId= req.body.category._id;
-    const categoryUpdated = await Category.findById({ name: categoryId });
+    const { name, description, price, stock } = req.body;
+
     const updatedProduct = await Product.updateOne(
       { _id: req.params.id },
       {
         $set: {
-          name: req.body.name,
-          description: req.body.description,
-          price: req.body.price,
-          category: categoryUpdated?._id || null,
-          stock: req.body.stock,
+          name,
+          description,
+          price,
+          stock,
         },
       }
     );
+
     if (updatedProduct.nModified === 0) {
-      res.status(404).send("Cannot Update Product with incorrect id");
+      return res.status(404).send("Cannot update product with incorrect id");
     } else {
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
-        msg_success: "updated succefully",
+        msg_success: "Updated successfully",
         updated: updatedProduct,
       });
     }
   } catch (err) {
-    res.status(400).send(err);
+    return res.status(400).send(err.message);
   }
 };
 const getProductDetails = async (req, res, next) => {

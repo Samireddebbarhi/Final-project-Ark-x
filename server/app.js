@@ -7,7 +7,7 @@ const cors = require("cors");
 const PORT = process.env.PORT || 3001; // Use the PORT environment variable if set, otherwise use 3001
 const admin_route = require("./routes/auth_routes/admin_route");
 const customer_route = require("./routes/auth_routes/customer_route");
-const RouterProduct = require("./routes/product_routes");
+const route_product= require("./routes/product_routes")
 const customer_crud = require("./routes/Customer_routes/crud_routes");
 const Cardt = require("./routes/cart_routes");
 const catg_route = require("./routes/category_route");
@@ -35,7 +35,7 @@ app.use("/api/v2/admin/super", verifyJwtAdmin, customer_crud);
 app.use("/api/v2/customer", verifyJwtCustomer, customer_crud);
 
 app.use("/api/v2/admin", verifyJwtAdmin, catg_route);
-app.use("/api/v2/admin", verifyJwtAdmin, RouterProduct);
+app.use("/api/v2/admin", verifyJwtAdmin, route_product);
 app.use("/api/v2/admin", verifyJwtAdmin, review_route);
 app.use("/api/v2/admin", verifyJwtAdmin, order_route);
 
