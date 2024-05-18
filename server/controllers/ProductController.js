@@ -56,7 +56,7 @@ const createProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const categoryId= req.body.category._id;
-    const categoryUpdated = await Category.findOne({ name: categoryId });
+    const categoryUpdated = await Category.findById({ name: categoryId });
     const updatedProduct = await Product.updateOne(
       { _id: req.params.id },
       {

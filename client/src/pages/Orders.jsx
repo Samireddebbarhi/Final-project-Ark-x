@@ -2,11 +2,6 @@
   import { Button, Table, Modal} from "antd";
   import { useDispatch, useSelector } from "react-redux";
   import { LuView } from "react-icons/lu";
-
-
-  // import { DeleteOutlined } from "@ant-design/icons";
-  // import CustomizedDialogs from "../admin/components/Dialog"
-  // import EditeProduct from "../admin/components/EditeProduct";
   import { getAllOrders } from "../features/orders/orderSlice";
   import { useState } from "react";
 
