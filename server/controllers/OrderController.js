@@ -1,24 +1,22 @@
-const OrderModel = require("../Models/OrderModel");
-const ProductModel = require("../Models/ProductModel");
+const Order = require("../Models/OrderModel");
+const Product = require("../Models/ProductModel");
 
 const newOrder = async (req, res) => {
   try {
     const productId = req.params.id;
-    const { quantityItem, paymentInfo, itemPrice, totalPrice } = req.body;
+    const { quantityItem, paymentInfo } = req.body;
 
-    // Validate the product ID (assuming you have a Product model)
-    /* if (!mongoose.Types.ObjectId.isValid(productId)) {
-      res.status(400).json({ success: false, message: "Invalid product ID" });
-      return;
-    }*/
-
-    // Check if the product exists
-    const product = await ProductModel.findById(productId);
+    const product = await Product.findById(productId);
     if (!product) {
       res.status(404).json({ success: false, message: "Product not found" });
       return;
     }
-
+    /*const updatedStock = await updateStock(productId, quantityItem);
+    if (!updatedStock) {
+      return res
+        .status(404)
+        .json({ succes: false, message: "Error Updated Stock " });
+    }*/
     // Create the order
     const order = await Order.create({
       orderItem: [
@@ -32,8 +30,7 @@ const newOrder = async (req, res) => {
       ],
       // Assuming you want to add the entire product
       paymentInfo,
-      itemPrice,
-      totalPrice,
+      totalPrice: product.price * quantityItem,
       paidAt: Date.now(),
       userInfo: { userId: req.user._id, username: req.user.username },
     });
@@ -48,7 +45,7 @@ const newOrder = async (req, res) => {
 };
 
 const getSingleOrder = async (req, res) => {
-  const order = await OrderModel.findById(req.params.id).populate(
+  const order = await Order.findById(req.params.id).populate(
     "user",
     "name ",
     "email"
@@ -63,7 +60,7 @@ const getSingleOrder = async (req, res) => {
   });
 };
 const myOrder = async (req, res) => {
-  const orders = await OrderModel.find({ user: req.user._id });
+  const orders = await Order.find({ user: req.user._id });
   if (!orders) {
     res.status(404);
     throw new Error("order not found with this id");
@@ -76,14 +73,15 @@ const myOrder = async (req, res) => {
 };
 
 async function updateStock(id, quantity) {
-  const product = await ProductModel.findById(id);
+  const product = await Product.findById(id);
   product.stock -= quantity;
   await product.save({ validateBeforeSave: false });
+  return product;
 }
 const updateOrder = async (req, res) => {
   try {
     console.log("the body", req.body);
-    const orders = await OrderModel.findById(req.params.id);
+    const orders = await Order.findById(req.params.id);
 
     if (!orders) {
       res.status(404);
@@ -97,11 +95,11 @@ const updateOrder = async (req, res) => {
     console.log("2");
 
     orders.orderItem.forEach((order) => {
-      updateStock(order.product, order.quantity);
+      updateStock(order.Idproduct, order.quantity);
     });
     console.log("3");
     orders.orderStatus = req.body.status;
-    if (req.body.status === "Delivered") {
+    if (req.body.status === "purshased") {
       orders.deliveredAt = Date.now();
     }
     console.log("4");
@@ -120,7 +118,7 @@ const updateOrder = async (req, res) => {
 };
 
 const getAllOrders = async (req, res) => {
-  const orders = await OrderModel.find();
+  const orders = await Order.find();
   let totalAmount = 0;
   orders.forEach((order) => {
     totalAmount += order.totalPrice;
@@ -132,14 +130,12 @@ const getAllOrders = async (req, res) => {
     orders,
   });
 };
-const deleteOrders = async (req, res) => {
-  const orders = await OrderModel.find(req.params.id);
+const deleteOrder = async (req, res) => {
+  const orders = await Order.findByIdAndDelete(req.params.id);
   if (!orders) {
     res.status(404);
     throw new Error("Order not found with this Id");
   }
-
-  await orders.remove();
 
   res.status(200).json({
     success: true,
@@ -151,5 +147,5 @@ module.exports = {
   myOrder,
   getAllOrders,
   updateOrder,
-  deleteOrders,
+  deleteOrder,
 };

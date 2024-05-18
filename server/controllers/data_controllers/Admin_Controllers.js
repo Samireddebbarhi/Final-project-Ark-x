@@ -7,10 +7,10 @@ exports.createAdmin = async (req, res) => {
     if (!admin) {
       res.status(400).send("No data provided");
     } else {
-      let hashedPassword = await bcrypt.hash(admin.password, 10); //Encryption of password using  Bcrypt
+      //let hashedPassword = await bcrypt.hash(admin.password, 10); //Encryption of password using  Bcrypt
       const newAdmin = new AdminModel({
         ...admin,
-        password: hashedPassword,
+        //password: hashedPassword,
       });
 
       newAdmin

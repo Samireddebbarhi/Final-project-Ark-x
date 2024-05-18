@@ -16,6 +16,11 @@ route.get(
   checkRoleAndPermission(["super_admin", "admin"], "read"),
   orderController.getSingleOrder
 );
+route.get(
+  "/order/getAll",
+  checkRoleAndPermission(["super_admin", "admin"], "read"),
+  orderController.getAllOrders
+);
 
 route.put(
   "/order/:id",
@@ -23,8 +28,8 @@ route.put(
   orderController.updateOrder
 );
 route.delete(
-  "order/:id",
+  "/order/:id",
   checkRoleAndPermission(["super_admin", "admin"], "delete"),
-  orderController.deleteOrders
+  orderController.deleteOrder
 );
 module.exports = route;

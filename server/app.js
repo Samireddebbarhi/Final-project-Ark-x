@@ -39,6 +39,7 @@ app.use("/api/v2/admin", verifyJwtAdmin, RouterProduct);
 app.use("/api/v2/admin", verifyJwtAdmin, review_route);
 app.use("/api/v2/admin", verifyJwtAdmin, order_route);
 
+app.use("/api/v2/customer", verifyJwtCustomer, order_route);
 app.use("/api/v2/customer", verifyJwtCustomer, catg_route);
 app.use("/api/v2/customer", verifyJwtCustomer, review_route);
 app.use("/api/v1/customer", customer_route);

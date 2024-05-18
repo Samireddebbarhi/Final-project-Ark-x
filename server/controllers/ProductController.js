@@ -1,8 +1,9 @@
 const Product = require("../Models/ProductModel");
 const Category = require("../Models/CategoryModel");
 
+
 const getAllProducts = async (req, res, next) => {
-  const product = await Product.find();
+  const product = await Product.find().populate('category', 'name');
   if (!product)
     return res
       .status(401)
@@ -13,18 +14,18 @@ const getAllProducts = async (req, res, next) => {
 const createProduct = async (req, res) => {
   try {
     const product = req.body;
-    const categoryName = product.category;
+    const categoryId = product.categoryId;
 
     // Find the category by name
-    const category = await Category.findOne({ name: categoryName });
+    const category = await Category.findById(categoryId);
 
     if (!category) {
-      throw new Error(`Category '${categoryName}' not found.`);
+      throw new Error(`Category ID '${categoryId}' not found.`);
     }
 
     const newProduct = new Product({
       ...product,
-      category: categoryName,
+      category: categoryId,
     });
 
     //Save the product
@@ -39,7 +40,10 @@ const createProduct = async (req, res) => {
     return res.status(201).json({
       success: true,
       msg_success: "The product has been created successfully:",
-      data: newProduct,
+      data: {
+        ...newProduct.toObject(),
+        categoryName: category.name // Include category name in the response
+      },
     });
   } catch (error) {
     console.log(error);
@@ -51,8 +55,8 @@ const createProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   try {
-    const categoryName = req.body.category;
-    const categoryUpdated = await Category.findOne({ name: categoryName });
+    const categoryId= req.body.category._id;
+    const categoryUpdated = await Category.findOne({ name: categoryId });
     const updatedProduct = await Product.updateOne(
       { _id: req.params.id },
       {
@@ -60,7 +64,7 @@ const updateProduct = async (req, res) => {
           name: req.body.name,
           description: req.body.description,
           price: req.body.price,
-          category: categoryUpdated?.name || null,
+          category: categoryUpdated?._id || null,
           stock: req.body.stock,
         },
       }

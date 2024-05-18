@@ -21,10 +21,7 @@ const productSchema = new mongoose.Schema(
    image:{
     type: String,
    },
-  category: {
-      type: String,
-      required: [true, "please Enter the product category"],
-  },
+  category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category' },
   stock: {
       type: Number,
       required: [true, "please Enter the product stock"],
