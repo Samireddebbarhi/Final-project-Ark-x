@@ -1,42 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux"; // Import Redux hooks
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
- 
-} from '@ant-design/icons';
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import {
   AiOutlineDashboard,
   AiOutlineShoppingCart,
   AiOutlineUser,
- 
+  AiOutlineBgColors,
 } from "react-icons/ai";
 import { LogOut } from "iconoir-react";
+import { RiCouponLine } from "react-icons/ri";
 import { ToastContainer } from "react-toastify";
-import { BiCategoryAlt } from "react-icons/bi";
-import { Button, Layout, Menu, theme } from 'antd';
-import { FaClipboardList } from "react-icons/fa";
-import { Outlet } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import { ImBlog } from "react-icons/im";
+import { IoIosNotifications } from "react-icons/io";
+import { FaClipboardList, FaBloggerB } from "react-icons/fa";
+import { SiBrandfolder } from "react-icons/si";
+import { BiCategoryAlt } from "react-icons/bi";
+import { Layout, Menu, theme } from "antd";
+import { useNavigate } from "react-router-dom";
 import { logout } from "../../features/auth/authSlice";
-import ProfileAdmin from "./ProfileAdmin"
-// import { Bounce, ToastContainer} from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-import { useNavigate } from 'react-router-dom';
-
-
+import ProfileAdmin from "./ProfileAdmin";
+import { isSuperAdmin } from "../../utils/authUtils";
 const { Header, Sider, Content } = Layout;
-const MainLyaout = () => {
+const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   const navigate = useNavigate();
 
-   // Access user state from Redux store
-   const user = useSelector((state) => state.auth.user);
-   const dispatch = useDispatch();
-   const handleLogout = () => {
+  // Access user state from Redux store
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
     // Dispatch the logout action
     dispatch(logout());
     // Redirect to login or homepage
@@ -44,37 +43,34 @@ const MainLyaout = () => {
   };
 
   return (
-    <Layout>
+    <Layout /*onContextMenu={(e) => e.preventDefault()}*/>
       <Sider trigger={null} collapsible collapsed={collapsed}>
-      <ProfileAdmin
+        <ProfileAdmin
           username={`Welcome ${user ? user.admin.username : ""}!!`}
         />
-        <div className="logo" ><h2 className="text-white fs-5 text-center py-3 mb-0">
-            <span className="lg-logo"></span>
-          </h2></div>
+
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={['']}
+          defaultSelectedKeys={[""]}
           onClick={({ key }) => {
-            if (key === "signout") {
-              handleLogout();// Call handleLogout when signout is clicked
+            if (key === "SignOut") {
+              handleLogout(); // Call handleLogout when signout is clicked
             } else {
               navigate(key);
             }
           }}
-    
           items={[
             {
-              key: "dashborad",
+              key: "Dashboard",
               icon: <AiOutlineDashboard className="fs-4" />,
-              label: 'Dashborad',
+              label: "Dashboard",
             },
             {
-              key: 'Catalog',
+              key: "catalog",
               icon: <AiOutlineShoppingCart className="fs-4" />,
-              label: 'Catalogs',
-              children :  [
+              label: "Catalogs",
+              children: [
                 {
                   key: "list-product",
                   icon: <AiOutlineShoppingCart className="fs-4" />,
@@ -85,9 +81,10 @@ const MainLyaout = () => {
                   icon: <BiCategoryAlt className="fs-4" />,
                   label: "Category List",
                 },
-              ]
+              ],
             },
-            {
+
+            isSuperAdmin(user.admin) && {
               key: "admins",
               icon: <AiOutlineUser className="fs-4" />,
               label: "Admins",
@@ -97,17 +94,17 @@ const MainLyaout = () => {
               icon: <AiOutlineUser className="fs-4" />,
               label: "Customers",
             },
+
             {
               key: "orders",
               icon: <FaClipboardList className="fs-4" />,
               label: "Orders",
             },
             {
-              key: "signout",
+              key: "SignOut",
               icon: <LogOut className="fs-4" />,
-              label: "Signout",
+              label: "SignOut",
             },
-
           ]}
         />
       </Sider>
@@ -131,11 +128,10 @@ const MainLyaout = () => {
             draggable
             theme="light"
           />
-        
           <Outlet />
         </Content>
       </Layout>
     </Layout>
   );
 };
-export default MainLyaout;
+export default MainLayout;

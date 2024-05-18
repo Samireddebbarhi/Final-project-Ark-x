@@ -1,84 +1,142 @@
-import React, { useEffect, useState } from "react";
-import { Table, Button } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-
-import { DeleteOutlined } from "@ant-design/icons";
-// import CustomizedDialogs from "../admin/components/Dialog"
-// import EditeProduct from "../admin/components/EditeProduct";
-import { getAllOrders } from "../features/orders/orderSlice";
-const columns = [
-  {
-    title: "SNo",
-    dataIndex: "key",
-  },
-  {
-    title: "Customer",
-    dataIndex: "customerId",
-    sorter: (a, b) => a.customerId.length - b.customerId.length,
-  },
- 
-  {
-    title: "Products",
-    dataIndex: "products",
-    sorter: (a, b) => a.products.length - b.products.length,
-  },
-  {
-    title: "Payment Info",
-    dataIndex: "paymentInfo",
-    sorter: (a, b) => a.products.length - b.products.length,
-  },
-  {
-    title: "Order Date",
-    dataIndex: "orderDate",
-    sorter: (a, b) => a.date.length - b.date.length,
-  },
-  {
-    title: "Total",
-    dataIndex: "totalAmount",
-    sorter: (a, b) => a.total.length - b.total.length,
-  },
-  
-
-];
+  import React, { useEffect} from "react";
+  import { Button, Table, Modal} from "antd";
+  import { useDispatch, useSelector } from "react-redux";
+  import { LuView } from "react-icons/lu";
 
 
-const Orderlist = () => {
+  // import { DeleteOutlined } from "@ant-design/icons";
+  // import CustomizedDialogs from "../admin/components/Dialog"
+  // import EditeProduct from "../admin/components/EditeProduct";
+  import { getAllOrders } from "../features/orders/orderSlice";
+  import { useState } from "react";
+
+
+
+const { confirm } = Modal;
+   // const orders = useSelector((state) => state.order);
+  const Orderlist = () => {
+      const dispatch = useDispatch();
+      const orders = useSelector((state) => state.orders.list);
+      const [data3, setData3] = useState([]);
+      const [selectedOrder , setSelectedOrder] = useState(null);
     
-    const orders = useSelector((state) => state.order);
-   
+      useEffect(() => {
+        dispatch(getAllOrders());
+      }, [dispatch]);
     
-    const dispatch = useDispatch();
-  
-    useEffect(() => {
-      dispatch(getAllOrders());
-    }, [dispatch]);
-  
-    const data3 = [];
-  
-    // Populate the data array with order information
-    for (let i = 0; i < orders.length; i++) {
-     
-      data3.push({
-        key: i + 1,
-        customer: orders[i].userInfo.username,
-        products: orders[i].orderItem.Idproduct,
-        paymentInfo: orders[i].paymentInfo,
-        orderDate: orders[i].paidAt,
-        totalPrice: orders[i].totalPrice,
-      });
-     
-    }
-
-  return (
-    <div className="relative">
-  <h3 className="mb-4 text-2xl font-bold">Orders</h3>
-  <br />
-  <div>
-    <Table dataSource={data3} columns={columns} />
-     
+      useEffect(() => {
+        console.log("Orders state:", orders);
+        if (orders.length > 0) {
+          // Populate the data array with order information
+          const newData = orders.map((order, index) => ({
+            key: order._id,
+            username: order.userInfo.map((item) => item.username),
+            paymentInfo: order.paymentInfo.status,
+            orderDate: new Date(order.paidAt).toDateString(),
+            totalAmount: order.totalPrice,
+            orderItems : order.orderItem || [],
+          }));
+          setData3(newData);
+          console.log(newData);
+        }
+      }, [orders]);
+      // handel view order details  here
+      const handleView = (record) =>{
+        setSelectedOrder(record)
+      };
+      const columns = [
+        // {
+        //   title: "SNo",
+        //   dataIndex: "key",
+        // },
+        {
+          title: "Username",
+          dataIndex: "username",
+          sorter: (a, b) => a.username.length - b.username.length,
+        },
+    
+        {
+          title: "Payment Info",
+          dataIndex: "paymentInfo",
+          sorter: (a, b) => a.paymentInfo.length - b.paymentInfo.length,
+        },
+        {
+          title: "Order Date",
+          dataIndex: "orderDate",
+          
+        },
+        {
+          title: "Total",
+          dataIndex: "totalAmount",
+          sorter: (a, b) => a.totalAmount - b.totalAmount,
+        },
+        {
+          title: "Actions",
+          render: (record) => (
+            <>
+              <Button onClick={() => handleView(record)} >
+                <LuView />
+              </Button>
+            </>
+          ),
+        },
+      ];
+    
+    return (
+      <div className="relative">
+    <h3 className="mb-4 text-2xl font-bold">Orders</h3>
+    <br />
+    <div>
+      <Table dataSource={data3} columns={columns} />
+      
+    </div>
+    <div>
+      <Modal
+            title="Order Detail"
+            open={selectedOrder}
+            onCancel={()=>  {setSelectedOrder(null)}}
+          >
+           {selectedOrder && (
+            <>
+             <h4>Order Items: </h4>
+             <Table 
+              dataSource={selectedOrder.orderItems}
+              columns={[
+                {
+                  title: "Image",
+                  dataIndex: "image",
+                  render: (text, record) => (
+                    <img
+                      src={record.image}
+                      alt="Product"
+                      style={{ width: "50px", height: "50px" }}
+                    />
+                  ),
+                },
+                {title: "Name", dataIndex: "name"},
+                {title: "Price", dataIndex: "price"},
+                {title: "Quantity", dataIndex: "quantity"},
+               
+              ]}
+              rowKey={(_record, index) => index}
+              pagination={false}
+              />
+            </>
+          )}
+          </Modal>
+    </div>
   </div>
-</div>
-  );
-};
+    );
+  };
 
-export default Orderlist;
+  export default Orderlist;
+//   {selectedOrder.orderItems.map((item, index) => (
+//     <div key1={index}>
+//       <img src={item.image} alt="Product" style={{ width: "100px", height: "100px" }} />
+//       <p>Name: {item.name}</p>
+//       <p>Price: {item.price}</p>
+//       <p>Quantity: {item.quantity}</p>
+//     </div>
+//   ))}
+// </>
+// )}

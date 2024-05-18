@@ -6,9 +6,9 @@ import { config } from "../../utils/axiosconfig";
 // Async thunk for getting all orders
 export const getAllOrders = createAsyncThunk(
   "orders/viewOrders",
-  async ({ rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${order_url}/order/getOrder`, config); 
+      const response = await axios.get(`${order_url}/order/getAll`, config); 
       console.log("respone is ", response)
       return response.data; // Assuming the response contains the orders data
     } catch (error) {
@@ -18,7 +18,7 @@ export const getAllOrders = createAsyncThunk(
 );
 
 const initialState = {
-    orders: [],
+    list: [],
     isError: false,
     isLoading: false,
     isSuccess: false,
@@ -37,7 +37,7 @@ export const orderSlice = createSlice({
                 state.isLoading =false,
                 state.isError= false,
                 state.isSuccess= true,
-                state.orders= action.payload;
+                state.list= action.payload.orders;
                
             })
             .addCase(getAllOrders.rejected, (state, action) => {
@@ -51,7 +51,3 @@ export const orderSlice = createSlice({
 
 });
 export default orderSlice.reducer;
-//  // state.isLoading= false;
-                // state.isError = false;
-                // state.isSuccess = true;
-                // state.orderss= action.payload.oreders;

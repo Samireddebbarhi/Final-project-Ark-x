@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import {config} from '../../utils/axiosconfig'
-import { base_url } from "../../utils/baseUrl";
+import { admin_url, base_url } from "../../utils/baseUrl";
 // get all products
 export const getProducts = createAsyncThunk("users/getProducts", async (_, {rejectWithValue}) => {
     return axios.get(`${base_url}/getAllProducts`, config)
@@ -59,7 +59,7 @@ export const updateProduct = createAsyncThunk(
   async ({ productId, updatedProduct }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `${base_url}/updateProduct/${productId}`,
+        `${admin_url}/updateProduct/${productId}`,
         updatedProduct, config
       );
 

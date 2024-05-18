@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { Select } from "antd";
+import { Input} from "antd";
 // import 'antd/dist/antd.css';
+
 
 import { useDispatch, useSelector } from 'react-redux';
 ;
@@ -16,29 +17,35 @@ const EditProduct = ({ productId }) => { // Accept productId as props
     name: "",
     description: "",
     price: "",
-    category: "",
     stock: "",
   });
 
 
-  useEffect(() => {
+useEffect(() => {
     const fetchProductDetails = async () => {
       try {
         const response = await axios.get(`${base_url}/getProduct/${productId}`);
         const product = response.data;
-        console.log(product)
+        console.log("Product details:", product);
         setFormValues(product);
       } catch (error) {
-        console.error("Failed to fetch product details:", error);
-        // Optionally, you can show an error message to the user
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          console.error("Server responded with error:", error.response.data);
+        } else if (error.request) {
+          // The request was made but no response was received
+          console.error("No response received from server:", error.request);
+        } else {
+          // Something else happened while setting up the request
+          console.error("Error setting up the request:", error.message);
+        }
       }
     };
-
+  
     if (productId) {
       fetchProductDetails();
     }
   }, [productId]);
-
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -75,7 +82,7 @@ const EditProduct = ({ productId }) => { // Accept productId as props
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium text-gray-700">Enter Name :</label>
-          <input 
+          <Input 
             type="text" 
             className="form-control"
             id="name" 
@@ -89,7 +96,7 @@ const EditProduct = ({ productId }) => { // Accept productId as props
 
         <div className="mb-4">
           <label htmlFor="description" className="block text-sm font-medium text-gray-700">Enter Description :</label>
-          <input 
+          <Input
             type="text" 
             className="form-control"
             id="description" 
@@ -104,7 +111,7 @@ const EditProduct = ({ productId }) => { // Accept productId as props
 
         <div className="mb-4">
           <label htmlFor="price" className="block text-sm font-medium text-gray-700">Enter Price :</label>
-          <input 
+          <Input 
             type="number" 
             className="form-control"
             id="price" 
@@ -116,9 +123,9 @@ const EditProduct = ({ productId }) => { // Accept productId as props
           />
         </div>
 
-        <div>
+        {/* <div>
         <label htmlFor="category" className="block text-sm font-medium text-gray-700">Select Category :</label>
-        <input 
+        <Input 
             type="text" 
             className="form-control"
             id="category" 
@@ -128,12 +135,12 @@ const EditProduct = ({ productId }) => { // Accept productId as props
             onChange={handleInputChange}
             required={true}
           />
-        </div>
+        </div> */}
 
 
         <div className="mb-4">
           <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Enter Quantity :</label>
-          <input 
+          <Input
             type="number" 
             className="form-control"
             id="stock" 
