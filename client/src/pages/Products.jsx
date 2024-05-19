@@ -12,6 +12,7 @@
   import EditeProduct from "../admin/components/EditeProduct";
   import { config } from "../utils/axiosconfig";
   import { LuView } from "react-icons/lu";
+  import { message } from "antd";
 
 
   const { confirm } = Modal;
@@ -48,11 +49,12 @@
         await axios.delete(`${base_url}/deleteProduct/${productId}`, config);
         dispatch(deleteProduct(productId));
         console.log("Product Deleted Successfully:", productId);
-        // alert('Product Deleted Successfully')
+        message.success('Product Deleted Succeessfuly')
         
         setDeleteConfirmed(true); // Set delete confirmation to true
       } catch (error) {
         console.error("Error deleting product:", error);
+        message.error('Somthing Went Wrong !!')
       }
     }
   // edite product
@@ -208,6 +210,7 @@
               setIsEditing(false)
             }}
             onOk={()=>{setIsEditing(false)}}
+            
             >
               <EditeProduct  key = {productId} productId={productId}/>
             </Modal>
@@ -217,6 +220,7 @@
               title="Product Detail"
               open={selectedProduct}
               onCancel={()=>  {setSelectedProduct(null)}}
+              footer={null}
             >
               {selectedProduct && (
               <>
@@ -229,7 +233,7 @@
                 <p>Stock: {selectedProduct.stock}</p>
               </>
             )}
-              {/* <Table  dataSource={data3} columns={columns2} /> */}
+              
             </Modal>
           </div>
         </div>

@@ -4,6 +4,7 @@ import { Input } from "antd";
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../../features/pcotegory/pcotegorySlice';
 import { addProduct, getProducts } from '../../features/product/productSlice';
+import { message } from 'antd';
 
 const AddProduct = () => {
   const dispatch = useDispatch();
@@ -118,14 +119,14 @@ const AddProduct = () => {
         dispatch(getProducts());
 
         // Show success message
-        alert("Product Added Successfully");
+        message.success('Product Added Successfuly')
       } else {
         // Show error message if product addition failed
-        alert("Something went wrong!");
+        message.error('Somthing Went Wrong')
       }
     } catch (error) {
       console.error("Error adding product:", error);
-      alert("Something went wrong!");
+      message.error('Somthing Went Wrong')
     }
   };
 

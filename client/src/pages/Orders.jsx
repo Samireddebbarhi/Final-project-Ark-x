@@ -1,10 +1,11 @@
   import React, { useEffect} from "react";
-  import { Button, Table, Modal} from "antd";
+  import { Button, Table, Modal, Dropdown,Menu} from "antd";
   import { useDispatch, useSelector } from "react-redux";
   import { LuView } from "react-icons/lu";
-  import { getAllOrders } from "../features/orders/orderSlice";
+  import { getAllOrders, updateOrder } from "../features/orders/orderSlice";
   import { useState } from "react";
-
+  import { DownOutlined } from '@ant-design/icons';
+  import { message } from "antd";
 
 
 const { confirm } = Modal;
@@ -14,10 +15,18 @@ const { confirm } = Modal;
       const orders = useSelector((state) => state.orders.list);
       const [data3, setData3] = useState([]);
       const [selectedOrder , setSelectedOrder] = useState(null);
+      const [selectedStatus, setSelectedStatus] = useState("Processing");
+      
     
       useEffect(() => {
         dispatch(getAllOrders());
       }, [dispatch]);
+      useEffect(() => {
+        const storedStatus = localStorage.getItem("selectedStatus");
+        if (storedStatus) {
+            setSelectedStatus(storedStatus);
+        }
+    }, []);
     
       useEffect(() => {
         console.log("Orders state:", orders);
@@ -30,6 +39,8 @@ const { confirm } = Modal;
             orderDate: new Date(order.paidAt).toDateString(),
             totalAmount: order.totalPrice,
             orderItems : order.orderItem || [],
+            status: order.orderStatus || selectedStatus,
+            
           }));
           setData3(newData);
           console.log(newData);
@@ -39,6 +50,35 @@ const { confirm } = Modal;
       const handleView = (record) =>{
         setSelectedOrder(record)
       };
+      // 
+      const handleMenuClick = async (record, e) => {
+        try {
+            const status = e.key === "1" ? "Delivered" : "Canceled"; // Update status based on the selected key
+            await dispatch(updateOrder({ id: record.key, status }));
+            message.success("Order updated successfully"); // Show success message
+    
+            // Update the status for the clicked order in the UI
+            setData3((prevData) =>
+                prevData.map((item) =>
+                    item.key === record.key ? { ...item, status } : item
+                )
+            );
+            // Update selectedStatus state
+            setSelectedStatus(status);
+            // Update selectedStatus in local storage
+            localStorage.setItem("selectedStatus", status);
+        } catch (error) {
+            message.error("Failed to update order"); // Show error message
+        }
+    };
+     // Create the dropdown menu
+      const menu = (record) => (
+        <Menu onClick={(e) => handleMenuClick(record, e)}>
+          <Menu.Item key="1">Delivered</Menu.Item>
+          <Menu.Item key="2">Canceled</Menu.Item>
+        </Menu>
+      );
+      
       const columns = [
         // {
         //   title: "SNo",
@@ -69,9 +109,14 @@ const { confirm } = Modal;
           title: "Actions",
           render: (record) => (
             <>
-              <Button onClick={() => handleView(record)} >
+              <Button onClick={() => handleView(record)} className="mr-2"  >
                 <LuView />
               </Button>
+              <Dropdown overlay={menu(record)}>
+              <Button>
+              {record.status ? record.status : "Status"} <DownOutlined />
+              </Button>
+            </Dropdown>
             </>
           ),
         },
@@ -90,6 +135,8 @@ const { confirm } = Modal;
             title="Order Detail"
             open={selectedOrder}
             onCancel={()=>  {setSelectedOrder(null)}}
+            footer={null}
+            style={{ minWidth: "600px" }}
           >
            {selectedOrder && (
             <>
@@ -97,6 +144,7 @@ const { confirm } = Modal;
              <Table 
               dataSource={selectedOrder.orderItems}
               columns={[
+                {title: "ID", dataIndex: "Idproduct"},
                 {
                   title: "Image",
                   dataIndex: "image",

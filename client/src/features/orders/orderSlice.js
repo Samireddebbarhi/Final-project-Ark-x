@@ -16,7 +16,18 @@ export const getAllOrders = createAsyncThunk(
     }
   }
 );
-
+// for update order
+export const updateOrder = createAsyncThunk(
+  'orders/updateOrder',
+  async ({ id, updateOrder }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`${order_url}/order/${id}`, updateOrder, config);
+      return response.data; // Assuming the response contains the updated order data
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 const initialState = {
     list: [],
     isError: false,
@@ -46,6 +57,21 @@ export const orderSlice = createSlice({
                 state.isSuccess = false;
                 state.message = action.error;
               })
+            .addCase(updateOrder.pending, (state) => {
+                state.isLoadingoading = true;
+                state.isError = null;
+                state.isSuccess= false;
+              })
+            .addCase(updateOrder.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                // Update the order in the state
+                const index = state.list.findIndex(order => order._id === action.payload._id);
+                if (index !== -1) {
+                  state.list[index] = action.payload;
+                }
+              });
+             
 
     }
 
