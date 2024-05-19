@@ -86,17 +86,16 @@ const updateOrder = async (req, res) => {
       res.status(404);
       throw new Error("order not found with this id");
     }
-    if (orders.orderStatus === "Delivered") {
+    if (orders.orderStatus === "purshased") {
       res.status(400);
-      throw new Error("you have already delivered this order");
+      throw new Error("you have already sold this order");
     }
-    console.log("2");
 
     orders.orderItem.forEach((order) => {
       updateStock(order.Idproduct, order.quantity);
     });
     orders.orderStatus = req.body.status;
-    if (req.body.status === "purshased") {
+    if (req.body.status === "delivered") {
       orders.deliveredAt = Date.now();
     }
 
