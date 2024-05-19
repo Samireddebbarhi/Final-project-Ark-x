@@ -3,10 +3,15 @@ import { Table, Button, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { deleteProduct, getProducts } from "../features/product/productSlice";
+import { Link, useNavigate } from "react-router-dom";
 import CustomizedDialogs from "../admin/components/Dialog";
 import AddProduct from "../admin/components/AddProduct";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { base_url } from "../utils/baseUrl";
+import axios from "axios";
+import { EditOutlined, DeleteOutlined, StopOutlined } from "@ant-design/icons";
 import EditeProduct from "../admin/components/EditeProduct";
+import { config } from "../utils/axiosconfig";
+import { LuView } from "react-icons/lu";
 
 const { confirm } = Modal;
 const Productlist = () => {
@@ -15,17 +20,32 @@ const Productlist = () => {
   const [deleteConfirmed, setDeleteConfirmed] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [productId, setProductId] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const { products } = useSelector((state) => state.product);
+  const userPermissions = localStorage.getItem("user")
+    ? new Set(JSON.parse(localStorage.getItem("user")).admin.permissions)
+    : new Set();
+  useEffect(() => {
+    dispatch(getProducts());
+    // Fetch categories when component mounts
+  }, [dispatch]);
+
   useEffect(() => {
     dispatch(getProducts());
   }, [deleteConfirmed]);
   useEffect(() => {
     dispatch(getProducts());
-  }, [productId]);
+  }, [deleteConfirmed, productId]);
+
+  //
+  // useEffect(() => {
+  //   dispatch(getReviews())
+  // },[dispatch])
 
   // delete product
   const handleDelete = async (productId) => {
     try {
+      await axios.delete(`${base_url}/deleteProduct/${productId}`, config);
       dispatch(deleteProduct(productId));
       console.log("Product Deleted Successfully:", productId);
       // alert('Product Deleted Successfully')
@@ -40,6 +60,11 @@ const Productlist = () => {
     setIsEditing(true);
     setProductId(productId); // Set the productId for editing
   };
+  // add the handel edit
+  const handleView = (record) => {
+    setSelectedProduct(record);
+    // Set the selectedProduct to the clicked product record
+  };
 
   useEffect(() => {
     dispatch(getProducts());
@@ -47,16 +72,29 @@ const Productlist = () => {
 
   const data1 = [];
   for (let i = 0; i < products.length; i++) {
+    const category = products[i].category; // Get the category object
+    const categoryName = category ? category.name : ""; // Check if category exists
     data1.push({
       key: products[i]._id,
       name: products[i].name,
       description: products[i].description,
-      category: products[i].category,
+      category: categoryName,
       price: `${products[i].price}`,
       image: products[i].image,
+      stock: products[i].stock,
     });
   }
   console.log(data1);
+  // for rewiews data3
+  // const data3 = [];
+  // for(let i = 0; i < reviews.length; i++){
+  //   data3.push({
+  //     name: reviews[i].name,
+  //     comment: reviews[i].comment,
+  //     rating: reviews[i].rating,
+  //   })
+  // }
+  // console.log(data3)
   // console.log(products)
   const handleAddProduct = () => {
     setOpenDialog(true); // Open the dialog when the button is clicked
@@ -79,6 +117,20 @@ const Productlist = () => {
       },
     });
   };
+  const columns2 = [
+    {
+      title: "Name User",
+      dataIndex: "name",
+    },
+    {
+      title: "Comments",
+      dataIndex: "comment",
+    },
+    {
+      title: "Rating",
+      dataIndex: "rating",
+    },
+  ];
   const columns = [
     {
       title: "SNo",
@@ -110,36 +162,44 @@ const Productlist = () => {
       dataIndex: "category",
       sorter: (a, b) => a.category.length - b.category.length,
     },
-
     {
       title: "Price",
       dataIndex: "price",
       sorter: (a, b) => a.price - b.price,
     },
-
     {
       title: "Actions",
       render: (record) => {
         return (
           <>
-            <Button
-              key={`edit_${record.key}`}
-              onClick={() => handleEdit(record.key)}
-              icon={<EditOutlined />}
-              className="mr-2"
-            ></Button>
-
-            <Button
-              key={`delete_${record.key}`}
-              onClick={() => showDeleteConfirm(record.key)}
-              icon={<DeleteOutlined />}
-              danger
-            ></Button>
+            {userPermissions.has("update") ? (
+              <Button
+                key={`edit_${record.key}`}
+                onClick={() => handleEdit(record.key)}
+                icon={<EditOutlined />}
+                className="mr-2"
+              />
+            ) : (
+              <StopOutlined style={{ color: "#EE4E4E" }} />
+            )}
+            {userPermissions.has("delete") ? (
+              <Button
+                key={`delete_${record.key}`}
+                onClick={() => showDeleteConfirm(record.key)}
+                icon={<DeleteOutlined />}
+                danger
+                className="mr-2"
+              />
+            ) : (
+              <StopOutlined style={{ color: "#EE4E4E" }} />
+            )}
+            <Button onClick={() => handleView(record)} icon={<LuView />} />
           </>
         );
       },
     },
   ];
+
   return (
     <div className="relative">
       <h3 className="mb-4 title">Products</h3>
@@ -157,7 +217,7 @@ const Productlist = () => {
       </div>
       <div>
         <Modal
-          title="Edit Product"
+          title="Edit Poroduct"
           open={isEditing}
           okText="save"
           onCancel={() => {
@@ -168,6 +228,31 @@ const Productlist = () => {
           }}
         >
           <EditeProduct key={productId} productId={productId} />
+        </Modal>
+      </div>
+      <div>
+        <Modal
+          title="Product Detail"
+          open={selectedProduct}
+          onCancel={() => {
+            setSelectedProduct(null);
+          }}
+        >
+          {selectedProduct && (
+            <>
+              <img
+                src={selectedProduct.image}
+                alt="Product"
+                style={{ width: "100px", height: "100px" }}
+              />
+              <p>Name: {selectedProduct.name}</p>
+              <p>Description: {selectedProduct.description}</p>
+              <p>Category: {selectedProduct.category}</p>
+              <p>Price: {selectedProduct.price}</p>
+              <p>Stock: {selectedProduct.stock}</p>
+            </>
+          )}
+          {/* <Table  dataSource={data3} columns={columns2} /> */}
         </Modal>
       </div>
     </div>

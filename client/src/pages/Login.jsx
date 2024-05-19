@@ -34,8 +34,10 @@ const Login = () => {
   useEffect(() => {
     if (isSuccess) {
       navigate("/list-product");
+    } else {
+      navigate("/login");
     }
-  }, [user, isError, isSuccess, isLoading, navigate]);
+  }, [user, isSuccess, isLoading, navigate]);
 
   return (
     <div

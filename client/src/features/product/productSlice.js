@@ -2,27 +2,28 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { config } from "../../utils/axiosconfig";
 import { base_url } from "../../utils/baseUrl";
-// get all products
+
+// Get all products
 export const getProducts = createAsyncThunk(
-  "users/getProducts",
+  "products/getProducts",
   async (_, { rejectWithValue }) => {
-    return axios
-      .get(`${base_url}/getAllProducts`, config)
-      .then((res) => {
-        console.log(res);
-        return res.data;
-      })
-      .catch((err) => rejectWithValue(err.response.data.message));
+    try {
+      const response = await axios.get(`${base_url}/getAllProducts`, config);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
   }
 );
-//add product
+
+// Add product
 export const addProduct = createAsyncThunk(
   "products/addProduct",
-  async (_newProduct, { rejectWithValue }) => {
+  async (newProduct, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         `${base_url}/createProduct`,
-        _newProduct,
+        newProduct,
         config
       );
       return response.data;
@@ -31,7 +32,8 @@ export const addProduct = createAsyncThunk(
     }
   }
 );
-// delete product
+
+// Delete product
 export const deleteProduct = createAsyncThunk(
   "products/deleteProduct",
   async (productId, { rejectWithValue }) => {
@@ -39,12 +41,12 @@ export const deleteProduct = createAsyncThunk(
       await axios.delete(`${base_url}/deleteProduct/${productId}`, config);
       return productId;
     } catch (error) {
-      // If the request fails, reject the promise with the error message
       return rejectWithValue(error.response.data.message);
     }
   }
 );
-// update product
+
+// Update product
 export const updateProduct = createAsyncThunk(
   "products/updateProduct",
   async ({ productId, updatedProduct }, { rejectWithValue }) => {
@@ -54,11 +56,6 @@ export const updateProduct = createAsyncThunk(
         updatedProduct,
         config
       );
-
-      if (response.status !== 200 || !response.data) {
-        throw new Error("Failed to update product. Invalid response data.");
-      }
-
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -68,13 +65,14 @@ export const updateProduct = createAsyncThunk(
 
 const initialState = {
   products: [],
-  isError: false,
   isLoading: false,
+  isError: false,
   isSuccess: false,
   message: "",
 };
-export const productSlice = createSlice({
-  name: "users",
+
+const productSlice = createSlice({
+  name: "products",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -91,8 +89,7 @@ export const productSlice = createSlice({
       .addCase(getProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error;
+        state.message = action.payload;
       })
       .addCase(addProduct.pending, (state) => {
         state.isLoading = true;
@@ -101,46 +98,47 @@ export const productSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.products = action.payload;
+        state.products.push(action.payload);
       })
       .addCase(addProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error;
+        state.message = action.payload;
       })
       .addCase(deleteProduct.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.isLoading = false;
         state.products = state.products.filter(
-          (product) => product.id !== action.payload
+          (product) => product._id !== action.payload
         );
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.errorMessage = action.payload;
+        state.message = action.payload;
       })
       .addCase(updateProduct.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.isSuccess = true;
         state.isError = false;
-        // Assuming the API returns the updated product
-        state.products = state.products.map((product) =>
-          product.id === action.payload.id ? action.payload : product
+        state.isSuccess = true;
+        const index = state.products.findIndex(
+          (product) => product._id === action.payload._id
         );
-        console.log("updatestate", state);
+        if (index !== -1) {
+          state.products[index] = action.payload;
+        }
       })
       .addCase(updateProduct.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.isSuccess = false;
-        state.errorMessage = action.payload;
+        state.message = action.payload;
       });
   },
 });
+
 export default productSlice.reducer;

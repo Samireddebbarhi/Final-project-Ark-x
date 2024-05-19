@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { Select } from "antd";
-// import 'antd/dist/antd.css';
-import Dropzone from "react-dropzone";
+import { Input } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { uploadImg } from "../../features/upload/uploadSlice";
+import { getCategories } from "../../features/pcotegory/pcotegorySlice";
 import { addProduct, getProducts } from "../../features/product/productSlice";
 
 const AddProduct = () => {
@@ -14,12 +11,17 @@ const AddProduct = () => {
     name: "",
     description: "",
     price: "",
-    category: "",
+    categoryId: "",
+    categoryName: "",
     stock: "",
     image: "",
   });
-  // const [desc, setDesc] = useState("");
   const [images, setImage] = useState(null);
+  const pCatStat = useSelector((state) => state.pCategory.pCategories);
+
+  useEffect(() => {
+    dispatch(getCategories());
+  }, [dispatch]);
 
   const uploadImage = async () => {
     try {
@@ -44,18 +46,19 @@ const AddProduct = () => {
       }
 
       console.log("response:", responseData);
-
       return responseData; // Return the response data
     } catch (error) {
       console.error("Error uploading image:", error);
       throw error; // Rethrow the error to be caught by the caller
     }
   };
+
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     setImage(file);
     console.log(file);
   };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormValues({
@@ -64,9 +67,24 @@ const AddProduct = () => {
     });
   };
 
-  // const handleDesc = (value) => {
-  //   setDesc(value);
+  // const handleCategoryChange = (e) => {
+  //   const { value } = e.target;
+  //   setFormValues({
+  //     ...formValues,
+  //     categoryId: value, // Set categoryId to the selected value
+  //   });
   // };
+  const handleCategoryChange = (e) => {
+    const { value } = e.target;
+    const selectedCategory = pCatStat.find(
+      (category) => category._id === value
+    );
+    setFormValues({
+      ...formValues,
+      categoryId: value,
+      categoryName: selectedCategory ? selectedCategory.name : "", // Store category name
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -92,7 +110,8 @@ const AddProduct = () => {
           name: "",
           description: "",
           price: "",
-          category: "",
+          categoryId: "",
+          categoryName: "",
           stock: "",
           image: "",
         });
@@ -114,7 +133,7 @@ const AddProduct = () => {
 
   return (
     <div className="px-8 py-6">
-      <h1 className="text-3xl font-bold mb-7">Add Produt</h1>
+      <h1 className="text-3xl font-bold mb-7">Add Product</h1>
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <label
@@ -123,9 +142,9 @@ const AddProduct = () => {
           >
             Enter Name :
           </label>
-          <input
+          <Input
             type="text"
-            className="form-control"
+            className="w-full"
             id="name"
             placeholder="Enter Product Title"
             name="name"
@@ -142,7 +161,7 @@ const AddProduct = () => {
           >
             Enter Description :
           </label>
-          <input
+          <Input
             type="text"
             className="form-control"
             id="description"
@@ -161,7 +180,7 @@ const AddProduct = () => {
           >
             Enter Price :
           </label>
-          <input
+          <Input
             type="number"
             className="form-control"
             id="price"
@@ -180,16 +199,23 @@ const AddProduct = () => {
           >
             Select Category :
           </label>
-          <input
-            type="text"
-            className="form-control"
+          <select
             id="category"
-            placeholder="Enter Category"
-            name="category"
-            value={formValues.category}
-            onChange={handleInputChange}
-            required={true}
-          />
+            name="categoryId"
+            value={formValues.categoryId}
+            onChange={handleCategoryChange}
+            className="w-full p-2 border rounded"
+            required
+          >
+            <option value="" disabled>
+              Select Category
+            </option>
+            {pCatStat.map((category) => (
+              <option key={category._id} value={category._id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         <br />
@@ -200,7 +226,7 @@ const AddProduct = () => {
           >
             Enter Quantity :
           </label>
-          <input
+          <Input
             type="number"
             className="form-control"
             id="stock"
@@ -211,20 +237,18 @@ const AddProduct = () => {
             required={true}
           />
         </div>
-
-        <input
-          type="file"
-          name="image"
-          onChange={(e) => handleImageChange(e)}
-        />
-
         <br />
-        <button
-          className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-          type="submit"
-        >
-          Add Product
-        </button>
+
+        <Input type="file" name="image" onChange={handleImageChange} />
+
+        <div className="mb-4 text-right">
+          <button
+            type="submit"
+            className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 mt-6"
+          >
+            Add Product
+          </button>
+        </div>
       </form>
     </div>
   );

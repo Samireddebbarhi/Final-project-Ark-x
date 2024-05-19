@@ -30,16 +30,20 @@ const Admins = () => {
   const authenticatedUsername = localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
     : null;
+  const [isDeleted, setIsDeleted] = useState(false);
 
   useEffect(() => {
     dispatch(getAdmins());
   }, [dispatch, isEditing, adminId, openDialog]);
 
+  useEffect(() => {
+    dispatch(getAdmins());
+  }, [isDeleted]);
   const handleDelete = async (adminId) => {
     try {
       await dispatch(deleteAdminsById(adminId)).unwrap();
       message.success("Admin deleted successfully.");
-      navigate("/admins");
+      setIsDeleted(true);
     } catch (error) {
       message.error("Error deleting admin.");
     }
@@ -87,10 +91,11 @@ const Admins = () => {
           updateAdminById({ idAdmin: adminId, admin: values })
         ).unwrap();
         message.success("Admin updated successfully.");
-        navigate("/admins");
+        setIsDeleted(false);
       } else {
         await dispatch(createAdmins(values)).unwrap();
         message.success("Admin created successfully.");
+
         navigate("/admins");
       }
       setOpenDialog(false);
@@ -243,7 +248,6 @@ const Admins = () => {
           >
             <Select mode="multiple">
               <Option value="create">Create</Option>
-              <Option value="read">Read</Option>
               <Option value="update">Update</Option>
               <Option value="delete">Delete</Option>
             </Select>
