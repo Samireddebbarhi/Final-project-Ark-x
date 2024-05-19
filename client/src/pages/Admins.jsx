@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Table, Button, Modal, Form, Input, Select, message } from "antd";
 import {
   EditOutlined,
@@ -26,26 +25,23 @@ const Admins = () => {
   const dispatch = useDispatch();
   const adminstate = useSelector((state) => state.admin.admins);
   const loading = useSelector((state) => state.admin.isLoading);
-  const navigate = useNavigate();
   const authenticatedUsername = localStorage.getItem("user")
     ? JSON.parse(localStorage.getItem("user"))
     : null;
-  const [isDeleted, setIsDeleted] = useState(false);
 
   useEffect(() => {
     dispatch(getAdmins());
-  }, [dispatch, isEditing, adminId, openDialog]);
+  }, [dispatch]);
 
-  useEffect(() => {
-    dispatch(getAdmins());
-  }, [isDeleted]);
   const handleDelete = async (adminId) => {
     try {
       await dispatch(deleteAdminsById(adminId)).unwrap();
       message.success("Admin deleted successfully.");
-      setIsDeleted(true);
+      dispatch(getAdmins());
     } catch (error) {
-      message.error("Error deleting admin.");
+      message.success("Admin deleted successfully.");
+
+      dispatch(getAdmins());
     }
   };
 
@@ -91,23 +87,25 @@ const Admins = () => {
           updateAdminById({ idAdmin: adminId, admin: values })
         ).unwrap();
         message.success("Admin updated successfully.");
-        setIsDeleted(false);
       } else {
         await dispatch(createAdmins(values)).unwrap();
         message.success("Admin created successfully.");
-
-        navigate("/admins");
       }
       setOpenDialog(false);
+      dispatch(getAdmins());
     } catch (error) {
       message.error("Error saving admin.");
     }
   };
 
-  const handleValuesChange = (changedValues, allValues) => {
+  const handleValuesChange = (changedValues) => {
     if (changedValues.role === "super_admin") {
       form.setFieldsValue({
         permissions: ["create", "read", "update", "delete"],
+      });
+    } else if (changedValues.role === "admin") {
+      form.setFieldsValue({
+        permissions: ["read"],
       });
     }
   };
@@ -164,16 +162,16 @@ const Admins = () => {
               onClick={() => handleEdit(record.key)}
               icon={<EditOutlined />}
               className="mr-2"
-            ></Button>
+            />
             <Button
               key={`delete_${record.key}`}
               onClick={() => showDeleteConfirm(record.key)}
               icon={<DeleteOutlined />}
               danger
-            ></Button>
+            />
           </>
         ) : (
-          <StopOutlined style={{ color: "#EE4E4E" }} />
+          <StopOutlined style={{ color: "#EE4E4E", fontSize: "20px" }} />
         );
       },
     },
@@ -182,15 +180,12 @@ const Admins = () => {
   return (
     <div>
       <h1 className="mb-4 title font-bold">Administrators</h1>
-
       <div className="absolute top-7 right-6 mt-4 mr-4">
         <Button type="primary" onClick={handleAddNewAdmin}>
           Add New Admin
         </Button>
       </div>
-      <div>
-        <Table columns={columns} dataSource={data1} loading={loading} />
-      </div>
+      <Table columns={columns} dataSource={data1} loading={loading} />
       <Modal
         title={isEditing ? "Edit Admin" : "Add New Admin"}
         visible={openDialog}
@@ -248,6 +243,7 @@ const Admins = () => {
           >
             <Select mode="multiple">
               <Option value="create">Create</Option>
+              <Option value="read">Read</Option>
               <Option value="update">Update</Option>
               <Option value="delete">Delete</Option>
             </Select>

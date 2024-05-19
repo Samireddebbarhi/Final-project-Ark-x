@@ -5,7 +5,9 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../features/auth/authSlice";
+import { getProducts } from "../features/product/productSlice";
 
+// Validation schema for the form
 const validationSchema = yup.object().shape({
   email: yup
     .string()
@@ -18,8 +20,9 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const authState = useSelector((state) => state.auth);
-  const { user, isError, isSuccess, isLoading, message } = authState;
+  const { isError, isSuccess, isLoading, message } = authState;
 
+  // Formik setup for form handling and validation
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -30,14 +33,14 @@ const Login = () => {
       dispatch(login(values));
     },
   });
-
+  dispatch(getProducts());
+  // Effect to handle navigation after successful login
   useEffect(() => {
     if (isSuccess) {
-      navigate("/list-product");
-    } else {
-      navigate("/login");
+      dispatch(getProducts());
+      navigate("/list-product"); // Redirect to the products list
     }
-  }, [user, isSuccess, isLoading, navigate]);
+  }, [isSuccess, dispatch, navigate]);
 
   return (
     <div
@@ -52,7 +55,7 @@ const Login = () => {
         {isError && (
           <Alert
             message="Login Failed"
-            description={message || "You are not an Admin? Please try again."}
+            description={message || "Username and password are incorrect."}
             type="error"
             showIcon
             className="mb-4"

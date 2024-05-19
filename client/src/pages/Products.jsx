@@ -180,7 +180,7 @@ const Productlist = () => {
                 className="mr-2"
               />
             ) : (
-              <StopOutlined style={{ color: "#EE4E4E" }} />
+              <StopOutlined style={{ color: "#EE4E4E", fontSize: "20px" }} />
             )}
             {userPermissions.has("delete") ? (
               <Button
@@ -191,7 +191,7 @@ const Productlist = () => {
                 className="mr-2"
               />
             ) : (
-              <StopOutlined style={{ color: "#EE4E4E" }} />
+              <StopOutlined style={{ color: "#EE4E4E", fontSize: "20px" }} />
             )}
             <Button onClick={() => handleView(record)} icon={<LuView />} />
           </>

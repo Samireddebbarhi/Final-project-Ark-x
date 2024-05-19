@@ -46,7 +46,7 @@ const MainLayout = () => {
     <Layout /*onContextMenu={(e) => e.preventDefault()}*/>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <ProfileAdmin
-          username={`Welcome ${user ? user.admin.username : ""}!!`}
+          username={`Welcome ${user ? user.admin.username : ""}!! 🎉`}
         />
 
         <Menu

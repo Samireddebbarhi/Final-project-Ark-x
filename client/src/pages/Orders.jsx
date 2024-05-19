@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Button, Table, Modal } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Table, Modal, Dropdown, Menu, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { LuView } from "react-icons/lu";
-
-import { getAllOrders } from "../features/orders/orderSlice";
+import { getAllOrders, updateOrder } from "../features/orders/orderSlice";
+import { DownOutlined } from "@ant-design/icons";
 
 const Orderlist = () => {
   const dispatch = useDispatch();
@@ -16,24 +16,48 @@ const Orderlist = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log("Orders state:", orders);
-    if (Array.isArray(orders) && orders.length > 0) {
+    if (orders.length > 0) {
       const newData = orders.map((order) => ({
         key: order._id,
-        username: order.userInfo.map((item) => item.username),
+        username: order.userInfo.map((item) => item.username).join(", "),
         paymentInfo: order.paymentInfo.status,
         orderDate: new Date(order.paidAt).toDateString(),
         totalAmount: order.totalPrice,
         orderItems: order.orderItem || [],
+        status: order.orderStatus || "Processing",
       }));
       setData3(newData);
-      console.log(newData);
     }
   }, [orders]);
 
   const handleView = (record) => {
     setSelectedOrder(record);
   };
+
+  const handleMenuClick = async (record, e) => {
+    const status = e.key === "1" ? "purchased" : "delivered";
+    try {
+      await dispatch(updateOrder({ id: record.key, status }));
+
+      message.success("Order updated successfully");
+
+      setData3((prevData) =>
+        prevData.map((item) =>
+          item.key === record.key ? { ...item, status } : item
+        )
+      );
+    } catch (error) {
+      dispatch(getAllOrders());
+      message.success("Order updated successfully");
+    }
+  };
+
+  const menu = (record) => (
+    <Menu onClick={(e) => handleMenuClick(record, e)}>
+      <Menu.Item key="1">purchased</Menu.Item>
+      <Menu.Item key="2">delivered</Menu.Item>
+    </Menu>
+  );
 
   const columns = [
     {
@@ -58,9 +82,16 @@ const Orderlist = () => {
     {
       title: "Actions",
       render: (record) => (
-        <Button onClick={() => handleView(record)}>
-          <LuView />
-        </Button>
+        <>
+          <Button onClick={() => handleView(record)} className="mr-2">
+            <LuView />
+          </Button>
+          <Dropdown overlay={menu(record)}>
+            <Button>
+              {record.status} <DownOutlined />
+            </Button>
+          </Dropdown>
+        </>
       ),
     },
   ];
@@ -75,11 +106,12 @@ const Orderlist = () => {
       <div>
         <Modal
           title="Order Detail"
-          visible={!!selectedOrder}
+          open={selectedOrder}
           onCancel={() => {
             setSelectedOrder(null);
           }}
           footer={null}
+          style={{ minWidth: "600px" }}
         >
           {selectedOrder && (
             <>
@@ -87,6 +119,7 @@ const Orderlist = () => {
               <Table
                 dataSource={selectedOrder.orderItems}
                 columns={[
+                  { title: "ID", dataIndex: "Idproduct" },
                   {
                     title: "Image",
                     dataIndex: "image",

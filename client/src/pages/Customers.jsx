@@ -95,7 +95,7 @@ const Customerlist = () => {
             />
           </>
         ) : (
-          <StopOutlined style={{ color: "#EE4E4E" }} />
+          <StopOutlined style={{ color: "#EE4E4E", fontSize: "20px" }} />
         );
       },
     },
