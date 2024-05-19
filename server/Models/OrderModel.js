@@ -25,13 +25,15 @@ const orderSchema = new mongoose.Schema({
       },
     },
   ],
-  userInfo: {
-    userId: { type: String, required: true },
-    username: {
-      type: String,
-      required: true,
+  userInfo: [
+    {
+      userId: { type: String, required: true },
+      username: {
+        type: String,
+        required: true,
+      },
     },
-  },
+  ],
   paymentInfo: {
     id: {
       type: String,

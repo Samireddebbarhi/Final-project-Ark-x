@@ -37,7 +37,7 @@ adminRouter.put(
   adminController.grantPermissions
 );
 
-authRoute.post("/register", authenticate.register);
+//authRoute.post("/register", authenticate.register);
 authRoute.post("/login", authenticate.login);
 
 module.exports = { authRoute, adminRouter };

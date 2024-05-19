@@ -1,30 +1,30 @@
 const Product = require("../models/ProductModel");
 const Category = require("../models/CategoryModel");
-const Image = require("../models/ImageModel");
+
 const getAllProducts = async (req, res, next) => {
-  const product = await Product.find();
+  const product = await Product.find().populate("category", "name");
   if (!product)
     return res
-      .status(400)
+      .status(401)
       .json({ success: false, msg: "No products exists in the database" });
   return res.status(200).json({ succeess: true, product });
 };
-
+// i update this
 const createProduct = async (req, res) => {
   try {
     const product = req.body;
-    const categoryName = product.category;
+    const categoryId = product.categoryId;
 
     // Find the category by name
-    const category = await Category.findOne({ name: categoryName });
+    const category = await Category.findById(categoryId);
 
     if (!category) {
-      throw new Error(`Category '${categoryName}' not found.`);
+      throw new Error(`Category ID '${categoryId}' not found.`);
     }
 
     const newProduct = new Product({
       ...product,
-      category: categoryName,
+      category: categoryId,
     });
 
     //Save the product
@@ -39,7 +39,10 @@ const createProduct = async (req, res) => {
     return res.status(201).json({
       success: true,
       msg_success: "The product has been created successfully:",
-      data: newProduct,
+      data: {
+        ...newProduct.toObject(),
+        categoryName: category.name, // Include category name in the response
+      },
     });
   } catch (error) {
     console.log(error);
@@ -48,34 +51,34 @@ const createProduct = async (req, res) => {
       .json({ success: false, msg_error: "Error creating product" });
   }
 };
-
+// i update this
 const updateProduct = async (req, res) => {
   try {
-    const categoryName = req.body.category;
-    const categoryUpdated = await Category.findOne({ name: categoryName });
+    const { name, description, price, stock } = req.body;
+
     const updatedProduct = await Product.updateOne(
       { _id: req.params.id },
       {
         $set: {
-          name: req.body.name,
-          description: req.body.description,
-          price: req.body.price,
-          category: categoryUpdated?.name || null,
-          stock: req.body.stock,
+          name,
+          description,
+          price,
+          stock,
         },
       }
     );
+
     if (updatedProduct.nModified === 0) {
-      res.status(404).send("Cannot Update Product with incorrect id");
+      return res.status(404).send("Cannot update product with incorrect id");
     } else {
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
-        msg_success: "updated succefully",
+        msg_success: "Updated successfully",
         updated: updatedProduct,
       });
     }
   } catch (err) {
-    res.status(400).send(err);
+    return res.status(400).send(err.message);
   }
 };
 const getProductDetails = async (req, res, next) => {
@@ -120,24 +123,6 @@ const deleteAllProducts = async (req, res, next) => {
     res.status(500).send(`Internal server error`);
   }
 };
-// Function to upload an image for a product
-// const uploadProductImage = async (req, res) => {
-//   if (!req.file) {
-//     return res.status(400).send("No image file uploaded");
-//   }
-
-//   const image = new Image({
-//     filename: req.file.filename,
-//     path: req.file.path,
-//   });
-
-//   try {
-//     await image.save();
-//     res.status(200).send("Image uploaded and saved successfully");
-//   } catch (error) {
-//     res.status(500).send("Error saving image to the database");
-//   }
-// };
 
 module.exports = {
   getAllProducts,

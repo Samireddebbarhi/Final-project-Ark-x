@@ -80,14 +80,12 @@ async function updateStock(id, quantity) {
 }
 const updateOrder = async (req, res) => {
   try {
-    console.log("the body", req.body);
     const orders = await Order.findById(req.params.id);
 
     if (!orders) {
       res.status(404);
       throw new Error("order not found with this id");
     }
-    console.log("1");
     if (orders.orderStatus === "Delivered") {
       res.status(400);
       throw new Error("you have already delivered this order");
@@ -97,15 +95,12 @@ const updateOrder = async (req, res) => {
     orders.orderItem.forEach((order) => {
       updateStock(order.Idproduct, order.quantity);
     });
-    console.log("3");
     orders.orderStatus = req.body.status;
     if (req.body.status === "purshased") {
       orders.deliveredAt = Date.now();
     }
-    console.log("4");
 
     await orders.save({ validateBeforeSave: false });
-    console.log("5");
 
     res.status(200).json({
       success: true,
