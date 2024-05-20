@@ -17,12 +17,17 @@ exports.login = async (req, res) => {
     }
 
     const token = jwt.sign({ InfoAdmin: admin }, process.env.TOKEN_ADMIN, {
-      expiresIn: "1h",
+      expiresIn: "10m",
     });
+
+    // Decode the token to get the expiration timestamp
+    const decodedToken = jwt.decode(token);
+    const expirationTimestamp = decodedToken.exp;
 
     return res.status(200).json({
       Login_Success: true,
       token: token,
+      expirationTimestamp: expirationTimestamp, // Include expiration timestamp in the response
       admin: {
         name: admin.name,
         email: admin.email,
