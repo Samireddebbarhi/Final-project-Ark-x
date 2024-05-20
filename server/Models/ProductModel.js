@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const productSchema = new mongoose.Schema(
   {
     name: {
@@ -19,40 +18,31 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    image: {
-      details: [
-        {
-          type: mongoose.Types.ObjectId,
-          ref: "Image",
-          //  required: [true, "please Enter the images"],
-        },
-      ],
-    },
-    category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category", // Reference the Category model
+   image:{
+    type: String,
+   },
+  category: {
+      type: String,
       required: [true, "please Enter the product category"],
-    },
-    stock: {
+  },
+  stock: {
       type: Number,
       required: [true, "please Enter the product stock"],
       maxLength: [4, "max stock is of 4 figure"],
       default: 1,
-    },
-    numofReviews: {
+  },
+  numofReviews: {
       type: Number,
       default: 0,
-    },
-    reviews: [
+  },
+  reviews: [
       {
-        customers: {
-          type: mongoose.Schema.ObjectId,
-          ref: "Review",
-          // required: true,
-        },
+        type: mongoose.Schema.ObjectId,
+        ref: "Review",
+        required: true,
       },
-    ],
-    createdAt: {
+  ],
+  createdAt: {
       type: Date,
       default: Date.now(),
     },

@@ -11,6 +11,7 @@ const RouterProduct = require("./routes/product_routes");
 const customer_crud = require("./routes/Customer_routes/crud_routes");
 const Cardt = require("./routes/cart_routes");
 const catg_route = require("./routes/category_route");
+const order_route = require("./routes/Customer_routes/crud_order");
 const review_route = require("./routes/Customer_routes/review_routes");
 const PayRoute = require("./routes/payment_routes");
 const verifyJwtCustomer = require("./middlewares/verifyJwtCus");
@@ -18,8 +19,9 @@ const verifyJwtAdmin = require("./middlewares/verifyJwt");
 const logs = require("./middlewares/logs");
 const errorHandler = require("./middlewares/errorHandling");
 const app = express();
+app.use(cors({ credentials: true, origin: ["http://localhost:5173","http://localhost:5174"] }));
 app.use(express.json());
-app.use(cors());
+
 app.use(cookie());
 app.use(express.static("client"));
 app.use(logs);
@@ -32,7 +34,9 @@ app.use("/api/v2/customer", /*verifyJwtCustomer,*/ customer_crud);
 app.use("/api/v2/admin", catg_route);
 app.use("/api/v2/admin", RouterProduct);
 app.use("/api/v2/admin", verifyJwtAdmin, review_route);
+app.use("/api/v2/admin", verifyJwtAdmin, order_route);
 
+app.use("/api/v2/customer", verifyJwtCustomer, order_route);
 app.use("/api/v2/customer", verifyJwtCustomer, catg_route);
 app.use("/api/v2/customer", verifyJwtCustomer, review_route);
 app.use("/api/v1/customer", customer_route);

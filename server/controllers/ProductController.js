@@ -1,16 +1,14 @@
 const Product = require("../models/ProductModel");
 const Category = require("../models/CategoryModel");
-const Image = require("../Models/ImageModel");
-// it work
+const Image = require("../models/ImageModel");
 const getAllProducts = async (req, res, next) => {
   const product = await Product.find();
   if (!product)
     return res
-      .status(401)
+      .status(400)
       .json({ success: false, msg: "No products exists in the database" });
   return res.status(200).json({ succeess: true, product });
 };
-// it work
 
 const createProduct = async (req, res) => {
   try {
@@ -24,20 +22,18 @@ const createProduct = async (req, res) => {
       throw new Error(`Category '${categoryName}' not found.`);
     }
 
-    // Create a new product
     const newProduct = new Product({
       ...product,
-      category: categoryName, // Assign category ID to the product
+      category: categoryName,
     });
 
-    // Save the product
+    //Save the product
     await newProduct.save();
 
     // Push the product ID to the category's products array
     category.products.push(newProduct._id);
     await category.save();
 
-    // Populate the products array in the category with product details
     await category.populate("products");
 
     return res.status(201).json({
@@ -125,23 +121,23 @@ const deleteAllProducts = async (req, res, next) => {
   }
 };
 // Function to upload an image for a product
-const uploadProductImage = async (req, res) => {
-  if (!req.file) {
-    return res.status(400).send("No image file uploaded");
-  }
+// const uploadProductImage = async (req, res) => {
+//   if (!req.file) {
+//     return res.status(400).send("No image file uploaded");
+//   }
 
-  const image = new Image({
-    filename: req.file.filename,
-    path: req.file.path,
-  });
+//   const image = new Image({
+//     filename: req.file.filename,
+//     path: req.file.path,
+//   });
 
-  try {
-    await image.save();
-    res.status(200).send("Image uploaded and saved successfully");
-  } catch (error) {
-    res.status(500).send("Error saving image to the database");
-  }
-};
+//   try {
+//     await image.save();
+//     res.status(200).send("Image uploaded and saved successfully");
+//   } catch (error) {
+//     res.status(500).send("Error saving image to the database");
+//   }
+// };
 
 module.exports = {
   getAllProducts,
@@ -150,5 +146,4 @@ module.exports = {
   updateProduct,
   deleteProduct,
   deleteAllProducts,
-  uploadProductImage,
 };

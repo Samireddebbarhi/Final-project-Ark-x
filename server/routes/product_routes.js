@@ -1,8 +1,7 @@
 const express = require("express");
 var RouterProduct = express.Router();
 const controller = require("../controllers/ProductController");
-const upload = require("../middlewares/uploadImage");
-//localhost:3001/api/customer/product
+//const upload = require("../middlewares/uploadImage");
 const {
   checkRoleAndPermission,
 } = require("../middlewares/verifyRole_permission");
@@ -12,13 +11,13 @@ RouterProduct.get(
   // checkRoleAndPermission(["super_admin", "admin"], "read"),
   controller.getAllProducts
 );
-RouterProduct.post(
-  "/upload",
-  upload.single("image"),
-  controller.uploadProductImage
-);
+// RouterProduct.post(
+//   "/upload",
+//   upload.single("image"),
+//   controller.uploadProductImage
+// );
 RouterProduct.get(
-  "/:id",
+  "/getProduct/:id",
   checkRoleAndPermission(["super_admin", "admin"], "read"),
   controller.getProductDetails
 );

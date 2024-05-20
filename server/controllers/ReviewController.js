@@ -1,17 +1,27 @@
 const Review = require("../models/ReviewsModel");
+const ProductModel = require("../models/ProductModel");
 
-// Controller to add a new review
 exports.addReview = async (req, res) => {
   try {
     const { rating, comment } = req.body;
+
     const review = new Review({
-      userId: req.userId,
-      name: req.username,
+      productId: req.params.id,
+      userId: req.user._id,
+      name: req.user.username,
       rating,
       comment,
     });
     await review.save();
-    res.status(201).json({ message: "Review added successfully", review });
+    const product = await ProductModel.findById(review.productId);
+
+    if (!product) {
+      return res.status(404).send(`No product with the id ${review.productId}`);
+    } else {
+      product.reviews.push(review._id);
+      await product.save();
+      res.status(201).json({ message: "Review added successfully", review });
+    }
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
@@ -57,5 +67,25 @@ exports.updateReview = async (req, res) => {
       .json({ message: "Review updated successfully", updatedReview });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.deleteReview = async (req, res) => {
+  try {
+    const deletedReview = await Review.deleteOne({ _id: req.params.id });
+    if (!deletedReview) {
+      return res.status(404).json({ error: "No review with that ID." });
+    }
+
+    // Remove the reference to the deleted review from the product's reviews array
+    await ProductModel.updateOne(
+      { "reviews.details": deletedReview._id },
+      { $pull: { reviews: { details: deletedReview._id } } }
+    );
+
+    res.status(200).json({ message: "Deletion successful!" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server Error" });
   }
 };

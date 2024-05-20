@@ -1,34 +1,78 @@
 const mongoose = require("mongoose");
 
-const SchemaOrder = new mongoose.Schema({
-  customerId: {
-    type: mongoose.Schema.Types.ObjectId, ref : "Customer", required: true,
-    required: true,
-  },
-  products: [
-    { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
+const orderSchema = new mongoose.Schema({
+  orderItem: [
+    {
+      name: {
+        type: String,
+        required: true,
+      },
+      price: {
+        type: Number,
+        required: true,
+      },
+      quantity: {
+        type: Number,
+        required: true,
+      },
+      image: {
+        type: String,
+        required: true,
+      },
+      Idproduct: {
+        // type: mongoose.Schema.ObjectId,
+        // ref: "Product",
+        type: String,
+        required: true,
+      },
+    },
   ],
+  userInfo: {
+    userId: { type: String, required: true },
+    username: {
+      type: String,
+      required: true,
+    },
+  },
   paymentInfo: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Payment",
+    id: {
+      type: String,
+      required: true,
+    },
+    status: {
+      type: String,
+      required: true,
+    },
+  },
+  paidAt: {
+    type: Date,
     required: true,
   },
-  status: {
-    type: String,
-    enum: ["Pending", "Processing"],
-    default: "Pending",
+  itemPrice: {
+    type: Number,
+    required: true,
+    default: 0,
   },
 
-  orderDate: {
-    type: Date,
-    default: Date.now,
-  },
-  totalAmount: {
-    type: Number, // Changed to Number if this should represent a numeric value
+  totalPrice: {
+    type: Number,
     required: true,
+    default: 0,
+  },
+  orderStatus: {
+    type: String,
+    required: true,
+    default: "Processing",
+  },
+  deliveredAt: {
+    type: Date,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now(),
   },
 });
 
-const OrderModel = mongoose.model("Order", SchemaOrder); // Removed export default
+const OrderModel = mongoose.model("Order", orderSchema);
 
 module.exports = OrderModel;

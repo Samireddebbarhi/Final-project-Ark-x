@@ -5,27 +5,31 @@ const {
 const controller = require("../../controllers/ReviewController");
 
 route.get(
-  "/getAllReview",
+  "/getAllReviews",
   checkRoleAndPermission(["super_admin", "admin"], "read"),
   controller.getAllReviews
 );
 //add review to product
 route.post(
-  "/addProductReview",
+  "/addProductReview/:id",
   checkRoleAndPermission(["user"], "create"),
   controller.addReview
 );
 
 route.get(
   "/getReview/:id",
-  checkRoleAndPermission(["user"], "read"),
+  checkRoleAndPermission(["super_admin", "admin", "user"], "read"),
   controller.getReviewById
 );
 
 route.put(
-  "updateReview/:id",
+  "/updateReview/:id",
   checkRoleAndPermission(["user"], "update"),
   controller.getReviewById
 );
-
+route.delete(
+  "/deleteReview/:id",
+  checkRoleAndPermission(["user"], "delete"),
+  controller.deleteReview
+);
 module.exports = route;
