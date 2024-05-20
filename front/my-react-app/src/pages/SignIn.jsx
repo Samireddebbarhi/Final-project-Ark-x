@@ -1,32 +1,34 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { login } from "../redux/features/auth/registerSlice";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { login } from "../redux/features/auth/loginSlice";
 
 // Define Zod schema
 const signInSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min( 'Password must be at least 6 characters long'),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min("Password must be at least 6 characters long"),
 });
 
 export default function SignIn() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-//   const authState = useSelector((state) => state);
+  //   const authState = useSelector((state) => state);
 
-//   const { user, isSuccess, isError, isLoading  } = authState.auth;
-const { user, isSuccess, isError, isLoading, message } = useSelector((state) => state.auth);
+  //   const { user, isSuccess, isError, isLoading  } = authState.auth;
+  const { user, isSuccess, isError, isLoading, message } = useSelector(
+    (state) => state.auth
+  );
 
   useEffect(() => {
     if (isSuccess) {
-      navigate('/home');
-      alert("login SuccessFully")
-    }  
-  }, [user,isSuccess,isError, isLoading]);
+      navigate("/home");
+      alert("login SuccessFully");
+    }
+  }, [user, isSuccess, isError, isLoading]);
 
   const {
     register,
@@ -51,7 +53,10 @@ const { user, isSuccess, isError, isLoading, message } = useSelector((state) => 
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
               Email address
             </label>
             <div className="mt-2">
@@ -60,12 +65,16 @@ const { user, isSuccess, isError, isLoading, message } = useSelector((state) => 
                 name="email"
                 type="email"
                 autoComplete="email"
-                {...register('email')}
+                {...register("email")}
                 className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${
-                  errors.email ? 'ring-red-500' : ''
+                  errors.email ? "ring-red-500" : ""
                 }`}
               />
-              {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>}
+              {errors.email && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
           </div>
 
@@ -78,7 +87,10 @@ const { user, isSuccess, isError, isLoading, message } = useSelector((state) => 
                 Password
               </label>
               <div className="text-sm">
-                <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                <a
+                  href="#"
+                  className="font-semibold text-indigo-600 hover:text-indigo-500"
+                >
                   Forgot password?
                 </a>
               </div>
@@ -89,13 +101,15 @@ const { user, isSuccess, isError, isLoading, message } = useSelector((state) => 
                 name="password"
                 type="password"
                 autoComplete="current-password"
-                {...register('password')}
+                {...register("password")}
                 className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${
-                  errors.password ? 'ring-red-500' : ''
+                  errors.password ? "ring-red-500" : ""
                 }`}
               />
               {errors.password && (
-                <p className="mt-2 text-sm text-red-600">{errors.password.message}</p>
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.password.message}
+                </p>
               )}
             </div>
           </div>
@@ -111,8 +125,11 @@ const { user, isSuccess, isError, isLoading, message } = useSelector((state) => 
         </form>
 
         <p className="mt-10 text-center text-sm text-gray-500">
-          Not a member?{' '}
-          <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+          Not a member?{" "}
+          <a
+            href="#"
+            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+          >
             Create account
           </a>
         </p>
