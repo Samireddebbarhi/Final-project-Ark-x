@@ -100,12 +100,15 @@ const Customerlist = () => {
       },
     },
   ];
-
+  const tableContainerStyle = {
+    height: "calc(100vh - 220px)", // Adjust the height as needed
+    overflowY: "scroll",
+  };
   return (
     <div className="relative">
       <h3 className="mb-4 text-2xl font-bold">Customers</h3>
       <br />
-      <div>
+      <div style={tableContainerStyle}>
         <Table dataSource={data2} columns={columns} />
       </div>
     </div>
