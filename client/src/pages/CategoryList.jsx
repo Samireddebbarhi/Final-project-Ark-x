@@ -1,15 +1,14 @@
 import React, { useEffect, useState, Fragment, useRef } from "react";
-import { Table } from "antd";
+import { useDispatch, useSelector } from "react-redux";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
-import { useDispatch, useSelector } from "react-redux";
+import { Dialog, Transition } from "@headlessui/react";
 import {
   getCategories,
   createCategory,
   deleteAProductCategory,
   updateAProductCategory,
 } from "../features/pcotegory/pcotegorySlice";
-import { Dialog, Transition } from "@headlessui/react";
 
 const Categorylist = () => {
   const dispatch = useDispatch();
@@ -23,9 +22,10 @@ const Categorylist = () => {
   const userPermissions = localStorage.getItem("user")
     ? new Set(JSON.parse(localStorage.getItem("user")).admin.permissions)
     : new Set();
+
   useEffect(() => {
     dispatch(getCategories());
-  }, []);
+  }, [dispatch]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -48,7 +48,6 @@ const Categorylist = () => {
 
   const handleUpdate = (e) => {
     e.preventDefault();
-    console.log(name);
     dispatch(updateAProductCategory({ id: idToUpdate, name: name }));
     setOpen(false);
   };
@@ -68,24 +67,26 @@ const Categorylist = () => {
       <header className="">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-semibold leading-tight">Categories</h2>
-          <button
-            onClick={() => {
-              setOpen(true);
-              setIdToUpdate("");
-            }}
-            className="hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-lg font-medium pl-2 pr-3 py-2 shadow-sm "
-          >
-            <svg
-              width="20"
-              height="20"
-              fill="currentColor"
-              className="mr-2"
-              aria-hidden="true"
+          {userPermissions.has("create") && (
+            <button
+              onClick={() => {
+                setOpen(true);
+                setIdToUpdate("");
+              }}
+              className="hover:bg-blue-400 group flex items-center rounded-md bg-blue-500 text-white text-lg font-medium pl-2 pr-3 py-2 shadow-sm "
             >
-              <path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z" />
-            </svg>
-            New
-          </button>
+              <svg
+                width="20"
+                height="20"
+                fill="currentColor"
+                className="mr-2"
+                aria-hidden="true"
+              >
+                <path d="M10 5a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-3v3a1 1 0 1 1-2 0v-3H6a1 1 0 1 1 0-2h3V6a1 1 0 0 1 1-1Z" />
+              </svg>
+              New
+            </button>
+          )}
         </div>
       </header>
       <div>
@@ -96,7 +97,6 @@ const Categorylist = () => {
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                   SNo
                 </th>
-                {/* <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">Product name</th> */}
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                   Name
                 </th>
@@ -116,7 +116,6 @@ const Categorylist = () => {
                       {index + 1}
                     </p>
                   </td>
-                  {/* <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm"><p className="text-gray-900 whitespace-no-wrap">{category.products.map(product => `${product.name}`).join(" - ")}</p></td> */}
                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                     <p className="text-gray-900 whitespace-no-wrap">
                       {category.name}

@@ -14,6 +14,7 @@ import { config } from "../utils/axiosconfig";
 import { LuView } from "react-icons/lu";
 
 const { confirm } = Modal;
+
 const Productlist = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const dispatch = useDispatch();
@@ -22,85 +23,62 @@ const Productlist = () => {
   const [productId, setProductId] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const { products } = useSelector((state) => state.product);
+
   const userPermissions = localStorage.getItem("user")
     ? new Set(JSON.parse(localStorage.getItem("user")).admin.permissions)
     : new Set();
+
   useEffect(() => {
     dispatch(getProducts());
-    // Fetch categories when component mounts
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(getProducts());
-  }, [deleteConfirmed]);
+    if (deleteConfirmed) {
+      dispatch(getProducts());
+      setDeleteConfirmed(false);
+    }
+  }, [deleteConfirmed, dispatch]);
+
   useEffect(() => {
-    dispatch(getProducts());
-  }, [deleteConfirmed, productId]);
+    if (productId) {
+      dispatch(getProducts());
+    }
+  }, [productId, dispatch]);
 
-  //
-  // useEffect(() => {
-  //   dispatch(getReviews())
-  // },[dispatch])
-
-  // delete product
   const handleDelete = async (productId) => {
     try {
       await axios.delete(`${base_url}/deleteProduct/${productId}`, config);
       dispatch(deleteProduct(productId));
-      console.log("Product Deleted Successfully:", productId);
-      // alert('Product Deleted Successfully')
-
-      setDeleteConfirmed(true); // Set delete confirmation to true
+      setDeleteConfirmed(true);
     } catch (error) {
       console.error("Error deleting product:", error);
     }
   };
-  // edite product
+
   const handleEdit = (productId) => {
     setIsEditing(true);
-    setProductId(productId); // Set the productId for editing
+    setProductId(productId);
   };
-  // add the handel edit
+
   const handleView = (record) => {
     setSelectedProduct(record);
-    // Set the selectedProduct to the clicked product record
   };
 
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
+  const data1 = products.map((product, i) => ({
+    key: product._id,
+    name: product.name,
+    description: product.description,
+    category: product.category ? product.category.name : "",
+    price: `${product.price}`,
+    image: product.image,
+    stock: product.stock,
+  }));
 
-  const data1 = [];
-  for (let i = 0; i < products.length; i++) {
-    const category = products[i].category; // Get the category object
-    const categoryName = category ? category.name : ""; // Check if category exists
-    data1.push({
-      key: products[i]._id,
-      name: products[i].name,
-      description: products[i].description,
-      category: categoryName,
-      price: `${products[i].price}`,
-      image: products[i].image,
-      stock: products[i].stock,
-    });
-  }
-  console.log(data1);
-  // for rewiews data3
-  // const data3 = [];
-  // for(let i = 0; i < reviews.length; i++){
-  //   data3.push({
-  //     name: reviews[i].name,
-  //     comment: reviews[i].comment,
-  //     rating: reviews[i].rating,
-  //   })
-  // }
-  // console.log(data3)
-  // console.log(products)
   const handleAddProduct = () => {
-    setOpenDialog(true); // Open the dialog when the button is clicked
+    setOpenDialog(true);
   };
+
   const showDeleteConfirm = (productId) => {
-    // Pass the productId as argument
     confirm({
       title: "Are you sure delete this Product?",
       icon: <ExclamationCircleFilled />,
@@ -109,7 +87,6 @@ const Productlist = () => {
       okType: "danger",
       cancelText: "No",
       onOk() {
-        // Call handleDelete with productId when user clicks "Yes"
         handleDelete(productId);
       },
       onCancel() {
@@ -117,20 +94,7 @@ const Productlist = () => {
       },
     });
   };
-  const columns2 = [
-    {
-      title: "Name User",
-      dataIndex: "name",
-    },
-    {
-      title: "Comments",
-      dataIndex: "comment",
-    },
-    {
-      title: "Rating",
-      dataIndex: "rating",
-    },
-  ];
+
   const columns = [
     {
       title: "SNo",
@@ -204,6 +168,17 @@ const Productlist = () => {
     <div className="relative">
       <h3 className="mb-4 title">Products</h3>
       <div className="absolute top-0 right-0 mt-4 mr-4">
+        {userPermissions.has("create") && (
+          <Button type="primary" onClick={handleAddProduct}>
+            Add Product
+          </Button>
+        )}
+      </div>
+      <br />
+      <div>
+        <Table dataSource={data1} columns={columns} />
+      </div>
+      <div>
         <CustomizedDialogs
           open={openDialog}
           onClose={() => setOpenDialog(false)}
@@ -211,15 +186,11 @@ const Productlist = () => {
           <AddProduct />
         </CustomizedDialogs>
       </div>
-      <br />
-      <div>
-        <Table dataSource={data1} columns={columns} />
-      </div>
       <div>
         <Modal
-          title="Edit Poroduct"
+          title="Edit Product"
           open={isEditing}
-          okText="save"
+          okText="Save"
           onCancel={() => {
             setIsEditing(false);
           }}
@@ -233,7 +204,7 @@ const Productlist = () => {
       <div>
         <Modal
           title="Product Detail"
-          open={selectedProduct}
+          open={!!selectedProduct}
           onCancel={() => {
             setSelectedProduct(null);
           }}
@@ -252,10 +223,10 @@ const Productlist = () => {
               <p>Stock: {selectedProduct.stock}</p>
             </>
           )}
-          {/* <Table  dataSource={data3} columns={columns2} /> */}
         </Modal>
       </div>
     </div>
   );
 };
+
 export default Productlist;
