@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { register } from "../redux/features/registerSlice";
+import { register } from "../../redux/features/registerSlice";
 
 const RegisterComponent = () => {
   const [username, setUserName] = useState('');

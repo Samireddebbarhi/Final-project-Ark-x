@@ -20,7 +20,7 @@ const Navbar = () => {
               <p
                 className="text-xl  text-gray-800 transition-colors duration-200 transform dark:text-white  hover:text-gray-700 dark:hover:text-gray-300"                
               >
-                <i className="fas fa-angle-double-right cursor-pointer" >OneLand</i>
+                <i className="fas fa-angle-double-right cursor-pointer" > Store</i>
               </p>
             </div>
 
