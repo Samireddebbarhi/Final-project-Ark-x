@@ -45,7 +45,7 @@ const errorHandler = (err, res, next) => {
       break;
 
     default:
-      console.log("pay attention!! It's error simple " , err);
+      console.log("pay attention!! It's error simple ", err);
 
       break;
   }
