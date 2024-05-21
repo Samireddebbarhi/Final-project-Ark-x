@@ -3,66 +3,82 @@ import { Table, Button, Modal } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { deleteProduct, getProducts } from "../features/product/productSlice";
+import { Link, useNavigate } from "react-router-dom";
 import CustomizedDialogs from "../admin/components/Dialog";
 import AddProduct from "../admin/components/AddProduct";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { base_url } from "../utils/baseUrl";
+import axios from "axios";
+import { EditOutlined, DeleteOutlined, StopOutlined } from "@ant-design/icons";
 import EditeProduct from "../admin/components/EditeProduct";
+import { config } from "../utils/axiosconfig";
+import { LuView } from "react-icons/lu";
 
 const { confirm } = Modal;
+
 const Productlist = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const dispatch = useDispatch();
   const [deleteConfirmed, setDeleteConfirmed] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [productId, setProductId] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const { products } = useSelector((state) => state.product);
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [deleteConfirmed]);
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [productId]);
 
-  // delete product
-  const handleDelete = async (productId) => {
-    try {
-      dispatch(deleteProduct(productId));
-      console.log("Product Deleted Successfully:", productId);
-      // alert('Product Deleted Successfully')
-
-      setDeleteConfirmed(true); // Set delete confirmation to true
-    } catch (error) {
-      console.error("Error deleting product:", error);
-    }
-  };
-  // edite product
-  const handleEdit = (productId) => {
-    setIsEditing(true);
-    setProductId(productId); // Set the productId for editing
-  };
+  const userPermissions = localStorage.getItem("user")
+    ? new Set(JSON.parse(localStorage.getItem("user")).admin.permissions)
+    : new Set();
 
   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
 
-  const data1 = [];
-  for (let i = 0; i < products.length; i++) {
-    data1.push({
-      key: products[i]._id,
-      name: products[i].name,
-      description: products[i].description,
-      category: products[i].category,
-      price: `${products[i].price}`,
-      image: products[i].image,
-    });
-  }
-  console.log(data1);
-  // console.log(products)
-  const handleAddProduct = () => {
-    setOpenDialog(true); // Open the dialog when the button is clicked
+  useEffect(() => {
+    if (deleteConfirmed) {
+      dispatch(getProducts());
+      setDeleteConfirmed(false);
+    }
+  }, [deleteConfirmed, dispatch]);
+
+  useEffect(() => {
+    if (productId) {
+      dispatch(getProducts());
+    }
+  }, [productId, dispatch]);
+
+  const handleDelete = async (productId) => {
+    try {
+      await axios.delete(`${base_url}/deleteProduct/${productId}`, config);
+      dispatch(deleteProduct(productId));
+      setDeleteConfirmed(true);
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
   };
+
+  const handleEdit = (productId) => {
+    setIsEditing(true);
+    setProductId(productId);
+  };
+
+  const handleView = (record) => {
+    setSelectedProduct(record);
+  };
+
+  const data1 = products.map((product, i) => ({
+    key: product._id,
+    name: product.name,
+    description: product.description,
+    category: product.category ? product.category.name : "",
+    price: `${product.price}`,
+    image: product.image,
+    stock: product.stock,
+  }));
+
+  const handleAddProduct = () => {
+    setOpenDialog(true);
+  };
+
   const showDeleteConfirm = (productId) => {
-    // Pass the productId as argument
     confirm({
       title: "Are you sure delete this Product?",
       icon: <ExclamationCircleFilled />,
@@ -71,7 +87,6 @@ const Productlist = () => {
       okType: "danger",
       cancelText: "No",
       onOk() {
-        // Call handleDelete with productId when user clicks "Yes"
         handleDelete(productId);
       },
       onCancel() {
@@ -79,6 +94,7 @@ const Productlist = () => {
       },
     });
   };
+
   const columns = [
     {
       title: "SNo",
@@ -110,40 +126,59 @@ const Productlist = () => {
       dataIndex: "category",
       sorter: (a, b) => a.category.length - b.category.length,
     },
-
     {
       title: "Price",
       dataIndex: "price",
       sorter: (a, b) => a.price - b.price,
     },
-
     {
       title: "Actions",
       render: (record) => {
         return (
           <>
-            <Button
-              key={`edit_${record.key}`}
-              onClick={() => handleEdit(record.key)}
-              icon={<EditOutlined />}
-              className="mr-2"
-            ></Button>
-
-            <Button
-              key={`delete_${record.key}`}
-              onClick={() => showDeleteConfirm(record.key)}
-              icon={<DeleteOutlined />}
-              danger
-            ></Button>
+            {userPermissions.has("update") ? (
+              <Button
+                key={`edit_${record.key}`}
+                onClick={() => handleEdit(record.key)}
+                icon={<EditOutlined />}
+                className="mr-2"
+              />
+            ) : (
+              <StopOutlined style={{ color: "#EE4E4E", fontSize: "20px" }} />
+            )}
+            {userPermissions.has("delete") ? (
+              <Button
+                key={`delete_${record.key}`}
+                onClick={() => showDeleteConfirm(record.key)}
+                icon={<DeleteOutlined />}
+                danger
+                className="mr-2"
+              />
+            ) : (
+              <StopOutlined style={{ color: "#EE4E4E", fontSize: "20px" }} />
+            )}
+            <Button onClick={() => handleView(record)} icon={<LuView />} />
           </>
         );
       },
     },
   ];
+
   return (
     <div className="relative">
       <h3 className="mb-4 title">Products</h3>
       <div className="absolute top-0 right-0 mt-4 mr-4">
+        {userPermissions.has("create") && (
+          <Button type="primary" onClick={handleAddProduct}>
+            Add Product
+          </Button>
+        )}
+      </div>
+      <br />
+      <div>
+        <Table dataSource={data1} columns={columns} />
+      </div>
+      <div>
         <CustomizedDialogs
           open={openDialog}
           onClose={() => setOpenDialog(false)}
@@ -151,15 +186,11 @@ const Productlist = () => {
           <AddProduct />
         </CustomizedDialogs>
       </div>
-      <br />
-      <div>
-        <Table dataSource={data1} columns={columns} />
-      </div>
       <div>
         <Modal
           title="Edit Product"
           open={isEditing}
-          okText="save"
+          okText="Save"
           onCancel={() => {
             setIsEditing(false);
           }}
@@ -170,7 +201,32 @@ const Productlist = () => {
           <EditeProduct key={productId} productId={productId} />
         </Modal>
       </div>
+      <div>
+        <Modal
+          title="Product Detail"
+          open={!!selectedProduct}
+          onCancel={() => {
+            setSelectedProduct(null);
+          }}
+        >
+          {selectedProduct && (
+            <>
+              <img
+                src={selectedProduct.image}
+                alt="Product"
+                style={{ width: "100px", height: "100px" }}
+              />
+              <p>Name: {selectedProduct.name}</p>
+              <p>Description: {selectedProduct.description}</p>
+              <p>Category: {selectedProduct.category}</p>
+              <p>Price: {selectedProduct.price}</p>
+              <p>Stock: {selectedProduct.stock}</p>
+            </>
+          )}
+        </Modal>
+      </div>
     </div>
   );
 };
+
 export default Productlist;

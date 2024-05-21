@@ -1,95 +1,118 @@
 import React, { useEffect } from "react";
-import CustomerInput from "../admin/components/CustomerInput";
+import { Form, Input, Button, Alert } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../features/auth/authSlice";
+import { getProducts } from "../features/product/productSlice";
 
-let schema = yup.object().shape({
+// Validation schema for the form
+const validationSchema = yup.object().shape({
   email: yup
     .string()
     .email("Email should be valid")
     .required("Email is Required"),
   password: yup.string().required("Password is Required"),
 });
+
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const authState = useSelector((state) => state.auth);
+  const { isError, isSuccess, isLoading, message } = authState;
+
+  // Formik setup for form handling and validation
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    validationSchema: schema,
+    validationSchema,
     onSubmit: (values) => {
       dispatch(login(values));
     },
   });
-  const authState = useSelector((state) => state);
-
-  const { user, isError, isSuccess, isLoading, message } = authState.auth;
-
+  dispatch(getProducts());
+  // Effect to handle navigation after successful login
   useEffect(() => {
     if (isSuccess) {
-      navigate("/list-product");
-    } else {
-      navigate("");
+      dispatch(getProducts());
+      navigate("/list-product"); // Redirect to the products list
     }
-  }, [user, isError, isSuccess, isLoading]);
+  }, [isSuccess, dispatch, navigate]);
+
   return (
-    <div className="py-5" style={{ background: "#03AED2", minHeight: "100vh" }}>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <div className="my-5 w-25 bg-white rounded-3 mx-auto p-4">
-        <h3 className="text-center title">Login</h3>
-        <p className="text-center">Login to your account to continue.</p>
-        <div className="error text-center text-red-600 font-bold">
-          {message.message == "Rejected"
-            ? "You are not an Admin ? pleaze try again !!"
-            : ""}
-        </div>
-        <form action="" onSubmit={formik.handleSubmit}>
-          <CustomerInput
-            type="text"
+    <div
+      className="flex items-center justify-center min-h-screen"
+      style={{ background: "#03AED2" }}
+    >
+      <div className="w-full max-w-md p-8 space-y-4 bg-white rounded shadow-md">
+        <h3 className="text-2xl font-bold text-center">Login</h3>
+        <p className="text-center text-gray-600">
+          Login to your account to continue.
+        </p>
+        {isError && (
+          <Alert
+            message="Login Failed"
+            description={message || "Username and password are incorrect."}
+            type="error"
+            showIcon
+            className="mb-4"
+          />
+        )}
+        <Form layout="vertical" onFinish={formik.handleSubmit}>
+          <Form.Item
             label="Email Address"
-            id="email"
-            name="email"
-            onChng={formik.handleChange("email")}
-            onBlr={formik.handleBlur("email")}
-            val={formik.values.email}
-          />
-          <div className="error mt-2">
-            {formik.touched.email && formik.errors.email}
-          </div>
-          <CustomerInput
-            type="password"
+            validateStatus={
+              formik.touched.email && formik.errors.email ? "error" : ""
+            }
+            help={formik.touched.email && formik.errors.email}
+          >
+            <Input
+              id="email"
+              name="email"
+              type="text"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+          </Form.Item>
+          <Form.Item
             label="Password"
-            id="pass"
-            name="password"
-            onChng={formik.handleChange("password")}
-            onBlr={formik.handleBlur("password")}
-            val={formik.values.password}
-          />
-          <div className="error mt-2">
-            {formik.touched.password && formik.errors.password}
-          </div>
-          <div className="mb-3 text-end">
-            <Link to="forgot-password" className="">
+            validateStatus={
+              formik.touched.password && formik.errors.password ? "error" : ""
+            }
+            help={formik.touched.password && formik.errors.password}
+          >
+            <Input.Password
+              id="password"
+              name="password"
+              type="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+          </Form.Item>
+          <div className="mb-3 text-right">
+            <Link
+              to="/forgot-password"
+              className="text-blue-500 hover:underline"
+            >
               Forgot Password?
             </Link>
           </div>
-          <button
-            className="border-0 px-3 py-2 text-white fw-bold w-100 text-center text-decoration-none fs-5"
-            style={{ background: "#03AED2" }}
-            type="submit"
-          >
-            Login
-          </button>
-        </form>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={isLoading}
+              className="w-full"
+            >
+              Login
+            </Button>
+          </Form.Item>
+        </Form>
       </div>
     </div>
   );

@@ -13,11 +13,10 @@ const verifyJwtAdmin = (req, res, next) => {
   jwt.verify(token, process.env.TOKEN_ADMIN, (err, decoded) => {
     if (err) {
       console.error("JWT Verification Error:", err.message);
-      return res.sendStatus(403); // Forbidden due to invalid token
+      return res.sendStatus(403);
     }
 
-    // Token is valid, decoded payload is available in `decoded`
-    req.user = decoded.InfoAdmin; // Assuming AdminId is a property in the JWT payload
+    req.user = decoded.InfoAdmin;
     next();
   });
 };

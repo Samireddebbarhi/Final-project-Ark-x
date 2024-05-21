@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Modal } from "antd";
-//import { BiEdit } from "react-icons/bi";
-//import { AiFillDelete } from "react-icons/ai";
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
-import { ExclamationCircleFilled } from "@ant-design/icons";
-
+import { Table, Button, Modal, Form, Input, Select, message } from "antd";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  ExclamationCircleFilled,
+  StopOutlined,
+} from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAdmins,
@@ -12,47 +13,103 @@ import {
   deleteAdminsById,
   createAdmins,
 } from "../features/admins/adminSlice";
+
 const { confirm } = Modal;
+const { Option } = Select;
 
 const Admins = () => {
   const [openDialog, setOpenDialog] = useState(false);
-  const dispatch = useDispatch();
-  const [deleteConfirmed, setDeleteConfirmed] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [adminId, setAdminId] = useState(null);
+  const [form] = Form.useForm();
+  const dispatch = useDispatch();
   const adminstate = useSelector((state) => state.admin.admins);
-  console.log(adminstate);
+  const loading = useSelector((state) => state.admin.isLoading);
+  const authenticatedUsername = localStorage.getItem("user")
+    ? JSON.parse(localStorage.getItem("user"))
+    : null;
+
   useEffect(() => {
     dispatch(getAdmins());
-  }, [dispatch, deleteConfirmed]);
+  }, [dispatch]);
 
   const handleDelete = async (adminId) => {
     try {
-      dispatch(deleteAdminsById(adminId));
-      console.log("Product Deleted Successfully:", productId);
-      setDeleteConfirmed(true); // Set delete confirmation to true
+      await dispatch(deleteAdminsById(adminId)).unwrap();
+      message.success("Admin deleted successfully.");
+      dispatch(getAdmins());
     } catch (error) {
-      console.error("Error deleting product:", error);
+      message.success("Admin deleted successfully.");
+
+      dispatch(getAdmins());
     }
   };
+
   const showDeleteConfirm = (adminId) => {
-    // Pass the productId as argument
     confirm({
-      title: "Are you sure delete this Product?",
+      title: "Are you sure you want to delete this admin?",
       icon: <ExclamationCircleFilled />,
-      content: "Sure You Want To Delete it.",
+      content: "This action cannot be undone.",
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
       onOk() {
-        // Call handleDelete with productId when user clicks "Yes"
         handleDelete(adminId);
-      },
-      onCancel() {
-        console.log("Cancel");
       },
     });
   };
+
+  const handleAddNewAdmin = () => {
+    setIsEditing(false);
+    form.resetFields();
+    setOpenDialog(true);
+  };
+
+  const handleEdit = (adminId) => {
+    setIsEditing(true);
+    const adminToEdit = adminstate.find((admin) => admin._id === adminId);
+    setAdminId(adminId);
+    form.setFieldsValue({
+      name: adminToEdit.name,
+      username: adminToEdit.username,
+      email: adminToEdit.email,
+      password: adminToEdit.password,
+      role: adminToEdit.role,
+      permissions: adminToEdit.permissions,
+    });
+    setOpenDialog(true);
+  };
+
+  const handleFormSubmit = async (values) => {
+    try {
+      if (isEditing) {
+        await dispatch(
+          updateAdminById({ idAdmin: adminId, admin: values })
+        ).unwrap();
+        message.success("Admin updated successfully.");
+      } else {
+        await dispatch(createAdmins(values)).unwrap();
+        message.success("Admin created successfully.");
+      }
+      setOpenDialog(false);
+      dispatch(getAdmins());
+    } catch (error) {
+      message.error("Error saving admin.");
+    }
+  };
+
+  const handleValuesChange = (changedValues) => {
+    if (changedValues.role === "super_admin") {
+      form.setFieldsValue({
+        permissions: ["create", "read", "update", "delete"],
+      });
+    } else if (changedValues.role === "admin") {
+      form.setFieldsValue({
+        permissions: ["read"],
+      });
+    }
+  };
+
   const data1 = adminstate.map((admin, index) => ({
     Sno: index + 1,
     key: admin._id,
@@ -61,7 +118,7 @@ const Admins = () => {
     email: admin.email,
     password: admin.password,
     role: admin.role,
-    permissions: admin.permissions ? admin.permissions.join(",") : "", // Handle case when permissions array is not present
+    permissions: admin.permissions ? admin.permissions.join(", ") : "",
   }));
 
   const columns = [
@@ -69,7 +126,6 @@ const Admins = () => {
       title: "SNo",
       dataIndex: "Sno",
     },
-
     {
       title: "Username",
       dataIndex: "username",
@@ -99,31 +155,106 @@ const Admins = () => {
     {
       title: "Action",
       render: (record) => {
-        return (
+        return authenticatedUsername.admin.username !== record.username ? (
           <>
             <Button
               key={`edit_${record.key}`}
               onClick={() => handleEdit(record.key)}
               icon={<EditOutlined />}
               className="mr-2"
-            ></Button>{" "}
+            />
             <Button
               key={`delete_${record.key}`}
               onClick={() => showDeleteConfirm(record.key)}
               icon={<DeleteOutlined />}
               danger
-            ></Button>
+            />
           </>
+        ) : (
+          <StopOutlined style={{ color: "#EE4E4E", fontSize: "20px" }} />
         );
       },
     },
   ];
+
   return (
     <div>
       <h1 className="mb-4 title font-bold">Administrators</h1>
-      <div>
-        <Table columns={columns} dataSource={data1} />
+      <div className="absolute top-7 right-6 mt-4 mr-4">
+        <Button type="primary" onClick={handleAddNewAdmin}>
+          Add New Admin
+        </Button>
       </div>
+      <Table columns={columns} dataSource={data1} loading={loading} />
+      <Modal
+        title={isEditing ? "Edit Admin" : "Add New Admin"}
+        visible={openDialog}
+        onCancel={() => setOpenDialog(false)}
+        footer={null}
+      >
+        <Form
+          form={form}
+          onFinish={handleFormSubmit}
+          onValuesChange={handleValuesChange}
+          layout="vertical"
+        >
+          <Form.Item
+            name="name"
+            label="Name"
+            rules={[{ required: true, message: "Please enter the name" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="username"
+            label="Username"
+            rules={[{ required: true, message: "Please enter the username" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[{ required: true, message: "Please enter the email" }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="Password"
+            rules={[{ required: true, message: "Please enter the password" }]}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item
+            name="role"
+            label="Role"
+            rules={[{ required: true, message: "Please select the role" }]}
+          >
+            <Select>
+              <Option value="super_admin">Super Admin</Option>
+              <Option value="admin">Admin</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            name="permissions"
+            label="Permissions"
+            rules={[{ required: true, message: "Please select permissions" }]}
+          >
+            <Select mode="multiple">
+              <Option value="create">Create</Option>
+              <Option value="read">Read</Option>
+              <Option value="update">Update</Option>
+              <Option value="delete">Delete</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              {isEditing ? "Update Admin" : "Add Admin"}
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };

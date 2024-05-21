@@ -4,7 +4,7 @@ const Product = require("../models/ProductModel");
 const newOrder = async (req, res) => {
   try {
     const productId = req.params.id;
-    const { quantityItem, paymentInfo, itemPrice, totalPrice } = req.body;
+    const { quantityItem, paymentInfo } = req.body;
 
     const product = await Product.findById(productId);
     if (!product) {
@@ -30,8 +30,7 @@ const newOrder = async (req, res) => {
       ],
       // Assuming you want to add the entire product
       paymentInfo,
-      itemPrice,
-      totalPrice,
+      totalPrice: product.price * quantityItem,
       paidAt: Date.now(),
       userInfo: { userId: req.user._id, username: req.user.username },
     });
@@ -81,32 +80,26 @@ async function updateStock(id, quantity) {
 }
 const updateOrder = async (req, res) => {
   try {
-    console.log("the body", req.body);
     const orders = await Order.findById(req.params.id);
 
     if (!orders) {
       res.status(404);
       throw new Error("order not found with this id");
     }
-    console.log("1");
-    if (orders.orderStatus === "Delivered") {
+    if (orders.orderStatus === "purshased") {
       res.status(400);
-      throw new Error("you have already delivered this order");
+      throw new Error("you have already sold this order");
     }
-    console.log("2");
 
     orders.orderItem.forEach((order) => {
       updateStock(order.Idproduct, order.quantity);
     });
-    console.log("3");
     orders.orderStatus = req.body.status;
-    if (req.body.status === "purshased") {
+    if (req.body.status === "delivered") {
       orders.deliveredAt = Date.now();
     }
-    console.log("4");
 
     await orders.save({ validateBeforeSave: false });
-    console.log("5");
 
     res.status(200).json({
       success: true,
