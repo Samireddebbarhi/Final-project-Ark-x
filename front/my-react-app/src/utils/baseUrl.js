@@ -1,1 +1,1 @@
-export const customer_url = ""
+export const product_view = "http://localhost:3001/api/v1/customer/view"

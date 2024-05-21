@@ -16,6 +16,9 @@ const Customerlist = () => {
     const [deleteConfirmed, setDeleteConfirmed] = useState(false);
     const { customers } = useSelector((state) => state.customer);
     const dispatch = useDispatch();
+    const userPermissions = localStorage.getItem("user")
+    ? new Set(JSON.parse(localStorage.getItem("user")).admin.permissions)
+    : new Set();
     useEffect(() => {
       dispatch(getCustomers());
     }, [deleteConfirmed]);

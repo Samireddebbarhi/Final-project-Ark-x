@@ -90,13 +90,13 @@ const updateOrder = async (req, res) => {
       res.status(400);
       throw new Error("you have already delivered this order");
     }
-    console.log("2");
+   
 
     orders.orderItem.forEach((order) => {
       updateStock(order.Idproduct, order.quantity);
     });
     orders.orderStatus = req.body.status;
-    if (req.body.status === "Canceled") {
+    if (req.body.status === "purshased") {
       orders.deliveredAt = Date.now();
     }
 

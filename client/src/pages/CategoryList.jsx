@@ -20,7 +20,9 @@ const Categorylist = () => {
   const pCatStat = useSelector((state) => state.pCategory.pCategories);
   const [currentPage, setCurrentPage] = useState(1);
   const [categoriesPerPage] = useState(5);
-
+  const userPermissions = localStorage.getItem("user")
+    ? new Set(JSON.parse(localStorage.getItem("user")).admin.permissions)
+    : new Set();
   useEffect(() => {
     dispatch(getCategories());
   }, []);
@@ -121,18 +123,26 @@ const Categorylist = () => {
                     </p>
                   </td>
                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                    <button
-                      className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-3 border border-blue-500 hover:border-transparent rounded"
-                      onClick={() => handleEdit(category._id)}
-                    >
-                      <BiEdit />
-                    </button>
-                    <button
-                      className="bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-3 border border-red-500 hover:border-transparent rounded m-1"
-                      onClick={() => handleDelete(category._id)}
-                    >
-                      <AiFillDelete />
-                    </button>
+                    {userPermissions.has("update") ? (
+                      <button
+                        className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-3 border border-blue-500 hover:border-transparent rounded"
+                        onClick={() => handleEdit(category._id)}
+                      >
+                        <BiEdit />
+                      </button>
+                    ) : (
+                      <p>-</p>
+                    )}
+                    {userPermissions.has("delete") ? (
+                      <button
+                        className="bg-transparent hover:bg-red-500 text-red-700 font-semibold hover:text-white py-2 px-3 border border-red-500 hover:border-transparent rounded m-1"
+                        onClick={() => handleDelete(category._id)}
+                      >
+                        <AiFillDelete />
+                      </button>
+                    ) : (
+                      <p>-</p>
+                    )}
                   </td>
                 </tr>
               ))}
