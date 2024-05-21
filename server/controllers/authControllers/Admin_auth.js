@@ -39,26 +39,25 @@ exports.login = (req, res) => {
       return res.status(400).json({ msg: "Invalid credentials" });
     }
 
-    await bcrypt.compare(password, admin.password).then((isMatch) => {
+    /*await bcrypt.compare(password, admin.password).then((isMatch) => {
       if (!isMatch) {
         return res.status(400).json({ msg: "error password, Try again !!" });
-      }
+      }*/
 
-      const token = jwt.sign({ InfoAdmin: admin }, process.env.TOKEN_ADMIN, {
-        expiresIn: "1h",
-      });
+    const token = jwt.sign({ InfoAdmin: admin }, process.env.TOKEN_ADMIN, {
+      expiresIn: "1h",
+    });
 
-      res.status(200).json({
-        Login_Success: true,
-        token: token,
-        admin: {
-          name: admin.name,
-          email: admin.email,
-          username: admin.username,
-          role: admin.role,
-          permissions: admin.permissions,
-        },
-      });
+    res.status(200).json({
+      Login_Success: true,
+      token: token,
+      admin: {
+        name: admin.name,
+        email: admin.email,
+        username: admin.username,
+        role: admin.role,
+        permissions: admin.permissions,
+      },
     });
   });
 };

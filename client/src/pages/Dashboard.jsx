@@ -1,7 +1,7 @@
-import React from "react";
-import { BsArrowDownRight, BsArrowUpRight, BsBarChart, BsBoxSeam, BsFillPeopleFill } from "react-icons/bs";
-import { Column } from "@ant-design/plots";
-import { Table, Card, Row, Col, Layout, Menu } from "antd";
+import React, { useState, useEffect } from "react";
+import { BsArrowDownRight, BsArrowUpRight, BsBarChart, BsBoxSeam, BsFillPeopleFill, BsBell, BsMoon, BsSun } from "react-icons/bs";
+import { Column, Pie } from "@ant-design/plots";
+import { Table, Card, Row, Col, Layout, Menu, Switch, Avatar, Badge } from "antd";
 import './Dashboard.css';
 
 const { Header, Content } = Layout;
@@ -25,33 +25,55 @@ const columns = [
   },
 ];
 
-const data1 = [];
-for (let i = 0; i < 46; i++) {
-  data1.push({
-    key: i,
-    name: `Edward King ${i}`,
-    product: 32,
-    status: `London, Park Lane no. ${i}`,
-  });
-}
-
 const Dashboard = () => {
-  const data = [
-    { type: "Jan", sales: 38 },
-    { type: "Feb", sales: 52 },
-    { type: "Mar", sales: 61 },
-    { type: "Apr", sales: 145 },
-    { type: "May", sales: 48 },
-    { type: "Jun", sales: 38 },
-    { type: "Jul", sales: 38 },
-    { type: "Aug", sales: 38 },
-    { type: "Sep", sales: 38 },
-    { type: "Oct", sales: 38 },
-    { type: "Nov", sales: 38 },
-    { type: "Dec", sales: 38 },
-  ];
+  const [darkMode, setDarkMode] = useState(false);
+  const [data, setData] = useState([]);
+  const [pieData, setPieData] = useState([]);
+  const [tableData, setTableData] = useState([]);
 
-  const config = {
+  useEffect(() => {
+    // Mock data fetching
+    const fetchData = () => {
+      setData([
+        { type: "Jan", sales: 38 },
+        { type: "Feb", sales: 52 },
+        { type: "Mar", sales: 61 },
+        { type: "Apr", sales: 145 },
+        { type: "May", sales: 48 },
+        { type: "Jun", sales: 38 },
+        { type: "Jul", sales: 38 },
+        { type: "Aug", sales: 38 },
+        { type: "Sep", sales: 38 },
+        { type: "Oct", sales: 38 },
+        { type: "Nov", sales: 38 },
+        { type: "Dec", sales: 38 },
+      ]);
+
+      setPieData([
+        { type: 'Product A', value: 27 },
+        { type: 'Product B', value: 25 },
+        { type: 'Product C', value: 18 },
+        { type: 'Product D', value: 15 },
+        { type: 'Product E', value: 10 },
+        { type: 'Product F', value: 5 },
+      ]);
+
+      const mockTableData = [];
+      for (let i = 0; i < 46; i++) {
+        mockTableData.push({
+          key: i,
+          name: `Edward King ${i}`,
+          product: `Product ${i % 10}`,
+          status: `Status ${i % 5}`,
+        });
+      }
+      setTableData(mockTableData);
+    };
+
+    fetchData();
+  }, []);
+
+  const columnConfig = {
     data,
     xField: "type",
     yField: "sales",
@@ -75,8 +97,26 @@ const Dashboard = () => {
     },
   };
 
+  const pieConfig = {
+    appendPadding: 10,
+    data: pieData,
+    angleField: 'value',
+    colorField: 'type',
+    radius: 0.9,
+    label: {
+      type: 'inner',
+      offset: '-30%',
+      content: ({ percent }) => `${(percent * 100).toFixed(0)}%`,
+      style: {
+        fontSize: 14,
+        textAlign: 'center',
+      },
+    },
+    interactions: [{ type: 'element-active' }],
+  };
+
   return (
-    <Layout className="dashboard-layout">
+    <Layout className={darkMode ? "dashboard-layout dark-mode" : "dashboard-layout"}>
       <Header className="dashboard-header">
         <div className="logo">My Dashboard</div>
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
@@ -84,6 +124,17 @@ const Dashboard = () => {
           <Menu.Item key="2">Reports</Menu.Item>
           <Menu.Item key="3">Settings</Menu.Item>
         </Menu>
+        <div className="header-right">
+          <Badge count={5}>
+            <BsBell className="header-icon" />
+          </Badge>
+          <Avatar className="header-avatar" src="https://i.pravatar.cc/300" />
+          <Switch
+            checkedChildren={<BsSun />}
+            unCheckedChildren={<BsMoon />}
+            onChange={() => setDarkMode(!darkMode)}
+          />
+        </div>
       </Header>
       <Content className="dashboard-content">
         <div className="dashboard">
@@ -95,7 +146,7 @@ const Dashboard = () => {
                   <BsFillPeopleFill className="card-icon" />
                   <div>
                     <p className="desc">Total Users</p>
-                    <h4 className="mb-0 sub-title">1,200</h4>
+                    <h4 className="mb-0 sub-title animated-number">1,200</h4>
                   </div>
                 </div>
                 <div className="d-flex flex-column align-items-end">
@@ -112,7 +163,7 @@ const Dashboard = () => {
                   <BsBarChart className="card-icon" />
                   <div>
                     <p className="desc">Total Sales</p>
-                    <h4 className="mb-0 sub-title">$2,300</h4>
+                    <h4 className="mb-0 sub-title animated-number">$2,300</h4>
                   </div>
                 </div>
                 <div className="d-flex flex-column align-items-end">
@@ -129,7 +180,7 @@ const Dashboard = () => {
                   <BsBoxSeam className="card-icon" />
                   <div>
                     <p className="desc">New Orders</p>
-                    <h4 className="mb-0 sub-title">350</h4>
+                    <h4 className="mb-0 sub-title animated-number">350</h4>
                   </div>
                 </div>
                 <div className="d-flex flex-column align-items-end">
@@ -144,13 +195,19 @@ const Dashboard = () => {
           <div className="mt-4">
             <h3 className="mb-5 title">Income Statistics</h3>
             <div>
-              <Column {...config} />
+              <Column {...columnConfig} />
+            </div>
+          </div>
+          <div className="mt-4">
+            <h3 className="mb-5 title">Sales Distribution</h3>
+            <div>
+              <Pie {...pieConfig} />
             </div>
           </div>
           <div className="mt-4">
             <h3 className="mb-5 title">Recent Orders</h3>
             <div>
-              <Table columns={columns} dataSource={data1} />
+              <Table columns={columns} dataSource={tableData} />
             </div>
           </div>
         </div>
