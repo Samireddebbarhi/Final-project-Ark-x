@@ -8,6 +8,9 @@ import HomePage from "./pages/Home/Home";
 import About from "./pages/Home/About";
 import Favourites from "./pages/Favourites";
 import Cart from "./pages/Cart";
+import SignIn from "./pages/Auth/SignIn";
+import Profile from "./pages/Profile/Profile";
+
 
 
 
@@ -25,6 +28,8 @@ const App = () => {
         <Route path="base/home" element={<HomePage />} />
         <Route path="base/favourites" element={<Favourites />} />
         <Route path="base/cart" element={<Cart />} />
+        <Route path="/login" element={<SignIn />}  />
+        <Route path="base/profile" element={<Profile />} />
 
       </Routes>
     </Router>
