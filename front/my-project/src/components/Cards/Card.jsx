@@ -43,7 +43,7 @@ const Card = ({ value }) => {
         <div className="flex justify-center m-4 hover:shadow-xl max-w-sm max-h-sm">
           <div className="flex flex-row   rounded-lg bg-white shadow-lg border-4">
             <img
-              src={value.imageurl}
+              src={value.image}
               className="w-sm h-sm"
               style={{ height: "10rem" }}
               key={value.id}
@@ -61,7 +61,7 @@ const Card = ({ value }) => {
               </div>
               <div className="flex flex-col justify-between  item-center">
                 <h1 className="text-lg font-bold text-gray-700  md:text-xl">
-                  $&nbsp;{value.price}
+                  MAD&nbsp;{value.price}
                 </h1>
                 <button
                   className="px-2 py-1 mb-2 text-xs font-bold text-white uppercase transition-colors duration-200 transform bg-gray-800 rounded  hover:bg-gray-700  focus:outline-none focus:bg-gray-700 "

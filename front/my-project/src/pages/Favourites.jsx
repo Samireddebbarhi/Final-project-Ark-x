@@ -63,7 +63,7 @@ const Favourites = () => {
               </h5>
             </div>
             <div>
-              <p className="text-gray-700 text-2xl mb-4">₹ {value.price}</p>
+              <p className="text-gray-700 text-2xl mb-4">MAD {value.price}</p>
             </div>
             <div>
               <button
