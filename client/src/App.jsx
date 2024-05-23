@@ -34,15 +34,3 @@ function App() {
 }
 
 export default App;
-
-{
-  /* <Route  path="/dashborad" element={<Dashborad/>} />
-          <Route path="/list-product"  element={<Products/>}/>
-          <Route path="/add-category"  element={<AddCat/>}/>
-          <Route path="/list-category"  element={<Categorylist/>}/>
-          <Route path="/customers"  element={<Customers/>}/>
-          
-
-        </Route>
-      </Routes> */
-}

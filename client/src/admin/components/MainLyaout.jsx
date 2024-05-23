@@ -16,7 +16,7 @@ import { logout } from "../../features/auth/authSlice";
 import ProfileAdmin from "./ProfileAdmin";
 import { isSuperAdmin } from "../../utils/authUtils";
 
-const { Header, Sider, Content } = Layout;
+const { Header, Sider, Content, Footer } = Layout;
 
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -46,11 +46,7 @@ const MainLayout = () => {
           mode="inline"
           defaultSelectedKeys={[""]}
           onClick={({ key }) => {
-            if (key === "SignOut") {
-              handleLogout();
-            } else {
-              navigate(key);
-            }
+            navigate(key);
           }}
           items={[
             {
@@ -90,13 +86,37 @@ const MainLayout = () => {
               icon: <AiOutlineShoppingCart className="fs-4" />,
               label: "Orders",
             },
-            {
-              key: "SignOut",
-              icon: <LogOut className="fs-4" />,
-              label: "SignOut",
-            },
           ]}
         />
+        <Footer
+          style={{
+            padding: 0,
+            background: "transparent",
+            textAlign: "center",
+            position: "absolute",
+            bottom: 0,
+            width: "100%",
+          }}
+        >
+          <Menu
+            theme="dark"
+            mode="inline"
+            onClick={({ key }) => {
+              if (key === "SignOut") {
+                handleLogout();
+              } else {
+                navigate(key);
+              }
+            }}
+            items={[
+              {
+                key: "SignOut",
+                icon: <LogOut className="fs-4" />,
+                label: "SignOut",
+              },
+            ]}
+          />
+        </Footer>
       </Sider>
       <Layout
         className="site-layout"
