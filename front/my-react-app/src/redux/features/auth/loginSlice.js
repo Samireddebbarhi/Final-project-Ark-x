@@ -31,6 +31,7 @@ const getUserFromLocalStorage = localStorage.getItem("user")
 console.log(getUserFromLocalStorage);
 const initialState = {
   user: getUserFromLocalStorage,
+  isAuthenticated: localStorage.getItem('isAuthenticated') || false,
   isLoading: false,
   isError: false,
   isSuccess: false,
@@ -39,7 +40,17 @@ const initialState = {
 const loginSlice = createSlice({
   name: "auth",
   initialState: initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      state.isSuccess = false;
+      state.isError = false;
+      state.isLoading = false;
+      state.message = "";
+      state.isAuthenticated = false;
+      state.user = localStorage.removeItem("user");
+      state.isAuthenticated = localStorage.removeItem("isAuthenticated");
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
@@ -49,6 +60,7 @@ const loginSlice = createSlice({
         state.isError = false;
         state.isLoading = false;
         state.isSuccess = true;
+        state.isAuthenticated = localStorage.setItem('isAuthenticated', true);
         state.user = action.payload;
         state.message = "success loginnnnnnnnn";
       })
@@ -60,4 +72,6 @@ const loginSlice = createSlice({
       });
   },
 });
+
+export const { logout } = loginSlice.actions;
 export default loginSlice.reducer;

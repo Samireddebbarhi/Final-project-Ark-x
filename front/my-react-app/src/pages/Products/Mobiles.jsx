@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Card from '../../components/Cards/Card';
 import axios from 'axios';
 import { product_view } from '../../utils/baseUrl';
-import { Link} from "react-router-dom"
+import { Link } from "react-router-dom";
+import ProductDetail from './ProductDetail';
 
 const ProductCard = () => {
   const [data, setData] = useState([]);
@@ -12,7 +13,7 @@ const ProductCard = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get(`${product_view}/getAllProducts`);
-      console.log(response.data.product);
+      console.log(response.data.product); // Log the entire response
       setData(response.data.product);
       setLoading(false);
     } catch (error) {
@@ -20,7 +21,7 @@ const ProductCard = () => {
       setError("Failed to fetch products");
       setLoading(false);
     }
-  };
+  };  
 
   useEffect(() => {
     fetchData();
@@ -36,16 +37,23 @@ const ProductCard = () => {
 
   return (
     <div className="flex flex-row overflow-x-auto flex-wrap justify-center">
-      {data && data.length > 0 ? (
-        data.map((value) => (
-            <Link to={`/products/${value.id}`} key={value.id}>
-                <Card value={value} />
+    {data && data.length > 0 ? (
+      (() => {
+        const elements = [];
+        for (let i = 0; i < data.length; i++) {
+          const value = data[i];
+          elements.push(
+            <Link to={`/products/${value._id}`} key={value._id}>
+              <Card value={value} />
             </Link>
-        ))
-      ) : (
-        <p>No products available.</p>
-      )}
-    </div>
+          );
+        }
+        return elements;
+      })()
+    ) : (
+      <p>No products available.</p>
+    )}
+  </div>
   );
 };
 

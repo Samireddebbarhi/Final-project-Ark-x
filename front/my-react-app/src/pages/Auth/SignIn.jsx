@@ -1,108 +1,140 @@
-// import React, { useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { useForm } from 'react-hook-form';
-// import { z } from 'zod';
-// import { zodResolver } from '@hookform/resolvers/zod';
-// import { login } from "../../redux/features/auth/registerSlice";
-// import 'boxicons/css/boxicons.min.css';
-// import svg from '../assets/login.svg';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { login } from "../../redux/features/auth/loginSlice";
 
-// // Define Zod schema
-// const signInSchema = z.object({
-//   email: z.string().email('Invalid email address'),
-//   password: z.string().min(6, 'Password must be at least 6 characters long'),
-// });
+// Define Zod schema
+const signInSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min("Password must be at least 6 characters long"),
+});
 
-// const SignIn = () => {
-//   const dispatch = useDispatch();
-//   const navigate = useNavigate();
+export default function SignIn() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-//   const { user, isSuccess, isError, isLoading, message } = useSelector((state) => state.auth);
+  //   const authState = useSelector((state) => state);
 
-//   useEffect(() => {
-//     if (isSuccess) {
-//       navigate('/home');
-//       alert("Login successfully");
-//     }
-//   }, [user, isSuccess, isError, isLoading]);
+  //   const { user, isSuccess, isError, isLoading  } = authState.auth;
+  const { user, isSuccess, isError, isLoading, message } = useSelector(
+    (state) => state.auth
+  );
 
-//   const {
-//     register,
-//     handleSubmit,
-//     formState: { errors },
-//   } = useForm({
-//     resolver: zodResolver(signInSchema),
-//   });
+  useEffect(() => {
+    if (isSuccess) {
+      
+      alert("login SuccessFully");
+      navigate("/");
+    }
+  }, [user, isSuccess, isError, isLoading]);
 
-//   const onSubmit = (data) => {
-//     dispatch(login(data));
-//   };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(signInSchema),
+  });
 
-//   return (
-//     <div className="relative h-screen overflow-hidden">
-//       <div className="absolute w-52 h-52 bg-gradient-to-b from-blue-900 to-transparent rounded-full top-[-7rem] left-[-3.5rem]"></div>
-//       <div className="absolute w-52 h-52 bg-gradient-to-b from-blue-900 to-transparent rounded-full bottom-[-6rem] right-[-5.5rem] rotate-180"></div>
+  const onSubmit = (data) => {
+    dispatch(login(data));
+  };
 
-//       <div className="flex h-full items-center justify-center px-4 md:flex-row flex-col">
-//         <img src={svg} alt="" className="w-[400px] md:w-[500px] lg:w-[600px] md:mr-8 mb-8 md:mb-0" />
-//         <div className="w-full max-w-sm">
-//           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-//             <h1 className="text-2xl font-semibold text-center mb-8">Welcome</h1>
+  return (
+    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          Sign in to your account
+        </h2>
+      </div>
 
-//             <div className="relative mb-8">
-//               <div className="flex items-center border-b border-gray-400 pb-2">
-//                 <i className='bx bx-user-circle text-xl text-gray-400'></i>
-//                 <div className="ml-2 relative w-full">
-//                   <input
-//                     type="email"
-//                     placeholder="Email"
-//                     {...register('email')}
-//                     className="w-full border-none outline-none bg-transparent p-2 text-gray-800"
-//                   />
-//                   {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-//                 </div>
-//               </div>
-//             </div>
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Email address
+            </label>
+            <div className="mt-2">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                {...register("email")}
+                className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${
+                  errors.email ? "ring-red-500" : ""
+                }`}
+              />
+              {errors.email && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.email.message}
+                </p>
+              )}
+            </div>
+          </div>
 
-//             <div className="relative mb-6">
-//               <div className="flex items-center border-b border-gray-400 pb-2">
-//                 <i className='bx bx-lock text-xl text-gray-400'></i>
-//                 <div className="ml-2 relative w-full">
-//                   <input
-//                     type="password"
-//                     placeholder="Password"
-//                     {...register('password')}
-//                     className="w-full border-none outline-none bg-transparent p-2 text-gray-800"
-//                   />
-//                   {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
-//                 </div>
-//               </div>
-//             </div>
+          <div>
+            <div className="flex items-center justify-between">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Password
+              </label>
+              <div className="text-sm">
+                <a
+                  href="#"
+                  className="font-semibold text-indigo-600 hover:text-indigo-500"
+                >
+                  Forgot password?
+                </a>
+              </div>
+            </div>
+            <div className="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                {...register("password")}
+                className={`block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 ${
+                  errors.password ? "ring-red-500" : ""
+                }`}
+              />
+              {errors.password && (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.password.message}
+                </p>
+              )}
+            </div>
+          </div>
 
-//             <a href="#" className="block text-right text-gray-400 mb-6 transition-colors hover:text-blue-900">Forgot Password?</a>
+          <div>
+            <button
+              type="submit"
+              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Sign in
+            </button>
+          </div>
+        </form>
 
-//             <button type="submit" className="w-full py-3 bg-blue-900 text-white rounded-lg transition-transform transform hover:scale-105">Login</button>
-
-//             <div className="text-center mt-6">
-//               <span className="block text-gray-400 mb-4">Or login with</span>
-//               <div className="flex justify-center space-x-4">
-//                 <a href="#" className="w-8 h-8 bg-gray-400 text-white rounded-full flex items-center justify-center hover:bg-blue-900 transition-colors">
-//                   <i className='bx bxl-facebook'></i>
-//                 </a>
-//                 <a href="#" className="w-8 h-8 bg-gray-400 text-white rounded-full flex items-center justify-center hover:bg-blue-900 transition-colors">
-//                   <i className='bx bxl-google'></i>
-//                 </a>
-//                 <a href="#" className="w-8 h-8 bg-gray-400 text-white rounded-full flex items-center justify-center hover:bg-blue-900 transition-colors">
-//                   <i className='bx bxl-instagram'></i>
-//                 </a>
-//               </div>
-//             </div>
-//           </form>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SignIn;
+        <p className="mt-10 text-center text-sm text-gray-500">
+          Not a member?{" "}
+          <a
+            href="#"
+            className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+          >
+            Create account
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+}

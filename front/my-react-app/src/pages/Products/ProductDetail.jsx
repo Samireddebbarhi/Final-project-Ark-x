@@ -10,11 +10,12 @@ const ProductDetail = () => {
   const { id } = useParams(); // Use useParams to get the product ID from the URL
 
   useEffect(() => {
+    console.log('product id', id)
     const fetchProduct = async () => {
       try {
         const response = await axios.get(`${product_view}/getProduct/${id}`);
-        setProduct(response.data);
-        console.log(response.data);
+        setProduct(response.data.product);
+        console.log(response.data.product);
         setLoading(false);
       } catch (error) {
         console.error("Something went wrong", error);
