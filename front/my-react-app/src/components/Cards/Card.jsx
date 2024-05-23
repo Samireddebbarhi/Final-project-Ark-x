@@ -1,18 +1,18 @@
 import React from 'react';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faStarHalfAlt, faHeart, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import {Link } from 'react-router-dom'
+import { faStar, faStarHalfAlt, faHeart,faEye  } from '@fortawesome/free-solid-svg-icons';
+import  {Link} from 'react-router-dom'
 
 const Card = ({ value }) => {
-  console.log('Card value:', value);
+  console.log('card value', value)
+
 
   const addfavInlist = () => {
     alert("Added to Favourites");
   };
 
-  const addcart = () => {
-    alert("Added to Cart");
-  };
+
 
   return (
     <div className="flex justify-center m-4 hover:shadow-xl max-w-sm max-h-sm">
@@ -44,16 +44,14 @@ const Card = ({ value }) => {
             >
               <FontAwesomeIcon icon={faHeart} /> Add to Favourite
             </button>
-            <button
-              className="px-4 py-2 w-full text-xs font-bold text-white uppercase transition-colors duration-200 transform bg-gray-800 rounded hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
-              onClick={addcart}
-            >
-              <FontAwesomeIcon icon={faShoppingCart} /> Add to Cart
-            </button>
-            
+            <Link to={`/products/${value._id}`} key={value._id} className='w-full'>
+              <button className="px-4 py-2 w-full text-xs font-bold text-white uppercase transition-colors duration-200 transform bg-gray-800 rounded hover:bg-gray-700 focus:outline-none focus:bg-gray-700">
+              <FontAwesomeIcon icon={faEye} /> View Details
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };

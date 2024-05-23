@@ -43,9 +43,9 @@ const ProductCard = () => {
         for (let i = 0; i < data.length; i++) {
           const value = data[i];
           elements.push(
-            <Link to={`/products/${value._id}`} key={value._id}>
+            // <Link to={`/products/${value._id}`} key={value._id}>
               <Card value={value} />
-            </Link>
+            // </Link>
           );
         }
         return elements;
