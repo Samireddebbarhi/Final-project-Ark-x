@@ -11,7 +11,7 @@ import {
 } from "../features/pcotegory/pcotegorySlice";
 import { Dialog, Transition } from "@headlessui/react";
 
-const Categorylist = () => {
+const CategoryList = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const cancelButtonRef = useRef(null);
@@ -328,4 +328,4 @@ const Categorylist = () => {
   );
 };
 
-export default Categorylist;
+export default CategoryList;

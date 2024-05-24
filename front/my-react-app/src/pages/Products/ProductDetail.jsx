@@ -3,12 +3,15 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { product_view } from '../../utils/baseUrl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faStarHalfAlt, faHeart, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faStarHalfAlt, faHeart,faCheckCircle,faDollarSign,faHeadset,faShippingFast} from '@fortawesome/free-solid-svg-icons';
+import Footer from '../../components/Footer/Footer'
+
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [quantity, setQuantity] = useState(1); // Initialize quantity to 1
   const { id } = useParams(); // Use useParams to get the product ID from the URL
 
   useEffect(() => {
@@ -28,6 +31,24 @@ const ProductDetail = () => {
 
     fetchProduct();
   }, [id]);
+
+  // add to cart
+  const addToCart = () => {
+    // Implement your logic to add the product to the cart
+    
+  };
+
+  const handleIncrement = () => {
+    // Increase the quantity by 1
+    setQuantity(quantity + 1);
+  };
+
+  const handleDecrement = () => {
+    // Ensure quantity doesn't go below 1
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
 
   if (loading) {
     return <p>Loading product details...</p>;
@@ -58,6 +79,16 @@ const ProductDetail = () => {
       rating: 4,
       comment: "Excellent phone for productivity. Multitasking is smooth, and the design is sleek. Would recommend for professionals."
     },
+    {
+      username: "DigitalNomad22",
+      rating: 3,
+      comment: "Excellent phone for productivity. Multitasking is smooth, and the design is sleek. Would recommend for professionals."
+    },
+    {
+      username: "DigitalNomad22",
+      rating: 4,
+      comment: "Excellent phone for productivity. Multitasking is smooth, and the design is sleek. Would recommend for professionals."
+    },
   ];
 
   return (
@@ -74,24 +105,32 @@ const ProductDetail = () => {
               <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">{product.name}</h1>
               <div className="flex mb-4">
                 <span className="flex items-center">
-                  {[...Array(5)].map((star, index) => (
-                    <FontAwesomeIcon
-                      icon={(index + 1) <= product.reviews ? faStar : (index + 0.5) === product.reviews ? faStarHalfAlt : 'far fa-star'}
-                      key={index}
-                      className="w-4 h-4 grey-500"
-                    />
-                  ))}
-                  <span className="text-gray-600 ml-3">{product.reviews} Reviews</span>
+                    <div>
+                      <FontAwesomeIcon icon={faStar} />
+                      <FontAwesomeIcon icon={faStar} />
+                      <FontAwesomeIcon icon={faStar} />
+                      <FontAwesomeIcon icon={faStarHalfAlt} />
+                    </div>
+                  <span className="text-gray-600 ml-3">Reviews</span>
                 </span>
               </div>
               <p className="leading-relaxed">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
               </p>
-              <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5"></div>
+              <ul>
+                <li>{product.description}</li>
+              </ul>
+              <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
+                <button onClick={handleDecrement} className="bg-gray-200 text-gray-700 rounded-lg py-2 px-3">-</button>
+                <input type="text" value={quantity} className="mx-3 w-12 text-center border border-gray-300 rounded" readOnly />
+                <button onClick={handleIncrement} className="bg-gray-200 text-gray-700 rounded-lg py-2 px-3">+</button>
+                {/* Show message if stock is less than or equal to 3 */}
+                {product.stock <= 3 && <span className="text-red-500 ml-3">Low Stock! Only {product.stock} left.</span>}
+              </div>
               <div className="flex">
-                <span className="title-font font-medium text-2xl text-gray-900">{product.price}Dhs</span>
-                <button className="flex ml-auto text-white bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 focus:bg-gray-700 rounded">
-                  Add to Cart
+                <span className="title-font font-medium text-2xl text-gray-900">{product.price} Dhs</span>
+                <button  onClick={addToCart} className="flex ml-auto text-white bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 focus:bg-gray-700 rounded">
+                  Add To Cart
                 </button>
                 <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
                   <FontAwesomeIcon icon={faHeart} className="w-5 h-5"/>
@@ -122,7 +161,50 @@ const ProductDetail = () => {
             </div>
             <button className="bg-gray-800 text-white px-4 py-2 mt-4 rounded hover:bg-gray-700 focus:outline-none focus:bg-gray-700">Add Comment</button>
           </div>
+          <div className=" mt-10">
+          <h2 className="text-gray-900 text-lg title-font font-medium mb-5"> Advantages</h2>
+            <div className="grid grid-cols-2 gap-8 p-6 bg-gray-100 rounded-lg shadow-md">
+              <div className="flex items-center space-x-4">
+                <div className="flex-shrink-0">
+                  <FontAwesomeIcon icon={faCheckCircle} className="w-10 h-10 text-gray-700" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold">High Quality Materials</h3>
+                  <p>Crafted with durable and premium materials for long-lasting performance.</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="flex-shrink-0">
+                  <FontAwesomeIcon icon={faDollarSign} className="w-10 h-10 text-gray-700" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold">Affordable Price</h3>
+                  <p>Get the best value for your money with our competitive pricing.</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="flex-shrink-0">
+                  <FontAwesomeIcon icon={faHeadset} className="w-10 h-10 text-gray-700" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold">Excellent Customer Support</h3>
+                  <p>We are here to help you 24/7 with any inquiries or issues.</p>
+                </div>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="flex-shrink-0">
+                  <FontAwesomeIcon icon={faShippingFast} className="w-10 h-10 text-gray-700" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold">Rapid Delivery</h3>
+                  <p>Enjoy fast and reliable shipping on all your orders.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
         </div>
+        <Footer />
       </section>
     )
   );

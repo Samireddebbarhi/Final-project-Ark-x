@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 const Cart = () => {
   // Assuming your cart state is stored in Redux and retrieved using useSelector
   const cart = useSelector(state => state.cart);
+  
 
   return (
     <div className="container mx-auto px-4 py-8">

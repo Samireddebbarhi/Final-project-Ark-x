@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import Card from '../../components/Cards/Card';
 import axios from 'axios';
 import { product_view } from '../../utils/baseUrl';
-import { Link } from "react-router-dom";
-import ProductDetail from './ProductDetail';
 
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 const ProductCard = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
