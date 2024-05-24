@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Modal } from "antd";
+import { Table, Button, Modal, message } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { deleteProduct, getProducts } from "../features/product/productSlice";
@@ -22,8 +22,11 @@ const Productlist = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [productId, setProductId] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [jwtExpired, setJwtExpired] = useState(false); // Track if JWT token has expired
+
   const { products } = useSelector((state) => state.product);
 
+  const navigate = useNavigate();
   const userPermissions = localStorage.getItem("user")
     ? new Set(JSON.parse(localStorage.getItem("user")).admin.permissions)
     : new Set();
@@ -44,6 +47,24 @@ const Productlist = () => {
       dispatch(getProducts());
     }
   }, [productId, dispatch]);
+
+  /*useEffect(() => {
+    checkTokenExpiration();
+  }, []);*/
+
+  const checkTokenExpiration = () => {
+    const tokenExpiration = localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user")).expirationTimestamp
+      : null;
+
+    if (!tokenExpiration || Date.now() > new Date(tokenExpiration).getTime()) {
+      message.error(
+        "Your session has expired. Please log in again to continue."
+      );
+      localStorage.removeItem("user");
+      localStorage.removeItem("tokenExpiration");
+    }
+  };
 
   const handleDelete = async (productId) => {
     try {
@@ -163,29 +184,30 @@ const Productlist = () => {
       },
     },
   ];
-
+  const tableContainerStyle = {
+    height: "calc(100vh - 220px)", // Adjust the height as needed
+    overflowY: "scroll",
+  };
   return (
     <div className="relative">
       <h3 className="mb-4 title">Products</h3>
       <div className="absolute top-0 right-0 mt-4 mr-4">
         {userPermissions.has("create") && (
-          <Button type="primary" onClick={handleAddProduct}>
-            Add Product
-          </Button>
+          <div>
+            <CustomizedDialogs
+              open={openDialog}
+              onClose={() => setOpenDialog(false)}
+            >
+              <AddProduct />
+            </CustomizedDialogs>
+          </div>
         )}
       </div>
       <br />
-      <div>
+      <div style={tableContainerStyle}>
         <Table dataSource={data1} columns={columns} />
       </div>
-      <div>
-        <CustomizedDialogs
-          open={openDialog}
-          onClose={() => setOpenDialog(false)}
-        >
-          <AddProduct />
-        </CustomizedDialogs>
-      </div>
+
       <div>
         <Modal
           title="Edit Product"

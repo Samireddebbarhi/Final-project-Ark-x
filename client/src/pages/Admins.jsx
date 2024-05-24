@@ -176,16 +176,21 @@ const Admins = () => {
       },
     },
   ];
-
+  const tableContainerStyle = {
+    height: "calc(100vh - 220px)", // Adjust the height as needed
+    overflowY: "scroll",
+  };
   return (
     <div>
       <h1 className="mb-4 title font-bold">Administrators</h1>
-      <div className="absolute top-7 right-6 mt-4 mr-4">
+      <div className="absolute top-7 right-6 mt-9 mr-4">
         <Button type="primary" onClick={handleAddNewAdmin}>
           Add New Admin
         </Button>
       </div>
-      <Table columns={columns} dataSource={data1} loading={loading} />
+      <div style={tableContainerStyle}>
+        <Table columns={columns} dataSource={data1} loading={loading} />
+      </div>
       <Modal
         title={isEditing ? "Edit Admin" : "Add New Admin"}
         visible={openDialog}

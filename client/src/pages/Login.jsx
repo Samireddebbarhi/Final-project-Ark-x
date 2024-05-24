@@ -33,7 +33,6 @@ const Login = () => {
       dispatch(login(values));
     },
   });
-  dispatch(getProducts());
   // Effect to handle navigation after successful login
   useEffect(() => {
     if (isSuccess) {

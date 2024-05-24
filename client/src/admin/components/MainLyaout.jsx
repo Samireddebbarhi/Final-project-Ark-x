@@ -1,29 +1,23 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux"; // Import Redux hooks
+import { useSelector, useDispatch } from "react-redux";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import {
   AiOutlineDashboard,
   AiOutlineShoppingCart,
   AiOutlineUser,
-  AiOutlineBgColors,
 } from "react-icons/ai";
 import { LogOut } from "iconoir-react";
-import { RiCouponLine } from "react-icons/ri";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Link } from "react-router-dom";
-import { Outlet } from "react-router-dom";
-import { ImBlog } from "react-icons/im";
-import { IoIosNotifications } from "react-icons/io";
-import { FaClipboardList, FaBloggerB } from "react-icons/fa";
-import { SiBrandfolder } from "react-icons/si";
+import { Outlet, useNavigate } from "react-router-dom";
 import { BiCategoryAlt } from "react-icons/bi";
 import { Layout, Menu, theme } from "antd";
-import { useNavigate } from "react-router-dom";
 import { logout } from "../../features/auth/authSlice";
 import ProfileAdmin from "./ProfileAdmin";
 import { isSuperAdmin } from "../../utils/authUtils";
-const { Header, Sider, Content } = Layout;
+
+const { Header, Sider, Content, Footer } = Layout;
+
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -31,34 +25,28 @@ const MainLayout = () => {
   } = theme.useToken();
   const navigate = useNavigate();
 
-  // Access user state from Redux store
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    // Dispatch the logout action
     dispatch(logout());
-    // Redirect to login or homepage
     navigate("/login");
   };
 
   return (
-    <Layout /*onContextMenu={(e) => e.preventDefault()}*/>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <ProfileAdmin
-          username={`Welcome ${user ? user.admin.username : ""}!! 🎉`}
-        />
-
+    <Layout>
+      <Sider
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+        style={{ position: "fixed", height: "100vh", overflow: "auto" }}
+      >
         <Menu
           theme="dark"
           mode="inline"
           defaultSelectedKeys={[""]}
           onClick={({ key }) => {
-            if (key === "SignOut") {
-              handleLogout(); // Call handleLogout when signout is clicked
-            } else {
-              navigate(key);
-            }
+            navigate(key);
           }}
           items={[
             {
@@ -83,7 +71,6 @@ const MainLayout = () => {
                 },
               ],
             },
-
             isSuperAdmin(user.admin) && {
               key: "admins",
               icon: <AiOutlineUser className="fs-4" />,
@@ -94,27 +81,87 @@ const MainLayout = () => {
               icon: <AiOutlineUser className="fs-4" />,
               label: "Customers",
             },
-
             {
               key: "orders",
-              icon: <FaClipboardList className="fs-4" />,
+              icon: <AiOutlineShoppingCart className="fs-4" />,
               label: "Orders",
-            },
-            {
-              key: "SignOut",
-              icon: <LogOut className="fs-4" />,
-              label: "SignOut",
             },
           ]}
         />
+        <Footer
+          style={{
+            padding: 0,
+            background: "transparent",
+            textAlign: "center",
+            position: "absolute",
+            bottom: 0,
+            width: "100%",
+          }}
+        >
+          <Menu
+            theme="dark"
+            mode="inline"
+            onClick={({ key }) => {
+              if (key === "SignOut") {
+                handleLogout();
+              } else {
+                navigate(key);
+              }
+            }}
+            items={[
+              {
+                key: "SignOut",
+                icon: <LogOut className="fs-4" />,
+                label: "SignOut",
+              },
+            ]}
+          />
+        </Footer>
       </Sider>
-      <Layout className="site-layout">
+      <Layout
+        className="site-layout"
+        style={{
+          marginLeft: collapsed ? 80 : 200,
+          transition: "margin-left 0.2s",
+        }}
+      >
+        <Header
+          style={{
+            position: "fixed",
+            width: `calc(100% - ${collapsed ? 80 : 200}px)`,
+            left: collapsed ? 80 : 200,
+            zIndex: 1,
+            background: colorBgContainer,
+            display: "flex",
+            alignItems: "center",
+            padding: 0,
+            transition: "width 0.2s, left 0.2s",
+          }}
+        >
+          <div style={{ paddingLeft: 16 }}>
+            {collapsed ? (
+              <MenuUnfoldOutlined onClick={() => setCollapsed(!collapsed)} />
+            ) : (
+              <MenuFoldOutlined onClick={() => setCollapsed(!collapsed)} />
+            )}
+          </div>
+          <div
+            style={{
+              paddingLeft: 600,
+            }}
+          >
+            <ProfileAdmin
+              username={`Welcome ${user ? user.admin.name : ""}!! 🎉`}
+            />
+          </div>
+        </Header>
         <Content
           style={{
-            margin: "24px 16px",
-            padding: 24,
-            minHeight: 280,
+            marginTop: 64,
+            padding: "24px 16px",
+            minHeight: "100vh",
             background: colorBgContainer,
+            overflow: "auto",
           }}
         >
           <ToastContainer

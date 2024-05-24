@@ -39,6 +39,7 @@ exports.login = (req, res) => {
       if (!isMatch)
         return res.status(400).json({ msg: "error password, Try again !!" });
 
+<<<<<<< HEAD
       const token = jwt.sign({ InfoAdmin: admin }, process.env.TOKEN_ADMIN, {
         expiresIn: "20m",
       });
@@ -49,3 +50,30 @@ exports.login = (req, res) => {
     });
   });
 };
+=======
+    const token = jwt.sign({ InfoAdmin: admin }, process.env.TOKEN_ADMIN, {
+      expiresIn: "10m",
+    });
+
+    // Decode the token to get the expiration timestamp
+    const decodedToken = jwt.decode(token);
+    const expirationTimestamp = decodedToken.exp;
+
+    return res.status(200).json({
+      Login_Success: true,
+      token: token,
+      expirationTimestamp: expirationTimestamp, // Include expiration timestamp in the response
+      admin: {
+        name: admin.name,
+        email: admin.email,
+        username: admin.username,
+        role: admin.role,
+        permissions: admin.permissions,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send("Server error");
+  }
+};
+>>>>>>> fa783eba62df7c41944d497b3fe4e84e6a30f351
