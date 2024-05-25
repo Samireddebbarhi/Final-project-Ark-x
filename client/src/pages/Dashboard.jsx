@@ -117,25 +117,7 @@ const Dashboard = () => {
 
   return (
     <Layout className={darkMode ? "dashboard-layout dark-mode" : "dashboard-layout"}>
-      <Header className="dashboard-header">
-        <div className="logo">My Dashboard</div>
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']}>
-          <Menu.Item key="1">Dashboard</Menu.Item>
-          <Menu.Item key="2">Reports</Menu.Item>
-          <Menu.Item key="3">Settings</Menu.Item>
-        </Menu>
-        <div className="header-right">
-          <Badge count={5}>
-            <BsBell className="header-icon" />
-          </Badge>
-          <Avatar className="header-avatar" src="https://i.pravatar.cc/300" />
-          <Switch
-            checkedChildren={<BsSun />}
-            unCheckedChildren={<BsMoon />}
-            onChange={() => setDarkMode(!darkMode)}
-          />
-        </div>
-      </Header>
+      
       <Content className="dashboard-content">
         <div className="dashboard">
           <h3 className="mb-4 title">Dashboard</h3>
