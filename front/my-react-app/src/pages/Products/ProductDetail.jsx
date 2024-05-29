@@ -4,10 +4,10 @@ import { useDispatch } from 'react-redux';
 import { useParams,  } from 'react-router-dom';
 import { product_view } from '../../utils/baseUrl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faStarHalfAlt, faHeart,faCheckCircle,faDollarSign,faHeadset,faShippingFast} from '@fortawesome/free-solid-svg-icons';
+import { faStar, faStarHalfAlt, faHeart, faCheckCircle, faDollarSign, faHeadset, faShippingFast } from '@fortawesome/free-solid-svg-icons';
 import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header';
-import { addItem } from '../../redux/features/cartSlice';
+import { createOrder } from '../../redux/features/orderSlice';
 
 
 const ProductDetail = () => {
@@ -39,15 +39,15 @@ const ProductDetail = () => {
 
   // add to cart
   const handleAddToCart = () => {
+    
     const item = {
-      productId: product._id,
-      name: product.name,
-      image: product.image,
-      price: product.price,
-      quantity
+      productId: id,
+      quantity: quantity,
+      payment: "pending"// Assuming you have payment information accessible
     };
     try {
-      dispatch(addItem(item));
+      dispatch(createOrder(item));
+      console.log("item " , item)
       alert('Item added to cart successfully!');
     } catch (error) {
       console.error('Failed to add item to cart', error);

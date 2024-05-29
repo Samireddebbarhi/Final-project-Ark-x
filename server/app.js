@@ -40,6 +40,7 @@ app.use("/api/v2/admin", verifyJwtAdmin, review_route);
 app.use("/api/v2/admin", verifyJwtAdmin, order_route);
 // 
 app.use("/api/v1/customer/view", route_product);
+// app.use("/api/v1/customer/view", order_route);
 app.use("/api/v2/customer",  verifyJwtCustomer,route_product);
 
 app.use("/api/v2/customer", verifyJwtCustomer, order_route);

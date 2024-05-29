@@ -10,7 +10,7 @@ import Laptops from "./pages/Products/Laptops.jsx";
 import About from "./pages/Home/About.jsx";
 import Entertainment from "./pages/Products/Entertainment.jsx";
 import Favourites from "./pages/Favourites.jsx";
-import Cart from "./pages/Cart.jsx";
+// import Cart from "./pages/Cart.jsx";
 
 
 
@@ -28,7 +28,7 @@ const App = () => {
         <Route path="base/about" element={<About />} />
         <Route path="base/home" element={<HomePage />} />
         <Route path="base/favourites" element={<Favourites />} />
-        <Route path="base/cart" element={<Cart />} />
+        {/* <Route path="base/cart" element={<Cart />} /> */}
         <Route path="/login" element={<SignIn />}  />
       
 
