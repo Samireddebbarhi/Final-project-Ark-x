@@ -11,13 +11,16 @@ export const createOrder = createAsyncThunk(
       const response = await axios.post(
         `${customer_crud}/order/new/${productId}`,
         {
-          quantityItem,
+          productId,
+          quantity: quantityItem,
           paymentInfo,
         },
         config
       );
-      console.log("the response is", response.data);
-      return response.data; // Corrected: Use response.data directly
+     if (response.data.orders){
+      console.log("the response is", response.data.orders);
+     }
+      return response.data.orders; // Corrected: Use response.data directly
     } catch (error) {
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);
@@ -29,7 +32,7 @@ export const createOrder = createAsyncThunk(
 );
 
 const initialState = {
-  order: null, // Corrected: Order should be a single object, not an array
+  order: [], // Corrected: Order should be a single object, not an array
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -44,8 +47,7 @@ export const orderSlice = createSlice({
     builder
       .addCase(createOrder.pending, (state) => {
         state.isLoading = true;
-        state.isError = false; // Corrected: Reset isError to false on pending
-        state.isSuccess = false; // Corrected: Reset isSuccess to false on pending
+      
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         state.isLoading = false;

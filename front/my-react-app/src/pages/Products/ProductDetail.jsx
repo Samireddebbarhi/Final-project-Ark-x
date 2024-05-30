@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { useDispatch , useSelector} from 'react-redux';
 import { useParams,  } from 'react-router-dom';
 import { product_view } from '../../utils/baseUrl';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,7 +18,7 @@ const ProductDetail = () => {
   const { id } = useParams(); 
   // Use useParams to get the product ID from the URL
   const dispatch = useDispatch();
-
+ 
   useEffect(() => {
     console.log('product id', id);
     const fetchProduct = async () => {
@@ -39,15 +39,18 @@ const ProductDetail = () => {
 
   // add to cart
   const handleAddToCart = () => {
-    
-    const item = {
-      productId: id,
-      quantity: quantity,
-      payment: "pending"// Assuming you have payment information accessible
+    const productId = id;
+    const quantityItem = quantity;
+    const paymentInfo = {
+      id: "test",
+      status: "pending"
     };
+  
     try {
-      dispatch(createOrder(item));
-      console.log("item " , item)
+      dispatch(createOrder({ productId, quantityItem, paymentInfo }));
+      console.log("Product ID: ", productId);
+      console.log("Quantity: ", quantityItem);
+      console.log("Payment Info: ", paymentInfo);
       alert('Item added to cart successfully!');
     } catch (error) {
       console.error('Failed to add item to cart', error);

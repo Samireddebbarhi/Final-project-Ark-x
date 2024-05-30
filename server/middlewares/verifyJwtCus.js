@@ -1,17 +1,23 @@
 const jwt = require("jsonwebtoken");
+
 const verifyJwtCustomer = (req, res, next) => {
   const authHeader = req.headers.authorization || req.headers.Authorization;
-  if (!authHeader?.startsWith("Bearer ")) return res.sendStatus(401);
+
+  if (!authHeader?.startsWith("Bearer ")) {
+    return res.sendStatus(401); // Unauthorized
+  }
+
   const token = authHeader.split(" ")[1];
-  jwt.verify(token, process.env.TOKEN_CUSTOMER, (err, user) => {
+
+  jwt.verify(token, process.env.TOKEN_CUSTOMER, (err, decoded) => {
     if (err) {
-      res.sendStatus(403); //inavlid token*
-      console.log(res);
+      console.error("Token verification failed:", err);
+      return res.sendStatus(403); // Forbidden
     }
-    req.user = user.InfoUser;
-    //req.userId = user.InfoUser.id;
-    //req.username = user.InfoUser.username;
+
+    req.user = decoded.InfoUser; // Assign the decoded user information
     next();
   });
 };
+
 module.exports = verifyJwtCustomer;

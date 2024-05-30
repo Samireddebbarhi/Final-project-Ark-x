@@ -8,7 +8,7 @@ const controller = require("../../controllers/ReviewController");
 
 route.post(
   "/order/new/:id",
-  // checkRoleAndPermission(["user"], "create"),
+  checkRoleAndPermission(["user"], "create"),
   orderController.newOrder
 );
 route.get(
