@@ -14,6 +14,7 @@ const orderSchema = new mongoose.Schema({
       quantity: {
         type: Number,
         required: true,
+        default: 1,
       },
       image: {
         type: String,
@@ -25,6 +26,7 @@ const orderSchema = new mongoose.Schema({
       },
     },
   ],
+  
   userInfo: [
     {
       userId: { type: String, required: true },
@@ -52,7 +54,7 @@ const orderSchema = new mongoose.Schema({
 
   totalPrice: {
     type: Number,
-    required: true,
+    required: false,
     default: 0,
   },
   orderStatus: {

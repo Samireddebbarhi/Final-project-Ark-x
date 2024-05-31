@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { customer_crud } from '../../utils/baseUrl';
 import { config } from '../../utils/axiosConfig';
 
@@ -8,58 +7,75 @@ export const createOrder = createAsyncThunk(
   'orders/createOrder',
   async ({ productId, quantityItem, paymentInfo }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${customer_crud}/order/new/${productId}`,
-        {
+      const response = await fetch(`${customer_crud}/order/new/${productId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          // Add any other headers you might need, like authorization headers
+          ...config.headers
+        },
+        body: JSON.stringify({
           productId,
           quantity: quantityItem,
           paymentInfo,
-        },
-        config
-      );
-     if (response.data.orders){
-      console.log("the response is", response.data.orders);
-     }
-      return response.data.orders; // Corrected: Use response.data directly
+        }),
+        
+      });
+
+      const data = await response.json();
+      console.log("data ", data);
+
+      if (!response.ok) {
+        // If response is not ok, handle the error
+        throw new Error(data.message || 'Something went wrong');
+      }
+
+      if (data.orders) {
+        console.log("the response is", data.orders);
+      }
+
+      return data.orders;
     } catch (error) {
-      if (error.response && error.response.data.message) {
-        return rejectWithValue(error.response.data.message);
-      } else {
+      if (error.message) {
         return rejectWithValue(error.message);
+      } else {
+        return rejectWithValue('An unknown error occurred');
       }
     }
   }
 );
 
 const initialState = {
-  order: [], // Corrected: Order should be a single object, not an array
+  order: {}, // Single order object
   isError: false,
   isLoading: false,
   isSuccess: false,
-  errorMessage: "", // Corrected: Changed 'message' to 'errorMessage' for clarity
+  errorMessage: "", // Clear error message
 };
 
 export const orderSlice = createSlice({
-  name: "orders", // Corrected: Changed name to "orders"
+  name: 'orders', // Slice name
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(createOrder.pending, (state) => {
         state.isLoading = true;
-      
+        state.isError = false;
+        state.isSuccess = false;
+        state.errorMessage = "";
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.order = action.payload; // Corrected: Assign action.payload to state.order
+        state.order = action.payload; // Assign the order data to state.order
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.errorMessage = action.payload ? action.payload : action.error.message; // Corrected: Assign errorMessage based on payload or error message
+        state.errorMessage = action.payload || action.error.message; // Assign errorMessage
       });
   },
 });

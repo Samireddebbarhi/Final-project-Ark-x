@@ -40,16 +40,16 @@ const ProductDetail = () => {
   // add to cart
   const handleAddToCart = () => {
     const productId = id;
-    const quantityItem = quantity;
+    
     const paymentInfo = {
       id: "test",
       status: "pending"
     };
   
     try {
-      dispatch(createOrder({ productId, quantityItem, paymentInfo }));
+      dispatch(createOrder({ productId, quantity, paymentInfo }));
       console.log("Product ID: ", productId);
-      console.log("Quantity: ", quantityItem);
+      console.log("Quantity: ", quantity);
       console.log("Payment Info: ", paymentInfo);
       alert('Item added to cart successfully!');
     } catch (error) {
@@ -144,7 +144,12 @@ const ProductDetail = () => {
                   </ul>
                   <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
                     <button onClick={handleDecrement} className="bg-gray-200 text-gray-700 rounded-lg py-2 px-3">-</button>
-                    <input type="text" value={quantity} className="mx-3 w-12 text-center border border-gray-300 rounded" readOnly />
+                      <input 
+                      type="text" 
+                      value={quantity} 
+                      onChange={(e) => setQuantity(parseInt(e.target.value) || 0)} 
+                      className="mx-3 w-12 text-center border border-gray-300 rounded" 
+                    />
                     <button onClick={handleIncrement} className="bg-gray-200 text-gray-700 rounded-lg py-2 px-3">+</button>
                     {product.stock <= 3 && <span className="text-red-500 ml-3">Low Stock! Only {product.stock} left.</span>}
                   </div>

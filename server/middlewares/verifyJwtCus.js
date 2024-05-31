@@ -11,7 +11,6 @@ const verifyJwtCustomer = (req, res, next) => {
 
   jwt.verify(token, process.env.TOKEN_CUSTOMER, (err, decoded) => {
     if (err) {
-      console.error("Token verification failed:", err);
       return res.sendStatus(403); // Forbidden
     }
 
