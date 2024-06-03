@@ -13,6 +13,10 @@
   import { config } from "../utils/axiosconfig";
   import { LuView } from "react-icons/lu";
   import { message } from "antd";
+  import { AudioOutlined } from '@ant-design/icons';
+  import { Input, Space } from 'antd';
+
+  const { Search } = Input;
 
 
   const { confirm } = Modal;
@@ -23,6 +27,7 @@
     const [isEditing, setIsEditing] = useState(false)
     const [productId, setProductId] = useState(null);
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [searchText, setSearchText] = useState('');
     const {products} = useSelector((state) => state.product);
     // const pCatStat = useSelector((state) => state.pCategory.pCategories);
     // const { reviews } = useSelector((state) => state.review);
@@ -74,38 +79,45 @@
       }, [dispatch]);
       
     
-      
-      
 
-      const data1 = [];
-      for (let i = 0; i < products.length ; i++) {
-        const category = products[i].category; // Get the category object
-        const categoryName = category ? category.name : ''; // Check if category exists
-        data1.push({
+
+    const filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+      
+    
+   
+      // const data1 = [];
+      // for (let i = 0; i < products.length ; i++) {
+      //   const category = products[i].category; // Get the category object
+      //   const categoryName = category ? category.name : ''; // Check if category exists
+      //   data1.push({
           
-          key: products[i]._id,
-          name: products[i].name,
-          description: products[i].description,
-          category: categoryName  ,
-          price: `${products[i].price}`,
-          image:products[i].image,
-          stock: products[i].stock,
+      //     key: products[i]._id,
+      //     name: products[i].name,
+      //     description: products[i].description,
+      //     category: categoryName  ,
+      //     price: `${products[i].price}`,
+      //     image:products[i].image,
+      //     stock: products[i].stock,
         
-        });
+      //   });
         
-      }
-      console.log(data1);
-      // for rewiews data3
-      // const data3 = [];
-      // for(let i = 0; i < reviews.length; i++){
-      //   data3.push({
-      //     name: reviews[i].name,
-      //     comment: reviews[i].comment,
-      //     rating: reviews[i].rating,
-      //   })
       // }
-      // console.log(data3)
-      // console.log(products)
+      const data1 = [];
+      filteredProducts.forEach(product => {
+        data1.push({
+                key: product._id,
+                name: product.name,
+                description: product.description,
+                category: product.category ? product.category.name : '',
+                price: `${product.price}`,
+                image: product.image,
+                stock: product.stock,
+            });
+        });
+      console.log(data1);
+   
       const handleAddProduct = () => {
         setOpenDialog(true); // Open the dialog when the button is clicked
       };
@@ -125,21 +137,12 @@
           },
         });
       }
-      const columns2 = [
-        {
-          title: "Name User",
-          dataIndex: "name",
-        },
-        {
-          title: "Comments",
-          dataIndex: "comment",
-        },
-        {
-          title: "Rating",
-          dataIndex: "rating",
-        }
-
-      ]
+      // on search function 
+      const onSearch = (value) => {
+        setSearchText(value);
+        dispatch(getProducts())
+    }
+      
       const columns = [
         {
           title: "SNo",
@@ -191,6 +194,17 @@
       return (
         <div className="relative">
           <h3 className="mb-4 title">Products</h3>
+          <div>
+          <Space direction="vertical">
+          <Search
+              placeholder="input search text"
+              onSearch={onSearch}
+              style={{
+                width: 300,
+              }}
+            />
+            </Space>
+          </div>
           <div className="absolute top-0 right-0 mt-4 mr-4">
         
           <CustomizedDialogs open={openDialog} onClose={() => setOpenDialog(false)} >

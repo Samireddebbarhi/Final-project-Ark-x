@@ -46,7 +46,7 @@ const EditProduct = ({ productId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const result = await dispatch(updateProduct({ productId, updatedProduct: formValues }));
+      const result =  await dispatch(updateProduct({ productId, updatedProduct: formValues }));
       if (updateProduct.fulfilled.match(result)) {
         console.log("Product edited successfully:", result.payload);
         dispatch(getProducts());
