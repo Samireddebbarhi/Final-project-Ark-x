@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getProducts, updateProduct } from '../../features/product/productSlice';
 import axios from 'axios';
 import { base_url } from '../../utils/baseUrl';
-
+import {message} from 'antd'
 const EditProduct = ({ productId }) => {
   const dispatch = useDispatch();
   const [formValues, setFormValues] = useState({
@@ -50,7 +50,8 @@ const EditProduct = ({ productId }) => {
       if (updateProduct.fulfilled.match(result)) {
         console.log("Product edited successfully:", result.payload);
         dispatch(getProducts());
-        alert("Product updated successfully!");
+        message.success('Product Updated Sucessfully');
+      
       }
     } catch (error) {
       console.error("Failed to edit product:", error);
