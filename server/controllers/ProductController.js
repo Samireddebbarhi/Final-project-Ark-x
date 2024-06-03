@@ -105,6 +105,27 @@ const deleteProduct = async (req, res, next) => {
     data: deleted,
   });
 };
+const getProductByKeyword = async (req, res, next) => {
+  const { keyword } = req.query;
+
+  try {
+    const products = await Product.find({
+      name: { $regex: keyword, $options: "i" },
+    });
+
+    res.status(200).json({
+      success: true,
+      data: {
+        products,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
 const deleteAllProducts = async (req, res, next) => {
   try {
@@ -131,4 +152,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   deleteAllProducts,
+  getProductByKeyword,
 };
