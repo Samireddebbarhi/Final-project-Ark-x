@@ -14,6 +14,7 @@ const favSlice = createSlice({
         imageurl: action.payload.imageurl,
         name: action.payload.name,
         price: action.payload.price,
+        stock: action.payload.stock,
         quantity: 1,
       };
       state.favList.push(newItem);

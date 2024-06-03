@@ -4,13 +4,13 @@ const Footer = () => {
   return (
     <footer className="bg-gray-800 text-white py-4">
       <div className="container mx-auto text-center">
-        <p className="text-sm">© 2023 Mobisale. All rights reserved.</p>
+        <p className="text-sm">© 2024 OneLand Store. All rights reserved.</p>
         <p className="text-xs text-gray-400">
-          What costs nothing is worth nothing. - Akash Tandale
+          - What costs nothing is worth nothing. -
         </p>
         <div className="flex justify-center space-x-4 mt-2">
           <a
-            href="https://www.linkedin.com/in/akash-tandale-ab7b3120a/"
+            href="https://www.linkedin.com/in/samireddebbarhi/"
             aria-label="LinkedIn"
             className="hover:text-gray-400"
           >
@@ -19,7 +19,7 @@ const Footer = () => {
             </svg>
           </a>
           <a
-            href="https://www.facebook.com/akash.tandale.182/"
+            href="https://www.facebook.com/samired/"
             aria-label="Facebook"
             className="hover:text-gray-400"
           >
@@ -28,7 +28,7 @@ const Footer = () => {
             </svg>
           </a>
           <a
-            href="https://twitter.com/AkashTandale6"
+            href="https://twitter.com/s_a_m_i_r.__"
             aria-label="Twitter"
             className="hover:text-gray-400"
           >

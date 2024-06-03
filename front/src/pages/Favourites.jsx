@@ -15,7 +15,6 @@ const Favourites = () => {
         name,
         imageurl,
         price,
-        quantity: 1,
       })
     );
     removeFav(id);
@@ -61,12 +60,21 @@ const Favourites = () => {
                 {value.name}
               </h5>
               <p className="text-gray-700 text-2xl mb-4"> {value.price} MAD</p>
+              {value.stock <= 0 && (
+                <p className="text-red-700 text-2xl mb-4">
+                  Not available in Stock
+                </p>
+              )}
+
               <button
                 type="button"
-                className="w-full p-2 mb-4 bg-blue-600 text-white font-medium text-xs uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+                className={`w-full p-2 mb-4 bg-blue-600 text-white font-medium text-xs uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ${
+                  value.stock <= 0 ? "cursor-not-allowed opacity-50" : ""
+                }`}
                 onClick={() =>
                   addCart(value.id, value.name, value.imageurl, value.price)
                 }
+                disabled={value.stock <= 0}
               >
                 Move to Cart
               </button>

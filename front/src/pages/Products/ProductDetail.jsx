@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import { product_view } from "../../utils/baseUrl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  saveitem,
-  additem,
-  selectitemList,
-} from "../../redux/features/CartSlice";
-import {
-  addfav,
-  savefav,
-  selectfavList,
-} from "../../redux/features/FavouriteSlice";
+import { saveitem } from "../../redux/features/CartSlice";
+import { addfav } from "../../redux/features/FavouriteSlice";
 import {
   faStar,
   faStarHalfAlt,
@@ -25,16 +17,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Footer from "../../components/Footer/Footer";
 import Header from "../../components/Header/Navbar";
-//import { createOrder } from "../../redux/features/orderSlice";
 
 const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [quantity, setQuantity] = useState(1); // Initialize quantity to 1
-  const [totalPrice, setTotalPrice] = useState(0); // Initialize total price to 0
   const { id } = useParams();
-  // Use useParams to get the product ID from the URL
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -45,7 +33,6 @@ const ProductDetail = () => {
           `${product_view}/base/getProduct/${id}`
         );
         setProduct(response.data.product);
-        setTotalPrice(response.data.product.price); // Set initial total price
         setLoading(false);
       } catch (error) {
         console.error("Something went wrong", error);
@@ -57,47 +44,28 @@ const ProductDetail = () => {
     fetchProduct();
   }, [id]);
 
-  useEffect(() => {
-    if (product) {
-      setTotalPrice(product.price * quantity); // Update total price whenever quantity changes
-    }
-  }, [quantity, product]);
-
-  // add to cart
   const handleAddToCart = () => {
-    if (!product) return; // Ensure product exists
+    if (!product) return;
     const item = {
-      id: product._id, // Assuming your product ID field is named _id
+      id: product._id,
       name: product.name,
       imageurl: product.image,
       price: product.price,
-      quantity: quantity,
     };
     dispatch(saveitem(item));
     alert("Item added to cart successfully!");
   };
 
   const handleAddToFavorites = () => {
-    if (!product) return; // Ensure product exists
+    if (!product) return;
     const favItem = {
-      id: product._id, // Assuming your product ID field is named _id
+      id: product._id,
       name: product.name,
       imageurl: product.image,
       price: product.price,
     };
     dispatch(addfav(favItem));
     alert("Item added to favorites successfully!");
-  };
-
-  const handleIncrement = () => {
-    setQuantity(quantity + 1);
-  };
-
-  const handleDecrement = () => {
-    // Ensure quantity doesn't go below 1
-    if (quantity > 1) {
-      setQuantity(quantity - 1);
-    }
   };
 
   if (loading) {
@@ -126,18 +94,6 @@ const ProductDetail = () => {
       rating: 3,
       comment:
         "Decent phone overall. The software could be better optimized, but it gets the job done. Average camera quality.",
-    },
-    {
-      username: "DigitalNomad22",
-      rating: 4,
-      comment:
-        "Excellent phone for productivity. Multitasking is smooth, and the design is sleek. Would recommend for professionals.",
-    },
-    {
-      username: "DigitalNomad22",
-      rating: 3,
-      comment:
-        "Excellent phone for productivity. Multitasking is smooth, and the design is sleek. Would recommend for professionals.",
     },
     {
       username: "DigitalNomad22",
@@ -189,41 +145,28 @@ const ProductDetail = () => {
                     <li>{product.description}</li>
                   </ul>
                   <div className="flex mt-6 items-center pb-5 border-b-2 border-gray-200 mb-5">
-                    <button
-                      onClick={handleDecrement}
-                      className="bg-gray-200 text-gray-700 rounded-lg py-2 px-3"
-                    >
-                      -
-                    </button>
-                    <input
-                      type="text"
-                      value={quantity}
-                      className="mx-3 w-12 text-center border border-gray-300 rounded"
-                      readOnly
-                    />
-                    <button
-                      onClick={handleIncrement}
-                      className="bg-gray-200 text-gray-700 rounded-lg py-2 px-3"
-                    >
-                      +
-                    </button>
-                    <span className="title-font font-medium text-2xl text-gray-900">
-                      {product.price} Dhs
-                    </span>
-                    {product.stock <= 3 && (
-                      <span className="text-red-500 ml-3">
-                        Low Stock! Only {product.stock} left.
+                    {product.stock <= 0 ? (
+                      <span className="text-red-500 mr-3">
+                        Not available in stock
+                      </span>
+                    ) : (
+                      <span className="text-pink-500 mr-3">
+                        Stock: {product.stock}
                       </span>
                     )}
+                    <h1 className="text-lg ml-auto font-bold text-gray-900">
+                      Price : {product.price} Dhs
+                    </h1>
                   </div>
                   <div className="flex">
-                    <span className="title-font font-medium text-2xl text-gray-900">
-                      Total: {totalPrice} Dhs
-                    </span>
-
                     <button
                       onClick={handleAddToCart}
-                      className="flex ml-auto text-white bg-gray-800 border-0 py-2 px-6 focus:outline-none hover:bg-gray-700 focus:bg-gray-700 rounded"
+                      disabled={product.stock <= 0}
+                      className={`flex ml-auto text-white bg-gray-800 border-0 py-2 px-6 focus:outline-none ${
+                        product.stock <= 0
+                          ? "cursor-not-allowed opacity-50"
+                          : "hover:bg-gray-700 focus:bg-gray-700"
+                      } rounded`}
                     >
                       <Link to="/base/cart">Add To Cart</Link>
                     </button>

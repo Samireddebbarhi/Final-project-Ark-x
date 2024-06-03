@@ -126,7 +126,7 @@ const rolesConfig = {
       components.ResetPassword,
       components.Mobiles,
       components.ProductDetails,
-      components.Cart,
+
       components.Favourites,
       components.Laptops,
       /*components.Laptops,
@@ -138,10 +138,6 @@ const rolesConfig = {
     ],
   },
 };
-/*const BasicRoutesConfig = [
-  components.Login,
-  components.ResetPassword,
-  components.SignUp,
-];
-*/
-export { rolesConfig };
+const ProtectedRoutesConfig = { routes: [components.Cart] };
+
+export { rolesConfig, ProtectedRoutesConfig };

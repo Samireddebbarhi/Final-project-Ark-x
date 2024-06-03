@@ -1,98 +1,146 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectitemList,
   deleteitem,
   additem,
-  subtratitem,
+  subtractitem,
 } from "../redux/features/CartSlice";
-import { Table, Button } from "antd";
-import { DeleteOutlined } from "@ant-design/icons";
 import toast, { Toaster } from "react-hot-toast";
+import { createOrder, resetOrderState } from "../redux/features/OrderSlice";
+import Header from "../components/Header/Navbar";
+import Footer from "../components/Footer/Footer";
 
 const Cart = () => {
   const dispatch = useDispatch();
   const itemList = useSelector(selectitemList);
-  const [totalCost, setTotalCost] = useState(
-    itemList.reduce((total, item) => total + item.price * item.quantity, 0)
+  const { isSuccess, isLoading, isError, orderedItems } = useSelector(
+    (state) => state.orders
   );
+  const obj = { id: "idtest", status: "pending" };
 
-  const columns = [
-    {
-      title: "ID",
-      dataIndex: "id",
-      key: "id",
-    },
-    {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Description",
-      dataIndex: "description",
-      key: "description",
-    },
-    {
-      title: "Price",
-      dataIndex: "price",
-      key: "price",
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Total Price",
-      dataIndex: "totalPrice",
-      key: "totalPrice",
-    },
-    {
-      title: "Action",
-      key: "action",
-      render: (text, record) => (
-        <Button
-          type="primary"
-          danger
-          icon={<DeleteOutlined />}
-          onClick={() => removeItem(record.id, record.price, record.quantity)}
-        >
-          Remove
-        </Button>
-      ),
-    },
-  ];
-
-  const data = itemList.map((item) => ({
-    ...item,
-    totalPrice: item.price * item.quantity,
-  }));
-
-  const removeItem = (id, price, quantity) => {
+  const removeItem = (id) => {
     dispatch(deleteitem(id));
-    const itemCost = price * quantity;
-    setTotalCost((prevTotal) => prevTotal - itemCost);
     toast.success("Item removed from cart successfully.");
   };
 
+  const increaseQuantity = (id) => {
+    dispatch(additem(id));
+  };
+
+  const decreaseQuantity = (id) => {
+    dispatch(subtractitem(id));
+  };
+
+  const checkout = (id, quantity, obj) => {
+    dispatch(createOrder({ productId: id, quantity, payment: obj }));
+  };
+
+  useEffect(() => {
+    localStorage.setItem("cartList", JSON.stringify(itemList));
+  }, [itemList]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Order placed successfully.");
+      dispatch(resetOrderState());
+    }
+    if (isError) {
+      toast.error("Order failed to place.");
+      dispatch(resetOrderState());
+    }
+  }, [isSuccess, isError, dispatch]);
+
   return (
     <>
-      <div className="flex justify-between items-center p-12 m-6 text-center font-bold text-4xl text-indigo-600 shadow-xl rounded">
-        {totalCost !== 0 && <div className="w-50 order-1"></div>}
-        <div className="self-center order-2">
-          <div>Cart Menu</div>
-          {totalCost !== 0 && <div>Total Cost : {totalCost} MAD</div>}
-        </div>
+      <Header />
+      <div className="flex flex-col items-center p-14 m-12 text-center font-bold text-4xl text-indigo-600 shadow-xl rounded">
+        <div className="mb-3">Cart Menu</div>
+        {itemList.length > 0 && (
+          <div className="text-2xl mb-4">
+            Total Cost: MAD{" "}
+            {itemList.reduce(
+              (total, item) => total + item.price * item.quantity,
+              0
+            )}
+          </div>
+        )}
       </div>
-      <div className="p-6">
-        <Table
-          columns={columns}
-          dataSource={data}
-          pagination={false}
-          className="rounded-lg shadow-md"
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+        {itemList.map((value, index) => (
+          <div
+            className="relative p-6 border border-gray-300 shadow-md rounded-lg bg-white flex flex-col justify-between"
+            key={index}
+          >
+            <button
+              type="button"
+              className="absolute top-2 right-2 text-red-600 hover:text-red-800 transition duration-150 ease-in-out"
+              onClick={() => removeItem(value.id)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+            <div className="flex flex-col items-center md:items-start">
+              {orderedItems[value.id] && (
+                <div className="text-red-500 font-bold mb-2">
+                  Already Ordered
+                </div>
+              )}
+              <img
+                src={value.imageurl}
+                className="mb-4 w-32 h-32 object-cover"
+                alt={value.name}
+              />
+              <h5 className="text-gray-900 text-xl font-medium mb-2">
+                {value.name}
+              </h5>
+              <p className="text-gray-700 text-lg mb-4">MAD {value.price}</p>
+              <div className="flex items-center mb-4">
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-red-600 text-white font-medium text-sm uppercase rounded shadow-md hover:bg-red-700 focus:bg-red-700 transition duration-150 ease-in-out"
+                  onClick={() => decreaseQuantity(value.id)}
+                  disabled={value.quantity === 1}
+                >
+                  -
+                </button>
+                <div className="px-4 text-lg">{value.quantity}</div>
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-green-600 text-white font-medium text-sm uppercase rounded shadow-md hover:bg-green-700 focus:bg-green-700 transition duration-150 ease-in-out"
+                  onClick={() => increaseQuantity(value.id)}
+                >
+                  +
+                </button>
+              </div>
+            </div>
+            <div className="flex justify-end mt-auto">
+              {itemList.length > 0 && (
+                <button
+                  type="button"
+                  className="px-6 py-3 bg-blue-600 text-white font-medium text-lg uppercase rounded shadow-md hover:bg-blue-700 focus:bg-blue-700 transition duration-150 ease-in-out"
+                  onClick={() => checkout(value.id, value.quantity, obj)}
+                >
+                  {orderedItems[value.id] ? " Order again " : " Order now "}
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
       </div>
+      <Footer />
       <Toaster />
     </>
   );

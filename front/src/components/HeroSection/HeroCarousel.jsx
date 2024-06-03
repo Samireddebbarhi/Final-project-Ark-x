@@ -1,9 +1,10 @@
 import React from "react";
 import AliceCarousel from "react-alice-carousel";
 import "react-alice-carousel/lib/alice-carousel.css";
-import b1 from "../../assets/banner/1.jpg";
-import b2 from "../../assets/banner/2.jpg";
-import b3 from "../../assets/banner/3.jpg";
+import b1 from "../../assets/banner/1.jpeg";
+import b2 from "../../assets/banner/2.jpeg";
+import b3 from "../../assets/banner/3.jpeg";
+import b4 from "../../assets/banner/4.jpeg";
 
 const handleDragStart = (e) => e.preventDefault();
 const items = [
@@ -21,6 +22,12 @@ const items = [
   />,
   <img
     src={b3}
+    style={{ width: "100%", height: "500px", objectFit: "cover" }}
+    alt="..."
+    onDragStart={handleDragStart}
+  />,
+  <img
+    src={b4}
     style={{ top: "20px", width: "100%", height: "500px", objectFit: "cover" }}
     alt="..."
     onDragStart={handleDragStart}

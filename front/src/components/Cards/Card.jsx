@@ -17,9 +17,10 @@ const Card = ({ value }) => {
   const addfavInlist = () => {
     dispatch(
       savefav({
-        id: value.id,
+        id: value._id,
         imageurl: value.image,
         name: value.name,
+        stock: value.stock,
         price: value.price,
       })
     );
@@ -41,12 +42,19 @@ const Card = ({ value }) => {
             key={value.id}
             alt="..."
           />
-          <div className="p-0 flex flex-col justify-between h-full">
-            {value.stock <= 3 && (
+          <div className="p-4 flex flex-col justify-between h-full">
+            {value.stock <= 0 ? (
               <span className="text-red-500 ml-2 mt-2">
-                Low Stock! Only {value.stock} left.
+                Not available in stock
               </span>
+            ) : (
+              value.stock < 6 && (
+                <span className="text-red-500 ml-2 mt-2">
+                  Low Stock! Only {value.stock} left.
+                </span>
+              )
             )}
+
             <div>
               <h5 className="text-gray-900 text-xl font-medium mb-2">
                 {value.name}

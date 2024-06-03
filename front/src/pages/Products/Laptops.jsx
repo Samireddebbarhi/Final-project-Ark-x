@@ -70,7 +70,7 @@ const ProductCard = () => {
       <div className="m-auto w-full text-center">
         <TextField
           id="standard-basic"
-          label="Search Mobiles Product"
+          label="Search Laptops Products"
           variant="standard"
           value={searchData}
           onChange={handleOnChange}
