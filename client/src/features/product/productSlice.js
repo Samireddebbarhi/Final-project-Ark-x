@@ -62,6 +62,25 @@ export const updateProduct = createAsyncThunk(
     }
   }
 );
+export const searchProducts = createAsyncThunk(
+  "products/searchProducts",
+  async (keyword) => {
+    try {
+      const response = await axios.get(
+        `${base_url}/search/getProductByQuery?keyword=${keyword}`,
+        config
+      );
+      return response.data.data.products.map((product) => ({
+        ...product,
+        category: product.category ? product.category.name : "",
+      }));
+    } catch (error) {
+      // Handle error
+      console.error("Error fetching search results:", error);
+      throw error;
+    }
+  }
+);
 
 const initialState = {
   products: [],
@@ -137,6 +156,20 @@ const productSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+      })
+      .addCase(searchProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(searchProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.products = action.payload;
+      })
+      .addCase(searchProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = false;
+        state.error = action.error.message;
       });
   },
 });

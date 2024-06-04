@@ -1,76 +1,54 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Modal, message } from "antd";
+import { Table, Button, Modal, message, Input } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import { deleteProduct, getProducts } from "../features/product/productSlice";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  getProducts,
+  deleteProduct,
+  searchProducts,
+} from "../features/product/productSlice";
 import CustomizedDialogs from "../admin/components/Dialog";
 import AddProduct from "../admin/components/AddProduct";
 import { base_url } from "../utils/baseUrl";
 import axios from "axios";
 import { EditOutlined, DeleteOutlined, StopOutlined } from "@ant-design/icons";
 import EditeProduct from "../admin/components/EditeProduct";
-import { config } from "../utils/axiosconfig";
 import { LuView } from "react-icons/lu";
 
 const { confirm } = Modal;
+const { Search } = Input;
 
 const Productlist = () => {
   const [openDialog, setOpenDialog] = useState(false);
-  const dispatch = useDispatch();
-  const [deleteConfirmed, setDeleteConfirmed] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [productId, setProductId] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [jwtExpired, setJwtExpired] = useState(false); // Track if JWT token has expired
 
+  const dispatch = useDispatch();
   const { products } = useSelector((state) => state.product);
 
-  const navigate = useNavigate();
-  const userPermissions = localStorage.getItem("user")
-    ? new Set(JSON.parse(localStorage.getItem("user")).admin.permissions)
-    : new Set();
+  const userPermissions = new Set(
+    JSON.parse(localStorage.getItem("user"))?.admin.permissions
+  );
 
   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (deleteConfirmed) {
-      dispatch(getProducts());
-      setDeleteConfirmed(false);
-    }
-  }, [deleteConfirmed, dispatch]);
-
-  useEffect(() => {
-    if (productId) {
-      dispatch(getProducts());
-    }
-  }, [productId, dispatch]);
-
-  /*useEffect(() => {
-    checkTokenExpiration();
-  }, []);*/
-
-  const checkTokenExpiration = () => {
-    const tokenExpiration = localStorage.getItem("user")
-      ? JSON.parse(localStorage.getItem("user")).expirationTimestamp
-      : null;
-
-    if (!tokenExpiration || Date.now() > new Date(tokenExpiration).getTime()) {
-      message.error(
-        "Your session has expired. Please log in again to continue."
-      );
-      localStorage.removeItem("user");
-      localStorage.removeItem("tokenExpiration");
+  const handleSearch = async (value) => {
+    try {
+      dispatch(searchProducts(value));
+    } catch (error) {
+      // Handle error
+      console.error("Error searching products:", error);
+      message.error("Failed to fetch search results");
     }
   };
 
   const handleDelete = async (productId) => {
     try {
-      await axios.delete(`${base_url}/deleteProduct/${productId}`, config);
+      //await axios.delete(`${base_url}/deleteProduct/${productId}`);
       dispatch(deleteProduct(productId));
-      setDeleteConfirmed(true);
     } catch (error) {
       console.error("Error deleting product:", error);
     }
@@ -85,7 +63,7 @@ const Productlist = () => {
     setSelectedProduct(record);
   };
 
-  const data1 = products.map((product, i) => ({
+  const data1 = products.map((product) => ({
     key: product._id,
     name: product.name,
     description: product.description,
@@ -117,10 +95,7 @@ const Productlist = () => {
   };
 
   const columns = [
-    {
-      title: "SNo",
-      dataIndex: "key",
-    },
+    { title: "SNo", dataIndex: "key" },
     {
       title: "Name",
       dataIndex: "name",
@@ -147,53 +122,57 @@ const Productlist = () => {
       dataIndex: "category",
       sorter: (a, b) => a.category.length - b.category.length,
     },
-    {
-      title: "Price",
-      dataIndex: "price",
-      sorter: (a, b) => a.price - b.price,
-    },
+    { title: "Price", dataIndex: "price", sorter: (a, b) => a.price - b.price },
     {
       title: "Actions",
-      render: (record) => {
-        return (
-          <>
-            {userPermissions.has("update") ? (
-              <Button
-                key={`edit_${record.key}`}
-                onClick={() => handleEdit(record.key)}
-                icon={<EditOutlined />}
-                className="mr-2"
-              />
-            ) : (
-              <StopOutlined style={{ color: "#EE4E4E", fontSize: "20px" }} />
-            )}
-            {userPermissions.has("delete") ? (
-              <Button
-                key={`delete_${record.key}`}
-                onClick={() => showDeleteConfirm(record.key)}
-                icon={<DeleteOutlined />}
-                danger
-                className="mr-2"
-              />
-            ) : (
-              <StopOutlined style={{ color: "#EE4E4E", fontSize: "20px" }} />
-            )}
-            <Button onClick={() => handleView(record)} icon={<LuView />} />
-          </>
-        );
-      },
+      render: (record) => (
+        <>
+          {userPermissions.has("update") ? (
+            <Button
+              key={`edit_${record.key}`}
+              onClick={() => handleEdit(record.key)}
+              icon={<EditOutlined />}
+              className="mr-2"
+            />
+          ) : (
+            <StopOutlined style={{ color: "#EE4E4E", fontSize: "20px" }} />
+          )}
+          {userPermissions.has("delete") ? (
+            <Button
+              key={`delete_${record.key}`}
+              onClick={() => showDeleteConfirm(record.key)}
+              icon={<DeleteOutlined />}
+              danger
+              className="mr-2"
+            />
+          ) : (
+            <StopOutlined style={{ color: "#EE4E4E", fontSize: "20px" }} />
+          )}
+          <Button onClick={() => handleView(record)} icon={<LuView />} />
+        </>
+      ),
     },
   ];
+
   const tableContainerStyle = {
-    height: "calc(100vh - 220px)", // Adjust the height as needed
+    height: "calc(100vh - 220px)",
     overflowY: "scroll",
   };
+
   return (
     <div className="relative">
       <h3 className="mb-4 title">Products</h3>
-      <div className="absolute top-0 right-0 mt-4 mr-4">
+      <div className="flex justify-between items-center mb-4">
+        <div className="flex-1 flex justify-center">
+          <Search
+            placeholder="Search for products"
+            enterButton="Search"
+            onSearch={handleSearch}
+            style={{ maxWidth: 400, width: "100%" }}
+          />
+        </div>
         {userPermissions.has("create") && (
-          <div>
+          <div className="ml-4">
             <CustomizedDialogs
               open={openDialog}
               onClose={() => setOpenDialog(false)}
@@ -203,22 +182,16 @@ const Productlist = () => {
           </div>
         )}
       </div>
-      <br />
       <div style={tableContainerStyle}>
         <Table dataSource={data1} columns={columns} />
       </div>
-
       <div>
         <Modal
           title="Edit Product"
           open={isEditing}
           okText="Save"
-          onCancel={() => {
-            setIsEditing(false);
-          }}
-          onOk={() => {
-            setIsEditing(false);
-          }}
+          onCancel={() => setIsEditing(false)}
+          onOk={() => setIsEditing(false)}
         >
           <EditeProduct key={productId} productId={productId} />
         </Modal>
@@ -227,9 +200,7 @@ const Productlist = () => {
         <Modal
           title="Product Detail"
           open={!!selectedProduct}
-          onCancel={() => {
-            setSelectedProduct(null);
-          }}
+          onCancel={() => setSelectedProduct(null)}
         >
           {selectedProduct && (
             <>

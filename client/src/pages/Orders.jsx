@@ -35,7 +35,8 @@ const Orderlist = () => {
   };
 
   const handleMenuClick = async (record, e) => {
-    const status = e.key === "1" ? "purchased" : "delivered";
+    const status =
+      e.key === "1" ? "paid" : e.key === "2" ? "delivered" : "cancelled";
     try {
       await dispatch(updateOrder({ id: record.key, status }));
 
@@ -54,14 +55,26 @@ const Orderlist = () => {
 
   const menu = (record) => (
     <Menu onClick={(e) => handleMenuClick(record, e)}>
-      <Menu.Item key="1">purchased</Menu.Item>
+      <Menu.Item key="1">paid</Menu.Item>
       <Menu.Item key="2">delivered</Menu.Item>
+      <Menu.Item key="3">cancelled</Menu.Item>
     </Menu>
   );
 
+  const statusStyles = {
+    pending: { color: "blue" },
+    paid: { color: "green" },
+    delivered: { color: "orange" },
+    cancelled: { color: "red" },
+  };
+
   const columns = [
     {
-      title: "Username",
+      title: "Order ID",
+      dataIndex: "key",
+    },
+    {
+      title: "username",
       dataIndex: "username",
       sorter: (a, b) => a.username.length - b.username.length,
     },
@@ -73,11 +86,20 @@ const Orderlist = () => {
     {
       title: "Order Date",
       dataIndex: "orderDate",
+      sorter: (a, b) => new Date(a.orderDate) - new Date(b.orderDate),
     },
     {
-      title: "Total",
+      title: "Total Price",
       dataIndex: "totalAmount",
       sorter: (a, b) => a.totalAmount - b.totalAmount,
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      render: (status) => {
+        const style = statusStyles[status.toLowerCase()] || {};
+        return <span style={style}>{status}</span>;
+      },
     },
     {
       title: "Actions",
@@ -86,19 +108,23 @@ const Orderlist = () => {
           <Button onClick={() => handleView(record)} className="mr-2">
             <LuView />
           </Button>
-          <Dropdown overlay={menu(record)}>
-            <Button>
-              {record.status} <DownOutlined />
-            </Button>
-          </Dropdown>
+          {record.status !== "cancelled" && (
+            <Dropdown overlay={menu(record)}>
+              <Button>
+                {record.status} <DownOutlined />
+              </Button>
+            </Dropdown>
+          )}
         </>
       ),
     },
   ];
+
   const tableContainerStyle = {
     height: "calc(100vh - 220px)", // Adjust the height as needed
     overflowY: "scroll",
   };
+
   return (
     <div className="relative">
       <h3 className="mb-4 text-2xl font-bold">Orders</h3>
