@@ -28,7 +28,6 @@ const newOrder = async (req, res) => {
           Idproduct: product._id,
         },
       ],
-      // Assuming you want to add the entire product
       paymentInfo,
       totalPrice: product.price * quantityItem,
       paidAt: Date.now(),
@@ -72,28 +71,39 @@ const myOrder = async (req, res) => {
   });
 };
 
-async function updateStock(id, quantity) {
+async function updateStock(id, quantity, increase = false) {
   const product = await Product.findById(id);
-  product.stock -= quantity;
+  if (increase) {
+    product.stock += quantity;
+  } else {
+    product.stock -= quantity;
+  }
   await product.save({ validateBeforeSave: false });
   return product;
 }
+
 const updateOrder = async (req, res) => {
   try {
     const orders = await Order.findById(req.params.id);
 
     if (!orders) {
       res.status(404);
-      throw new Error("order not found with this id");
+      throw new Error("Order not found with this id");
     }
-    if (orders.orderStatus === "purshased") {
+
+    if (orders.orderStatus === "paid" && req.body.status !== "cancelled") {
       res.status(400);
-      throw new Error("you have already sold this order");
+      throw new Error("You have already sold this order");
     }
 
     orders.orderItem.forEach((order) => {
-      updateStock(order.Idproduct, order.quantity);
+      if (req.body.status === "cancelled") {
+        updateStock(order.Idproduct, order.quantity, true);
+      } else {
+        updateStock(order.Idproduct, order.quantity);
+      }
     });
+
     orders.orderStatus = req.body.status;
     if (req.body.status === "delivered") {
       orders.deliveredAt = Date.now();

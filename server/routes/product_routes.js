@@ -20,6 +20,12 @@ RouterProduct.get(
   checkRoleAndPermission(["super_admin", "admin"], "read"),
   controller.getProductDetails
 );
+RouterProduct.get(
+  "/search/getProductByQuery",
+  checkRoleAndPermission(["super_admin", "admin"], "read"),
+  controller.getProductByKeyword
+);
+
 RouterProduct.post(
   "/createProduct",
   checkRoleAndPermission(["super_admin", "admin"], "create"),

@@ -17,7 +17,7 @@ exports.login = async (req, res) => {
     }
 
     const token = jwt.sign({ InfoAdmin: admin }, process.env.TOKEN_ADMIN, {
-      expiresIn: "10m",
+      expiresIn: "1h",
     });
 
     // Decode the token to get the expiration timestamp
