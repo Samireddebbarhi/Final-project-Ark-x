@@ -19,7 +19,7 @@ const ProductCard = () => {
       setLoading(true);
       const response = await axios.get(`${product_view}/base/getAllProducts`);
       const filteredData = response.data.product.filter(
-        (product) => product.category.name === "laptops"
+        (product) => product.category.name === "tablettes"
       );
       setData(filteredData);
       setLoading(false);
@@ -36,7 +36,7 @@ const ProductCard = () => {
       const response = await axios.get(`${product_view}/getProductByKeyword`, {
         params: {
           keyword: searchData,
-          categoryId: "663f60f92c8d4005874b793a", // Replace 'yourCategoryIdHere' with the actual category ID
+          categoryId: "665d8238e73431c4dd587680", // Replace 'yourCategoryIdHere' with the actual category ID
         },
       });
       setData(response.data.data.products);
@@ -68,12 +68,12 @@ const ProductCard = () => {
     <div className="flex flex-col items-center mt-16">
       <Header />
       <div className="p-6 m-6 text-center font-bold text-4xl text-indigo-600 shadow-xl rounded">
-        Laptops
+        Tablettes
       </div>
       <div className="m-auto w-full text-center">
         <TextField
           id="standard-basic"
-          label="Search Laptops Products"
+          label="Search Tablettes Products"
           variant="standard"
           value={searchData}
           onChange={handleOnChange}

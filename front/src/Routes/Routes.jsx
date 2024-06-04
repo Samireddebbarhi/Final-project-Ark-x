@@ -1,14 +1,9 @@
 import React from "react";
 
-//const Fail = React.lazy(() => import("../pages/Checkout/Fail"));
-//const Sucess = React.lazy(() => import("../pages/Checkout/Sucess"));
-
 const Home = React.lazy(() => import("../pages/Home/Home"));
 const About = React.lazy(() => import("../pages/Home/About"));
 const Cart = React.lazy(() => import("../pages/Cart"));
-//const Entertainment = React.lazy(() =>
-//import("../pages/Products/Entertainment")
-//);
+const Tablettes = React.lazy(() => import("../pages/Products/Tablettes"));
 const Favourites = React.lazy(() => import("../pages/Favourites"));
 const Laptops = React.lazy(() => import("../pages/Products/Laptops"));
 const Mobiles = React.lazy(() => import("../pages/Products/Mobiles"));
@@ -79,40 +74,11 @@ const components = {
     name: "Laptops",
     element: <Laptops />,
   },
-
-  /*Profile: {
-    path: "/base/profile",
-    name: "Profile",
-    element: <Profile />,
+  Tablettes: {
+    path: "/base/tablettes",
+    name: "Tablettes",
+    element: <Tablettes />,
   },
-  
-  Entertainment: {
-    path: "/base/Entertainment",
-    name: "Entertainment",
-    element: <Entertainment />,
-  },
- 
- 
-
-  
- 
-  AdminDashBoard: {
-    path: "/base/AdminDashBoard",
-    name: "AdminDashBoard",
-    element: <AdminDashBoard />,
-  },
- 
-  PaymentSucess: {
-    path: "/base/checkout-sucess",
-    name: "sucess",
-    element: <Sucess />,
-  },
-  PaymentFail: {
-    path: "/base/checkout-fail",
-    name: "fail",
-    element: <Fail />,
-  },
-};*/
 };
 const rolesConfig = {
   user: {
@@ -126,9 +92,9 @@ const rolesConfig = {
       components.ResetPassword,
       components.Mobiles,
       components.ProductDetails,
-
       components.Favourites,
       components.Laptops,
+      components.Tablettes,
       /*components.Laptops,
       components.Mobiles,
       components.Entertainment,

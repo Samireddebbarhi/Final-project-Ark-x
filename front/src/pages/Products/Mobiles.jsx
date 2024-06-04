@@ -33,9 +33,12 @@ const ProductCard = () => {
   const handleSearch = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        `${product_view}/getProductByKeyword?keyword=${searchData}`
-      );
+      const response = await axios.get(`${product_view}/getProductByKeyword`, {
+        params: {
+          keyword: searchData,
+          categoryId: "663b4fe82b25f167014d3ee7", // Replace 'yourCategoryIdHere' with the actual category ID
+        },
+      });
       setData(response.data.data.products);
       setSearchData("");
       setLoading(false);

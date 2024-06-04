@@ -5,7 +5,7 @@ import { Link, useParams } from "react-router-dom";
 import { product_view } from "../../utils/baseUrl";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { saveitem } from "../../redux/features/CartSlice";
-import { addfav } from "../../redux/features/FavouriteSlice";
+import { savefav } from "../../redux/features/FavouriteSlice";
 import {
   faStar,
   faStarHalfAlt,
@@ -64,7 +64,7 @@ const ProductDetail = () => {
       imageurl: product.image,
       price: product.price,
     };
-    dispatch(addfav(favItem));
+    dispatch(savefav(favItem));
     alert("Item added to favorites successfully!");
   };
 

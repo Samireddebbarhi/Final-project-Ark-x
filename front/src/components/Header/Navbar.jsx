@@ -56,7 +56,7 @@ const Navbar = () => {
             <Option value="">All Categories</Option>
             <Option value="mobiles">Smartphones</Option>
             <Option value="laptops">Laptops</Option>
-            <Option value="entertainment">Entertainment</Option>
+            <Option value="tablettes">Tablettes</Option>
           </Select>
         </div>
 
