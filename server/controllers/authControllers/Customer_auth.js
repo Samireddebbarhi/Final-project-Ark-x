@@ -57,10 +57,6 @@ const customerLogin = async (req, res) => {
           token: token,
           customer: {
             name: customer.name,
-            email: customer.email,
-            username: customer.username,
-            role: customer.role,
-            permissions: customer.permissions,
           },
         });
       });

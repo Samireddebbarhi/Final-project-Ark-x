@@ -30,7 +30,6 @@ exports.login = async (req, res) => {
       expirationTimestamp: expirationTimestamp, // Include expiration timestamp in the response
       admin: {
         name: admin.name,
-        email: admin.email,
         username: admin.username,
         role: admin.role,
         permissions: admin.permissions,
