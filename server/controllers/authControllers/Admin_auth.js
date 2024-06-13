@@ -22,6 +22,29 @@ exports.register = async (req, res) => {
             .json({ Succefull_msg: `${admin.username} added Succefully` })
         );
     }
+<<<<<<< HEAD
+=======
+
+    const token = jwt.sign({ InfoAdmin: admin }, process.env.TOKEN_ADMIN, {
+      expiresIn: "1h",
+    });
+
+    // Decode the token to get the expiration timestamp
+    const decodedToken = jwt.decode(token);
+    const expirationTimestamp = decodedToken.exp;
+
+    return res.status(200).json({
+      Login_Success: true,
+      token: token,
+      expirationTimestamp: expirationTimestamp, // Include expiration timestamp in the response
+      admin: {
+        name: admin.name,
+        username: admin.username,
+        role: admin.role,
+        permissions: admin.permissions,
+      },
+    });
+>>>>>>> c9b42518f4e7ec620b4be9d86fe2c58afd41c95e
   } catch (err) {
     console.log(err);
   }

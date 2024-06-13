@@ -1,6 +1,6 @@
 const { constants } = require("../utils/constants");
 
-const errorHandler = (err, res, next) => {
+const errorHandler = (err, req, res, next) => {
   const statusCode = res.statusCode ? res.statusCode : 500;
 
   switch (statusCode) {
@@ -20,8 +20,7 @@ const errorHandler = (err, res, next) => {
       });
       break;
     case constants.UNAUTHORIZED:
-      console.log("unhotirized");
-
+      console.log("unhotiraized");
       res.json({
         title: "Unauthorized",
         message: err.message,
@@ -45,7 +44,7 @@ const errorHandler = (err, res, next) => {
       break;
 
     default:
-      console.log("pay attention!! It's error simple " , err);
+      console.log("pay attention!! It's error simple ", err);
 
       break;
   }

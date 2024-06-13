@@ -105,7 +105,38 @@ const deleteProduct = async (req, res, next) => {
     data: deleted,
   });
 };
+const getProductByKeyword = async (req, res, next) => {
+  const { keyword, categoryId } = req.query;
 
+  try {
+    let products;
+
+    if (categoryId) {
+      // Filter by both keyword and category ID
+      products = await Product.find({
+        name: { $regex: keyword, $options: "i" },
+        category: categoryId,
+      });
+    } else {
+      // Only filter by keyword if category ID is not provided
+      products = await Product.find({
+        name: { $regex: keyword, $options: "i" },
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: {
+        products,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 const deleteAllProducts = async (req, res, next) => {
   try {
     const deleted_product = await Product.deleteMany();
@@ -131,4 +162,9 @@ module.exports = {
   updateProduct,
   deleteProduct,
   deleteAllProducts,
+<<<<<<< HEAD
 };
+=======
+  getProductByKeyword,
+};
+>>>>>>> c9b42518f4e7ec620b4be9d86fe2c58afd41c95e
