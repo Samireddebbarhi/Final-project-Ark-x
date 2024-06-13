@@ -46,7 +46,15 @@ const MainLayout = () => {
           mode="inline"
           defaultSelectedKeys={[""]}
           onClick={({ key }) => {
+<<<<<<< HEAD
             navigate(key);
+=======
+            if (key === "signout") {
+              handleLogout(); // Call handleLogout when signout is clicked
+            } else {
+              navigate(key);
+            }
+>>>>>>> a7fa1cf22d1605af6d30e711dbef0ea8791ebf09
           }}
           items={[
             {
@@ -88,7 +96,13 @@ const MainLayout = () => {
             },
           ]}
         />
+<<<<<<< HEAD
         <Footer
+=======
+      </Sider>
+      <Layout className="site-layout">
+        <Content
+>>>>>>> a7fa1cf22d1605af6d30e711dbef0ea8791ebf09
           style={{
             padding: 0,
             background: "transparent",

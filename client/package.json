@@ -23,7 +23,10 @@
     "cloudinary-react": "^1.8.1",
     "formik": "^2.4.6",
     "iconoir-react": "^7.7.0",
+<<<<<<< HEAD
     "jwt-decode": "^4.0.0",
+=======
+>>>>>>> a7fa1cf22d1605af6d30e711dbef0ea8791ebf09
     "ra-data-json-server": "^4.16.16",
     "ra-data-simple-rest": "^4.16.16",
     "react": "^18.3.1",

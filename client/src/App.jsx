@@ -32,4 +32,11 @@ function App() {
     </Router>
   );
 }
+<<<<<<< HEAD
 export default App;
+=======
+
+export default App;
+
+
+>>>>>>> a7fa1cf22d1605af6d30e711dbef0ea8791ebf09
