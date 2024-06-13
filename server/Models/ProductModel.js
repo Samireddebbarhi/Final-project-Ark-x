@@ -18,20 +18,22 @@ const productSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+<<<<<<< HEAD
     image: {
-      details: [
-        {
-          type: mongoose.Types.ObjectId,
-          ref: "Image",
-          //  required: [true, "please Enter the images"],
-        },
-      ],
+      type: String,
     },
-    category: {
+    category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
+    stock: {
+=======
+   image:{
+    type: String,
+   },
+  category: {
       type: String,
       required: [true, "please Enter the product category"],
-    },
-    stock: {
+  },
+  stock: {
+>>>>>>> a7fa1cf22d1605af6d30e711dbef0ea8791ebf09
       type: Number,
       required: [true, "please Enter the product stock"],
       maxLength: [4, "max stock is of 4 figure"],

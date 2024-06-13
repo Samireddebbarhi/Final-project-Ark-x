@@ -38,6 +38,6 @@ adminRouter.put(
 );
 
 //authRoute.post("/register", authenticate.register);
-authRoute.get("/login", authenticate.login);
+authRoute.post("/login", authenticate.login);
 
 module.exports = { authRoute, adminRouter };

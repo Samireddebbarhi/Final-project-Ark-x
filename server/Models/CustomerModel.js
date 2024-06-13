@@ -36,15 +36,15 @@ const SchemaCustomer = new mongoose.Schema(
       type: String,
       default: "user",
     },
-    permissions: {
-      type: [String],
-      default: ["create", "read", "update", "delete"],
-    },
     resetPasswordToken: {
       type: String,
     },
     resetPasswordExpire: {
       type: Date,
+    },
+    permissions: {
+      type: [String],
+      default: ["create", "read", "update", "delete"],
     },
   },
   {
@@ -52,5 +52,9 @@ const SchemaCustomer = new mongoose.Schema(
   }
 );
 
-const CustomerModel = mongoose.model("Customer", SchemaCustomer);
+// HEAD
+const  CustomerModel = mongoose.model("Customer", SchemaCustomer);
+
+//const CustomerModel = mongoose.model("Customer", SchemaCustomer);
+//e4ebd8e905e4957ceeec146e9e4f44a8b0375ba7
 module.exports = CustomerModel;
