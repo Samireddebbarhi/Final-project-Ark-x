@@ -6,10 +6,11 @@ const getAllProducts = async (req, res, next) => {
   if (!product)
     return res
       .status(401)
-      .json({ success: false, msg: "No products exists in the database" });
-  return res.status(200).json({ succeess: true, product });
+      .json({ success: false, msg: "No products exist in the database" });
+  return res.status(200).json({ success: true, product });
 };
-// i update this
+
+// i updated this
 const createProduct = async (req, res) => {
   try {
     const product = req.body;
@@ -27,7 +28,7 @@ const createProduct = async (req, res) => {
       category: categoryId,
     });
 
-    //Save the product
+    // Save the product
     await newProduct.save();
 
     // Push the product ID to the category's products array
@@ -51,7 +52,8 @@ const createProduct = async (req, res) => {
       .json({ success: false, msg_error: "Error creating product" });
   }
 };
-// i update this
+
+// i updated this
 const updateProduct = async (req, res) => {
   try {
     const { name, description, price, stock } = req.body;
@@ -81,30 +83,33 @@ const updateProduct = async (req, res) => {
     return res.status(400).send(err.message);
   }
 };
+
 const getProductDetails = async (req, res, next) => {
   try {
     let product = await Product.findById(req.params.id);
     if (product) {
       res.status(200).json({ success: true, product });
     } else {
-      res.status(404).json({ success: false, message: "product not found" });
+      res.status(404).json({ success: false, message: "Product not found" });
     }
   } catch (error) {
     res.status(404);
     throw new Error(error.message);
   }
 };
+
 const deleteProduct = async (req, res, next) => {
   const deleted = await Product.deleteOne({ _id: req.params.id });
   if (!deleted) {
-    return res.status(404).json({ success: false, msg: "no such id found" });
+    return res.status(404).json({ success: false, msg: "No such id found" });
   }
   res.status(200).json({
     success: true,
-    msg_success: "product is deleted succesfully",
+    msg_success: "Product is deleted successfully",
     data: deleted,
   });
 };
+
 const getProductByKeyword = async (req, res, next) => {
   const { keyword, categoryId } = req.query;
 
@@ -137,16 +142,17 @@ const getProductByKeyword = async (req, res, next) => {
     });
   }
 };
+
 const deleteAllProducts = async (req, res, next) => {
   try {
     const deleted_product = await Product.deleteMany();
 
     if (deleted_product.length == 0) {
-      return res.status(404).json("no data is available in the database");
+      return res.status(404).json("No data is available in the database");
     } else {
       res.status(200).json({
         success: true,
-        data: "all data has been deleted from the database",
+        data: "All data has been deleted from the database",
       });
     }
   } catch (err) {
@@ -162,9 +168,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   deleteAllProducts,
-<<<<<<< HEAD
-};
-=======
   getProductByKeyword,
 };
->>>>>>> c9b42518f4e7ec620b4be9d86fe2c58afd41c95e

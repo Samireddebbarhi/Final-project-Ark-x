@@ -18,16 +18,13 @@ const verifyJwtAdmin = require("./middlewares/verifyJwt");
 const logs = require("./middlewares/logs");
 const errorHandler = require("./middlewares/errorHandling");
 const app = express();
-<<<<<<< HEAD
 app.use(cors({ credentials: true, origin: ["http://localhost:5173","http://localhost:5174"] }));
-=======
 app.use(
   cors({
     credentials: true,
     origin: ["http://localhost:5173", "http://localhost:5174"],
   })
-);
->>>>>>> c9b42518f4e7ec620b4be9d86fe2c58afd41c95e
+); c9b42518f4e7ec620b4be9d86fe2c58afd41c95e
 app.use(express.json());
 
 app.use(cookie());
