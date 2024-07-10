@@ -1,33 +1,29 @@
-import React, { useEffect, useState } from "react";
-import CustomInput from "../admin/components/CustomerInput";
+import React, { useEffect } from "react";
+import CustomInput from "../admin/components/CustomInput";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { InboxOutlined } from "@ant-design/icons";
-import * as yup from "yup";
-import { Select } from "antd";
 import { useFormik } from "formik";
 import Dropzone from "react-dropzone";
-import { message, Upload } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImg } from "../features/upload/uploadSlice";
 import { useNavigate } from "react-router-dom";
 import { addProduct } from "../features/product/productSlice";
-import { toast } from "react-toastify";
+import * as yup from "yup";
 
 const AddProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const [images, setImages] = useState([]);
   const newProduct = useSelector((state) => state.product);
-  const { isSucess, isError, isLoading, createdProduct } = newProduct;
+  const { isSuccess, isError, isLoading, createdProduct } = newProduct;
+
   useEffect(() => {
-    if (isSucess && createdProduct) {
-      alert("🦄 Product add Successfully");
+    if (isSuccess && createdProduct) {
+      alert("🦄 Product added successfully");
     }
     if (isError) {
-      alert("🦄 Somthing Went Wrong!");
+      alert("🦄 Something went wrong!");
     }
-  }, [isSucess, isError, isLoading, createdProduct]);
+  }, [isSuccess, isError, isLoading, createdProduct]);
 
   let schema = yup.object().shape({
     name: yup.string().required("Name is Required"),
@@ -53,11 +49,10 @@ const AddProduct = () => {
     },
   });
 
-  const [desc, setDesc] = useState();
   const imgState = useSelector((state) => state.upload.images);
 
-  const handleDesc = (e) => {
-    setDesc(e);
+  const handleDesc = (value) => {
+    formik.setFieldValue("description", value);
   };
 
   return (
@@ -69,39 +64,39 @@ const AddProduct = () => {
             htmlFor="name"
             className="block text-sm font-medium text-gray-700"
           >
-            Enter Name :
+            Enter Name:
           </label>
           <CustomInput
             type="text"
             label="Enter Product Title"
             name="name"
-            onChng={formik.handleChange("name")}
-            onBlr={formik.handleBlur("name")}
-            val={formik.values.name}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.name}
           />
-        </div>
-        <div className="error text-red-600">
-          {formik.touched.name && formik.errors.name}
+          {formik.touched.name && formik.errors.name && (
+            <div className="error text-red-600">{formik.errors.name}</div>
+          )}
         </div>
 
         <div className="mb-4">
           <label
-            htmlFor="desc"
+            htmlFor="description"
             className="block text-sm font-medium text-gray-700"
           >
-            Enter Description :
+            Enter Description:
           </label>
           <br />
           <ReactQuill
             theme="snow"
             name="description"
-            onChange={formik.handleChange("description")}
-            onBlur={formik.handleBlur("desctiption")}
-            value={formik.values.description}
+            onChange={handleDesc}
+            onBlur={formik.handleBlur}
+            value={formik.values.description || ""}
           />
-        </div>
-        <div className="error  text-red-600">
-          {formik.touched.description && formik.errors.description}
+          {formik.touched.description && formik.errors.description && (
+            <div className="error text-red-600">{formik.errors.description}</div>
+          )}
         </div>
 
         <div className="mb-4">
@@ -109,42 +104,43 @@ const AddProduct = () => {
             htmlFor="price"
             className="block text-sm font-medium text-gray-700"
           >
-            Enter Price :
+            Enter Price:
           </label>
           <CustomInput
             type="number"
             label="Enter Product Price"
             name="price"
-            onChng={formik.handleChange("price")}
-            onBlr={formik.handleBlur("price")}
-            val={formik.values.price}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.price}
           />
+          {formik.touched.price && formik.errors.price && (
+            <div className="error text-red-600">{formik.errors.price}</div>
+          )}
         </div>
-        <div className="error text-red-600">
-          {formik.touched.price && formik.errors.price}
-        </div>
-        <label
-          htmlFor="quintity"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Enter Quantity :
-        </label>
-        <CustomInput
-          type="number"
-          label="Enter Product Quantity"
-          name="stock"
-          onChng={formik.handleChange("stock")}
-          onBlr={formik.handleBlur("stock")}
-          val={formik.values.stock}
-        />
-        <br />
-        <div className="error text-red-600">
-          {formik.touched.stock && formik.errors.stock}
-        </div>
-        <div className="border-2 border-dashed border-gray-400 rounded-lg p-4">
-          <Dropzone
-            onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
+
+        <div className="mb-4">
+          <label
+            htmlFor="stock"
+            className="block text-sm font-medium text-gray-700"
           >
+            Enter Quantity:
+          </label>
+          <CustomInput
+            type="number"
+            label="Enter Product Quantity"
+            name="stock"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.stock}
+          />
+          {formik.touched.stock && formik.errors.stock && (
+            <div className="error text-red-600">{formik.errors.stock}</div>
+          )}
+        </div>
+
+        <div className="border-2 border-dashed border-gray-400 rounded-lg p-4 mb-4">
+          <Dropzone onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}>
             {({ getRootProps, getInputProps }) => (
               <section>
                 <div {...getRootProps()}>
@@ -155,16 +151,15 @@ const AddProduct = () => {
             )}
           </Dropzone>
         </div>
-        <br />
+
         <div className="showImage">
-          {imgState.map((i, j) => {
-            return (
-              <div key={j}>
-                <img src={i.url} alt="imga iploaded" />
-              </div>
-            );
-          })}
+          {imgState.map((image, index) => (
+            <div key={index}>
+              <img src={image.url} alt={`Uploaded image ${index}`} />
+            </div>
+          ))}
         </div>
+
         <button
           className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
           type="submit"
