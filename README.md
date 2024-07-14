@@ -60,6 +60,16 @@ Our project architecture follows the MVC design pattern to ensure separation of 
 
 ---
 
+## Screenshots
+![Capture d’écran 2024-06-05 173301](https://github.com/user-attachments/assets/8c031903-4982-4db4-83f4-858eaa545d22)
+![Capture d’écran 2024-06-05 173802](https://github.com/user-attachments/assets/c2c25c7a-306c-44e0-aeef-0a95e6f4f2f7)
+![Capture d’écran 2024-06-05 173552](https://github.com/user-attachments/assets/4993e31a-f48c-4ba0-9bdc-0eb130a0c981)
+![Capture d’écran 2024-06-05 175125](https://github.com/user-attachments/assets/02b3171d-7f50-4a5f-b2a1-aafcd00dd6e7)
+![Capture d’écran 2024-06-05 175402](https://github.com/user-attachments/assets/79c105f5-1fd7-4d65-88db-b711b4fcf10c)
+![Capture d’écran 2024-06-05 175241](https://github.com/user-attachments/assets/4c874c7f-df9e-4d77-9183-a18bf9ff4775)
+![Capture d’écran 2024-06-05 175318](https://github.com/user-attachments/assets/051f77d7-9842-4116-bfd3-18dec6319061)
+
+---
 ## Authors 👨‍💻
 
 - [@samireddebbarhi](https://www.github.com/Samireddebbarhi)
