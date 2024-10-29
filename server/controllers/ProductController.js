@@ -1,33 +1,34 @@
 const Product = require("../models/ProductModel");
 const Category = require("../models/CategoryModel");
-const Image = require("../models/ImageModel");
+
 const getAllProducts = async (req, res, next) => {
-  const product = await Product.find();
+  const product = await Product.find().populate("category", "name");
   if (!product)
     return res
       .status(401)
-      .json({ success: false, msg: "No products exists in the database" });
-  return res.status(200).json({ succeess: true, product });
+      .json({ success: false, msg: "No products exist in the database" });
+  return res.status(200).json({ success: true, product });
 };
 
+// i updated this
 const createProduct = async (req, res) => {
   try {
     const product = req.body;
-    const categoryName = product.category;
+    const categoryId = product.categoryId;
 
     // Find the category by name
-    const category = await Category.findOne({ name: categoryName });
+    const category = await Category.findById(categoryId);
 
     if (!category) {
-      throw new Error(`Category '${categoryName}' not found.`);
+      throw new Error(`Category ID '${categoryId}' not found.`);
     }
 
     const newProduct = new Product({
       ...product,
-      category: categoryName,
+      category: categoryId,
     });
 
-    //Save the product
+    // Save the product
     await newProduct.save();
 
     // Push the product ID to the category's products array
@@ -39,7 +40,10 @@ const createProduct = async (req, res) => {
     return res.status(201).json({
       success: true,
       msg_success: "The product has been created successfully:",
-      data: newProduct,
+      data: {
+        ...newProduct.toObject(),
+        categoryName: category.name, // Include category name in the response
+      },
     });
   } catch (error) {
     console.log(error);
@@ -49,58 +53,94 @@ const createProduct = async (req, res) => {
   }
 };
 
+// i updated this
 const updateProduct = async (req, res) => {
   try {
-    const categoryName = req.body.category;
-    const categoryUpdated = await Category.findOne({ name: categoryName });
+    const { name, description, price, stock } = req.body;
+
     const updatedProduct = await Product.updateOne(
       { _id: req.params.id },
       {
         $set: {
-          name: req.body.name,
-          description: req.body.description,
-          price: req.body.price,
-          category: categoryUpdated?.name || null,
-          stock: req.body.stock,
+          name,
+          description,
+          price,
+          stock,
         },
       }
     );
+
     if (updatedProduct.nModified === 0) {
-      res.status(404).send("Cannot Update Product with incorrect id");
+      return res.status(404).send("Cannot update product with incorrect id");
     } else {
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
-        msg_success: "updated succefully",
+        msg_success: "Updated successfully",
         updated: updatedProduct,
       });
     }
   } catch (err) {
-    res.status(400).send(err);
+    return res.status(400).send(err.message);
   }
 };
+
 const getProductDetails = async (req, res, next) => {
   try {
     let product = await Product.findById(req.params.id);
     if (product) {
       res.status(200).json({ success: true, product });
     } else {
-      res.status(404).json({ success: false, message: "product not found" });
+      res.status(404).json({ success: false, message: "Product not found" });
     }
   } catch (error) {
     res.status(404);
     throw new Error(error.message);
   }
 };
+
 const deleteProduct = async (req, res, next) => {
   const deleted = await Product.deleteOne({ _id: req.params.id });
   if (!deleted) {
-    return res.status(404).json({ success: false, msg: "no such id found" });
+    return res.status(404).json({ success: false, msg: "No such id found" });
   }
   res.status(200).json({
     success: true,
-    msg_success: "product is deleted succesfully",
+    msg_success: "Product is deleted successfully",
     data: deleted,
   });
+};
+
+const getProductByKeyword = async (req, res, next) => {
+  const { keyword, categoryId } = req.query;
+
+  try {
+    let products;
+
+    if (categoryId) {
+      // Filter by both keyword and category ID
+      products = await Product.find({
+        name: { $regex: keyword, $options: "i" },
+        category: categoryId,
+      });
+    } else {
+      // Only filter by keyword if category ID is not provided
+      products = await Product.find({
+        name: { $regex: keyword, $options: "i" },
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: {
+        products,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };
 
 const deleteAllProducts = async (req, res, next) => {
@@ -108,34 +148,16 @@ const deleteAllProducts = async (req, res, next) => {
     const deleted_product = await Product.deleteMany();
 
     if (deleted_product.length == 0) {
-      return res.status(404).json("no data is available in the database");
+      return res.status(404).json("No data is available in the database");
     } else {
       res.status(200).json({
         success: true,
-        data: "all data has been deleted from the database",
+        data: "All data has been deleted from the database",
       });
     }
   } catch (err) {
     console.log(err);
     res.status(500).send(`Internal server error`);
-  }
-};
-// Function to upload an image for a product
-const uploadProductImage = async (req, res) => {
-  if (!req.file) {
-    return res.status(400).send("No image file uploaded");
-  }
-
-  const image = new Image({
-    filename: req.file.filename,
-    path: req.file.path,
-  });
-
-  try {
-    await image.save();
-    res.status(200).send("Image uploaded and saved successfully");
-  } catch (error) {
-    res.status(500).send("Error saving image to the database");
   }
 };
 
@@ -146,5 +168,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   deleteAllProducts,
-  uploadProductImage,
+  getProductByKeyword,
 };

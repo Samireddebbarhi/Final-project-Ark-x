@@ -1,0 +1,28 @@
+.custom-input {
+  position: relative;
+}
+
+.custom-input input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.custom-input label {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #666;
+  pointer-events: none;
+  transition: transform 0.2s ease, color 0.2s ease;
+  font-family:  "Fjalla One", sans-serif;
+  font-size: 20px;
+}
+
+.custom-input input:focus + label,
+.custom-input input:not(:placeholder-shown) + label {
+  transform: translateY(-100%) scale(0.8);
+  color: #828599;
+}

@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const AdminModel = require("../../models/AdminModel.js");
 
-/*exports.register = async (req, res) => {
+/*
+exports.register = async (req, res) => {
   try {
     const admin = req.body;
     if (!admin) {
@@ -21,10 +22,34 @@ const AdminModel = require("../../models/AdminModel.js");
             .json({ Succefull_msg: `${admin.username} added Succefully` })
         );
     }
+<<<<<<< HEAD
+=======
+
+    const token = jwt.sign({ InfoAdmin: admin }, process.env.TOKEN_ADMIN, {
+      expiresIn: "1h",
+    });
+
+    // Decode the token to get the expiration timestamp
+    const decodedToken = jwt.decode(token);
+    const expirationTimestamp = decodedToken.exp;
+
+    return res.status(200).json({
+      Login_Success: true,
+      token: token,
+      expirationTimestamp: expirationTimestamp, // Include expiration timestamp in the response
+      admin: {
+        name: admin.name,
+        username: admin.username,
+        role: admin.role,
+        permissions: admin.permissions,
+      },
+    });
+>>>>>>> c9b42518f4e7ec620b4be9d86fe2c58afd41c95e
   } catch (err) {
     console.log(err);
   }
-};*/
+};
+*/
 
 exports.login = (req, res) => {
   const { email, password } = req.body;
@@ -43,9 +68,25 @@ exports.login = (req, res) => {
         expiresIn: "20m",
       });
 
-      res
-        .status(200)
-        .send(`${admin.username} logged in with a token: ${token}`);
+      // Decode the token to get the expiration timestamp
+      const decodedToken = jwt.decode(token);
+      const expirationTimestamp = decodedToken.exp;
+
+      return res.status(200).json({
+        Login_Success: true,
+        token: token,
+        expirationTimestamp: expirationTimestamp, // Include expiration timestamp in the response
+        admin: {
+          name: admin.name,
+          email: admin.email,
+          username: admin.username,
+          role: admin.role,
+          permissions: admin.permissions,
+        },
+      });
     });
+  }).catch(err => {
+    console.error(err);
+    return res.status(500).send("Server error");
   });
 };

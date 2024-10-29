@@ -2,6 +2,7 @@ require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const CustomerModel = require("../../models/CustomerModel");
+const sendEmail = require("../../utils/sendEmail");
 
 const customerRegister = async (req, res) => {
   try {
@@ -47,13 +48,17 @@ const customerLogin = async (req, res) => {
           },
           process.env.TOKEN_CUSTOMER,
           {
-            expiresIn: "20m",
+            expiresIn: "1d",
           }
         );
 
-        res
-          .status(200)
-          .send(`${customer.name} logged in with a token: ${token}`);
+        res.status(200).json({
+          Login_Success: true,
+          token: token,
+          customer: {
+            name: customer.name,
+          },
+        });
       });
     });
   } catch {
@@ -79,14 +84,13 @@ const customer_update = async (req, res) => {
     }
     res.status(200).json({ message: "Customer Updated successfully" });
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     res
       .status(500)
       .json({ error: "Failed to update customer, please try again", err });
   }
 };
 // logout
-const tokenBlacklist = new Set();
 
 const customerLogout = async (req, res) => {
   try {
@@ -105,10 +109,99 @@ const customerLogout = async (req, res) => {
     res.status(500).json({ msg: "Failed to logout" });
   }
 };
+const forgotPassword = async (req, res, next) => {
+  try {
+    const user = await CustomerModel.findOne({ email: req.body.email });
+
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    const resetToken = jwt.sign({ id: user._id }, process.env.FORGOT_PASSWD, {
+      expiresIn: "5m",
+    });
+
+    const expirationTime = new Date(
+      Date.now() + 5 * 60 * 1000
+    ).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
+
+    const resetPasswordUrl = `http://localhost:5173/resetPassword/${user._id}/${resetToken}`;
+
+    const message = `Your password reset token is:\n\n${resetPasswordUrl}\n\nThis link will expire at ${expirationTime}.\n\nIf you did not request this email, please ignore it.`;
+    const htmlMessage = `
+      <p>Your password reset token is:</p>
+      <a href="${resetPasswordUrl}">${resetPasswordUrl}</a>
+      <p>This link will expire at <strong>${expirationTime}</strong>.</p>
+      <p>If you did not request this email, please ignore it.</p>
+      
+    `;
+
+    await sendEmail({
+      email: user.email,
+      subject: "Ecommerce Password Recovery",
+      message,
+      html: htmlMessage,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Email sent to ${user.email} successfully`,
+    });
+  } catch (error) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save({ validateBeforeSave: false });
+    res.status(500);
+    throw new Error(error.message);
+  }
+};
+const resetPassword = async (req, res, next) => {
+  const { userId, token } = req.params;
+
+  const { password } = req.body;
+
+  try {
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.FORGOT_PASSWD);
+
+    // Check if the user ID in the token matches the request
+    if (decoded.id !== userId) {
+      res.status(400);
+      throw new Error("Invalid or expired token");
+    }
+
+    const user = await CustomerModel.findById(userId);
+
+    if (!user) {
+      res.status(404);
+      throw new Error("User not found");
+    }
+
+    user.password = await bcrypt.hash(password, 10);
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Password reset successfuly",
+    });
+  } catch (error) {
+    res.status(500);
+    next(error);
+  }
+};
 
 module.exports = {
   customerRegister,
   customerLogin,
   customer_update,
   customerLogout,
+  resetPassword,
+  forgotPassword,
 };

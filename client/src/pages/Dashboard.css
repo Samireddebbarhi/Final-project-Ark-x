@@ -1,0 +1,156 @@
+/* General Layout */
+.dashboard-layout {
+  min-height: 100vh;
+}
+
+.dashboard-layout.dark-mode {
+  background-color: #121212;
+  color: #fff;
+}
+
+/* Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  background-color: #001529;
+}
+
+.logo {
+  font-size: 20px;
+  color: #fff;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.header-icon {
+  font-size: 20px;
+  margin-right: 20px;
+  color: #fff;
+}
+
+.header-avatar {
+  margin-right: 20px;
+}
+
+/* Content */
+.dashboard-content {
+  padding: 20px;
+  background: #f0f2f5;
+}
+
+.dashboard-content.dark-mode {
+  background: #1e1e1e;
+}
+
+/* Dashboard Container */
+.dashboard {
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard.dark-mode {
+  background: #333;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Cards */
+.dashboard-card {
+  padding: 20px;
+  border-radius: 8px;
+  color: #fff;
+  transition: transform 0.3s;
+}
+
+.dashboard-card:hover {
+  transform: scale(1.05);
+}
+
+.dashboard-card--yellow {
+  background-color: #ffd333;
+}
+
+.dashboard-card--blue {
+  background-color: #1890ff;
+}
+
+.dashboard-card--green {
+  background-color: #52c41a;
+}
+
+.card-content {
+  display: flex;
+  align-items: center;
+}
+
+.card-icon {
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.desc {
+  font-size: 14px;
+  color: #999;
+}
+
+.sub-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.red {
+  color: #ff4d4f;
+}
+
+.green {
+  color: #52c41a;
+}
+
+/* Margin Utilities */
+.mb-4 {
+  margin-bottom: 16px;
+}
+
+.mb-5 {
+  margin-bottom: 20px;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.mt-5 {
+  margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-right {
+    margin-top: 10px;
+  }
+
+  .dashboard-card {
+    margin-bottom: 16px;
+  }
+
+  .title {
+    font-size: 20px;
+  }
+}

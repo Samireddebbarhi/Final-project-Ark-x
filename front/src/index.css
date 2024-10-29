@@ -1,0 +1,33 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+* {
+  font-family: "Heebo", sans-serif;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+/* Works on Firefox */
+* {
+  scrollbar-width: 1em;
+  scrollbar-color: #3d4a4a #f5f5f5;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+*::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 100vw;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #3d4a4a;
+  border-radius: 100vw;
+}
